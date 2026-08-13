@@ -34,7 +34,7 @@ export default async function Process() {
                 <div key={m.id} className="flex flex-col gap-1.5">
                   <div className="aspect-square rounded-sm overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
                     {m.photoUrl ? (
-                      <img src={m.photoUrl} alt={m.name} className="w-full h-full object-cover" />
+                      <img src={m.photoUrl} alt={m.name} loading="lazy" className="w-full h-full object-cover" />
                     ) : (
                       <span className="font-mono text-[10px] text-paper/40">사진</span>
                     )}

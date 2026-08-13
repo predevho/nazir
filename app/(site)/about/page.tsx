@@ -58,8 +58,12 @@ export default async function About() {
         <div className="grid gap-3.5 [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
           {characters.map((c) => (
             <article key={c.id} className="bg-velvet border border-gold/[0.14] p-5 flex flex-col gap-3">
-              <div className="aspect-square bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
-                <span className="font-mono text-[10px] text-paper/40">배우 사진 1:1</span>
+              <div className="aspect-square overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
+                {c.photoUrl ? (
+                  <img src={c.photoUrl} alt={c.name} loading="lazy" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="font-mono text-[10px] text-paper/40">배우 사진 1:1</span>
+                )}
               </div>
               <h4 className="font-display text-2xl text-gold m-0">{c.name}</h4>
               <MarkdownText className="text-[13px] font-light text-paper/[0.72]">{c.description}</MarkdownText>
