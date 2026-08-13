@@ -2,6 +2,8 @@ import { Accordion } from '@/components/Accordion';
 import { StatusChip } from '@/components/StatusChip';
 import { getContent } from '@/lib/content';
 
+export const revalidate = 60;
+
 export default async function Process() {
   const { site, timeline, people, budget } = await getContent();
   return (

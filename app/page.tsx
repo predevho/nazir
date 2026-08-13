@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { HeroBackdrop } from '@/components/HeroBackdrop';
 import { getContent } from '@/lib/content';
 
+export const revalidate = 60;
+
 const cards = [
   { to: '/about', n: '01', title: '<나지르>에 대하여', desc: '연출의 인사말 · 작품 소개' },
   { to: '/process', n: '02', title: '<나지르>가 무대에 오르기까지', desc: '제작 일정 · 함께하는 사람들 · 예산' },

@@ -1,6 +1,8 @@
 import { CopyButton } from '@/components/CopyButton';
 import { getContent } from '@/lib/content';
 
+export const revalidate = 60;
+
 export default async function Join() {
   const { site, prayers } = await getContent();
   return (
