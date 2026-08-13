@@ -31,4 +31,11 @@ describe('PeopleEditor', () => {
     await userEvent.click(screen.getByRole('button', { name: '+ 그룹 추가' }));
     expect(screen.getAllByLabelText('그룹 이름').length).toBe(2);
   });
+
+  it('약력 항목을 추가할 수 있다', async () => {
+    render(<PeopleEditor initialGroups={initial} />);
+    expect(screen.queryAllByLabelText('약력 항목').length).toBe(0);
+    await userEvent.click(screen.getByRole('button', { name: '+ 약력 항목' }));
+    expect(screen.getAllByLabelText('약력 항목').length).toBe(1);
+  });
 });
