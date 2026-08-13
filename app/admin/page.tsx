@@ -38,7 +38,12 @@ export default async function AdminPage() {
             </Link>
           ))}
         </div>
-        <p className="text-[13px] text-paper/40 mt-3">참여자 명단(중첩)은 다음 단계(3B-3)에서 추가됩니다.</p>
+        <Link
+          href="/admin/lists/people"
+          className="mt-2 block border border-gold/25 bg-velvet rounded-sm px-4 py-3 text-sm text-paper hover:border-gold/55 transition-colors"
+        >
+          참여자 명단 (그룹 · 개인)
+        </Link>
       </div>
       <form action={logout}>
         <button
