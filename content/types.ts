@@ -30,7 +30,10 @@ export interface Prayer {
 
 export interface PeopleMember {
   id: string;
-  text: string;
+  role: string;
+  name: string;
+  bio: string;
+  photoUrl: string | null;
   sortOrder: number;
 }
 

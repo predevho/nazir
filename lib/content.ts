@@ -10,7 +10,7 @@ type Rows = {
   budget: { id: string; name: string; sort_order: number }[];
   prayers: { id: string; text: string; sort_order: number }[];
   groups: { id: string; label: string; sort_order: number }[];
-  members: { id: string; group_id: string; text: string; sort_order: number }[];
+  members: { id: string; group_id: string; role: string; name: string; bio: string; photo_url: string | null; sort_order: number }[];
 };
 
 const byOrder = <T extends { sort_order: number }>(a: T, b: T) => a.sort_order - b.sort_order;
@@ -38,7 +38,7 @@ export function assembleContent(rows: Rows): AllContent {
     people: [...rows.groups].sort(byOrder).map((g) => ({
       id: g.id, label: g.label, sortOrder: g.sort_order,
       members: rows.members.filter((m) => m.group_id === g.id).sort(byOrder).map((m) => ({
-        id: m.id, text: m.text, sortOrder: m.sort_order,
+        id: m.id, role: m.role, name: m.name, bio: m.bio, photoUrl: m.photo_url, sortOrder: m.sort_order,
       })),
     })),
   };
@@ -57,7 +57,7 @@ export async function getContent(): Promise<AllContent> {
       client.from('budget_items').select('id,name,sort_order'),
       client.from('prayers').select('id,text,sort_order'),
       client.from('people_groups').select('id,label,sort_order'),
-      client.from('people_members').select('id,group_id,text,sort_order'),
+      client.from('people_members').select('id,group_id,role,name,bio,photo_url,sort_order'),
     ]);
     const err = blocks.error || facts.error || characters.error || timeline.error || budget.error || prayers.error || groups.error || members.error;
     if (err) throw err;

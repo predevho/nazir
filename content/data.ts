@@ -108,41 +108,78 @@ const prayerTexts = [
 
 const prayers: Prayer[] = prayerTexts.map((text, i) => ({ id: `p${i}`, text, sortOrder: i }));
 
-const peopleSeeds: { label: string; rows: string[] }[] = [
+const peopleSeeds: { label: string; members: { role: string; name: string }[] }[] = [
   {
     label: '헤더진',
-    rows: [
-      '연출 정은수 / 조연출 권도원',
-      '디자인팀장 정은민 / 미디어팀장 김수연 / 홍보팀장 홍빛',
-      '무대감독 이하은 / 안무팀장 이하늘 / 의소품팀장 김가은',
+    members: [
+      { role: '연출', name: '정은수' },
+      { role: '조연출', name: '권도원' },
+      { role: '디자인팀장', name: '정은민' },
+      { role: '미디어팀장', name: '김수연' },
+      { role: '홍보팀장', name: '홍빛' },
+      { role: '무대감독', name: '이하은' },
+      { role: '안무팀장', name: '이하늘' },
+      { role: '의소품팀장', name: '김가은' },
     ],
   },
   {
     label: '팀원',
-    rows: [
-      '기획팀 김은성 · 장시은',
-      '디자인팀 구정서',
-      '미디어팀 안새진 · 권은수 · 박지유',
-      '홍보팀 임은혜',
-      '무대팀 박명인',
-      '의소품팀 오주형',
-      '음향 · 음악팀 김시온 · 강민규 · 김태범 · 배유미 · 봉승빈 · 봉종빈 · 주찬영 · 최요한 · 이시온',
+    members: [
+      { role: '기획팀', name: '김은성' },
+      { role: '기획팀', name: '장시은' },
+      { role: '디자인팀', name: '구정서' },
+      { role: '미디어팀', name: '안새진' },
+      { role: '미디어팀', name: '권은수' },
+      { role: '미디어팀', name: '박지유' },
+      { role: '홍보팀', name: '임은혜' },
+      { role: '무대팀', name: '박명인' },
+      { role: '의소품팀', name: '오주형' },
+      { role: '음향·음악팀', name: '김시온' },
+      { role: '음향·음악팀', name: '강민규' },
+      { role: '음향·음악팀', name: '김태범' },
+      { role: '음향·음악팀', name: '배유미' },
+      { role: '음향·음악팀', name: '봉승빈' },
+      { role: '음향·음악팀', name: '봉종빈' },
+      { role: '음향·음악팀', name: '주찬영' },
+      { role: '음향·음악팀', name: '최요한' },
+      { role: '음향·음악팀', name: '이시온' },
     ],
   },
   {
     label: '배우',
-    rows: [
-      '정주은, 신현택, 박주은, 김수, 박승주, 장지훈',
-      '외 예수아 · 예재빈 · 오예현 · 정영인 · 진예빈 · 추서연 · 고은수 · 양다인 · 임현민 · 정수지 · 정인준',
+    members: [
+      { role: '', name: '정주은' },
+      { role: '', name: '신현택' },
+      { role: '', name: '박주은' },
+      { role: '', name: '김수' },
+      { role: '', name: '박승주' },
+      { role: '', name: '장지훈' },
+      { role: '', name: '예수아' },
+      { role: '', name: '예재빈' },
+      { role: '', name: '오예현' },
+      { role: '', name: '정영인' },
+      { role: '', name: '진예빈' },
+      { role: '', name: '추서연' },
+      { role: '', name: '고은수' },
+      { role: '', name: '양다인' },
+      { role: '', name: '임현민' },
+      { role: '', name: '정수지' },
+      { role: '', name: '정인준' },
     ],
   },
 ];
-
 const people: PeopleGroup[] = peopleSeeds.map((g, gi) => ({
   id: `g${gi}`,
   label: g.label,
   sortOrder: gi,
-  members: g.rows.map((text, i) => ({ id: `g${gi}m${i}`, text, sortOrder: i })),
+  members: g.members.map((m, i) => ({
+    id: `g${gi}m${i}`,
+    role: m.role,
+    name: m.name,
+    bio: '',
+    photoUrl: null,
+    sortOrder: i,
+  })),
 }));
 
 const facts: Fact[] = [
