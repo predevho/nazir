@@ -1,17 +1,12 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
-import { Curtain } from '@/components/Curtain';
-import { getContent } from '@/lib/content';
 
 export const metadata: Metadata = {
   title: '나지르 · 구별된 사람들',
   description: '창작 뮤지컬 〈나지르〉 — 구별된 사람들. 제작 PRAYSOUND.',
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const { site } = await getContent();
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <head>
@@ -22,12 +17,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           rel="stylesheet"
         />
       </head>
-      <body className="bg-stage text-paper min-h-screen overflow-x-hidden">
-        <Curtain />
-        <Header />
-        <main className="min-h-[60vh]">{children}</main>
-        <Footer site={site} />
-      </body>
+      <body className="bg-stage text-paper min-h-screen overflow-x-hidden">{children}</body>
     </html>
   );
 }
