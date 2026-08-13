@@ -1,3 +1,5 @@
+'use client';
+
 import { useRef, useState } from 'react';
 
 export function CopyButton({ value, idleLabel, doneLabel, className }: {

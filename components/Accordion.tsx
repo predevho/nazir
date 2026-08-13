@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, type ReactNode } from 'react';
 
 export function Accordion({ label, defaultOpen = false, children }: {
