@@ -1,12 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 export function Curtain() {
+  const pathname = usePathname();
   const [on, setOn] = useState(true);
   useEffect(() => {
     const t = setTimeout(() => setOn(false), 1700);
     return () => clearTimeout(t);
   }, []);
+  if (pathname.startsWith('/admin')) return null;
   if (!on) return null;
   return (
     <div data-testid="curtain" className="fixed inset-0 z-[200] pointer-events-none">

@@ -2,6 +2,8 @@ import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
 import { Curtain } from './Curtain';
 
+vi.mock('next/navigation', () => ({ usePathname: () => '/' }));
+
 afterEach(() => vi.useRealTimers());
 
 describe('Curtain', () => {
