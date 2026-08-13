@@ -36,7 +36,10 @@ export async function saveList(_prev: SaveState, formData: FormData): Promise<Sa
       id: r.id && String(r.id).trim() ? String(r.id) : makeServerId(),
       sort_order: i,
     };
-    for (const c of config.columns) row[c.key] = String(r[c.key] ?? '');
+    for (const c of config.columns) {
+      const v = String(r[c.key] ?? '');
+      row[c.key] = c.type === 'image' ? (v || null) : v;
+    }
     return row;
   });
 

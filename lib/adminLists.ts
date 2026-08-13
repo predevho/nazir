@@ -1,7 +1,7 @@
 export type ListColumn = {
   key: string;
   label: string;
-  type: 'text' | 'textarea' | 'select';
+  type: 'text' | 'textarea' | 'select' | 'image';
   options?: { value: string; label: string }[];
   markdown?: boolean;
 };
@@ -28,6 +28,7 @@ export const ADMIN_LISTS: Record<string, ListConfig> = {
     table: 'characters',
     title: '주요 등장인물',
     columns: [
+      { key: 'photo_url', label: '사진', type: 'image' },
       { key: 'name', label: '이름', type: 'text' },
       { key: 'description', label: '설명', type: 'textarea', markdown: true },
     ],

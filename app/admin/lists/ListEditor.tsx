@@ -2,6 +2,7 @@
 import { useActionState, useState } from 'react';
 import type { ListConfig } from '@/lib/adminLists';
 import { saveList, type SaveState } from './actions';
+import { PhotoField } from './PhotoField';
 
 type Row = { _key: string; id: string } & Record<string, string>;
 
@@ -67,7 +68,9 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
           {config.columns.map((c) => (
             <label key={c.key} className="flex flex-col gap-1">
               <span className="font-mono text-[10px] tracking-[0.1em] text-paper/50">{c.label}</span>
-              {c.type === 'textarea' ? (
+              {c.type === 'image' ? (
+                <PhotoField kind="characters" id={row.id} value={row[c.key] ?? ''} onChange={(url) => setVal(row._key, c.key, url)} />
+              ) : c.type === 'textarea' ? (
                 <>
                   <textarea
                     value={row[c.key] ?? ''}
