@@ -44,10 +44,16 @@ npm start        # 프로덕션 서버
 
 관리자 인증이 추가되었습니다. `/admin`은 로그인해야 접근할 수 있고, 미인증 시 `/admin/login`으로 이동합니다.
 
-- **계정 생성**: Supabase 대시보드 → Authentication → Users → **Add user**로 관리자 이메일·비밀번호를 만듭니다. 공개 가입은 사용하지 않습니다(권장: Authentication 설정에서 Sign up 비활성화).
-- **로그인**: `/admin/login`에서 로그인 → `/admin` 대시보드 진입. 로그아웃 버튼 제공.
-- **확인 절차**: 계정 생성 후 `npm run dev` → `/admin` 접속 시 로그인 페이지로 이동 → 로그인 → 대시보드 → 로그아웃까지 확인.
+**로그인은 이메일이 아니라 "아이디"로 합니다.** 사용자는 아이디만 입력하고, 앱이 내부적으로 `<아이디>@nazir.local`로 변환해 Supabase Auth에 로그인합니다(보안 처리는 Supabase Auth 그대로). 예: 아이디 `nazir1234` → 내부 이메일 `nazir1234@nazir.local`.
+
+- **계정 생성**: Supabase 대시보드 → Authentication → Users → **Add user**.
+  - 이메일 칸에 **`<아이디>@nazir.local`** 을 입력(예: `nazir1234@nazir.local`). 아이디는 **소문자**로.
+  - **Auto Confirm User**를 켜서 생성(실제 메일 발송 없음).
+  - 비밀번호 설정. 공개 가입은 사용하지 않습니다(권장: Authentication 설정에서 Sign up 비활성화).
+- **로그인**: `/admin/login`에서 **아이디 + 비밀번호**(도메인 없이 아이디만) → `/admin` 대시보드 진입. 로그아웃 버튼 제공.
+- **확인 절차**: 계정 생성 후 `npm run dev` → `/admin` 접속 시 로그인 페이지로 이동 → 아이디로 로그인 → 대시보드에 아이디 표시 → 로그아웃까지 확인.
 - 쓰기 권한은 로그인 세션 + RLS "auth write" 정책으로 처리합니다(`service_role` 키 미사용). 실제 콘텐츠 편집 UI는 Phase 3B에서 추가됩니다.
+- 내부 도메인은 `lib/adminUsername.ts`의 `ADMIN_EMAIL_DOMAIN`에서 바꿀 수 있습니다.
 
 ## 라우팅
 

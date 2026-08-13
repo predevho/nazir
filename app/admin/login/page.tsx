@@ -2,10 +2,11 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
+import { usernameToEmail } from '@/lib/adminUsername';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -15,10 +16,13 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
     const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({
+      email: usernameToEmail(username),
+      password,
+    });
     setLoading(false);
     if (error) {
-      setError('로그인에 실패했습니다. 이메일과 비밀번호를 확인해 주세요.');
+      setError('로그인에 실패했습니다. 아이디와 비밀번호를 확인해 주세요.');
       return;
     }
     router.push('/admin');
@@ -31,12 +35,14 @@ export default function LoginPage() {
       <h1 className="font-display font-bold text-[clamp(26px,6vw,34px)] text-paper mb-8">관리자 로그인</h1>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5">
-          <span className="font-mono text-[11px] tracking-[0.14em] text-paper/60">이메일</span>
+          <span className="font-mono text-[11px] tracking-[0.14em] text-paper/60">아이디</span>
           <input
-            type="email"
+            type="text"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            autoComplete="username"
+            autoCapitalize="none"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className="min-h-[48px] px-3.5 bg-velvet border border-gold/25 rounded-sm text-paper focus:border-gold/60 outline-none"
           />
         </label>
