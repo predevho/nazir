@@ -1,11 +1,12 @@
 'use client';
 import { useActionState, useState } from 'react';
 import { savePeople, type SaveState } from './actions';
+import { PhotoField } from '../PhotoField';
 
 type BioLine = { _key: string; text: string };
-type Member = { _key: string; id: string; role: string; name: string; bio: BioLine[] };
+type Member = { _key: string; id: string; role: string; name: string; bio: BioLine[]; photoUrl: string };
 type Group = { _key: string; id: string; label: string; members: Member[] };
-export type InitialGroup = { id: string; label: string; members: { id: string; role: string; name: string; bio: string }[] };
+export type InitialGroup = { id: string; label: string; members: { id: string; role: string; name: string; bio: string; photo_url: string | null }[] };
 
 function makeId(): string {
   if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') return crypto.randomUUID();
@@ -39,7 +40,7 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
       _key: makeId(),
       id: g.id,
       label: g.label,
-      members: g.members.map((m) => ({ _key: makeId(), id: m.id, role: m.role, name: m.name, bio: parseBio(m.bio) })),
+      members: g.members.map((m) => ({ _key: makeId(), id: m.id, role: m.role, name: m.name, bio: parseBio(m.bio), photoUrl: m.photo_url ?? '' })),
     }))
   );
   const [state, formAction, pending] = useActionState(savePeople, initial);
@@ -70,7 +71,7 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
   }
   function addMember(gk: string) {
     const id = makeId();
-    setG((gs) => gs.map((g) => (g._key === gk ? { ...g, members: [...g.members, { _key: id, id, role: '', name: '', bio: [] }] } : g)));
+    setG((gs) => gs.map((g) => (g._key === gk ? { ...g, members: [...g.members, { _key: id, id, role: '', name: '', bio: [], photoUrl: '' }] } : g)));
   }
   function removeMember(gk: string, mk: string) {
     setG((gs) => gs.map((g) => (g._key === gk ? { ...g, members: g.members.filter((m) => m._key !== mk) } : g)));
@@ -100,6 +101,9 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
   function setBio(gk: string, mk: string, bk: string, text: string) {
     updateMember(gk, mk, (m) => ({ ...m, bio: m.bio.map((b) => (b._key === bk ? { ...b, text } : b)) }));
   }
+  function setPhoto(gk: string, mk: string, url: string) {
+    updateMember(gk, mk, (m) => ({ ...m, photoUrl: url }));
+  }
   function moveBio(gk: string, mk: string, bk: string, dir: -1 | 1) {
     updateMember(gk, mk, (m) => {
       const i = m.bio.findIndex((b) => b._key === bk);
@@ -114,7 +118,7 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
   const payload = groups.map((g) => ({
     id: g.id,
     label: g.label,
-    members: g.members.map((m) => ({ id: m.id, role: m.role, name: m.name, bio: serializeBio(m.bio) })),
+    members: g.members.map((m) => ({ id: m.id, role: m.role, name: m.name, bio: serializeBio(m.bio), photoUrl: m.photoUrl })),
   }));
 
   const inputCls = 'min-h-[38px] px-2.5 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60';
@@ -141,6 +145,7 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
                   <button type="button" onClick={() => moveMember(g._key, m._key, 1)} disabled={mi === g.members.length - 1} aria-label="멤버 아래로" className={iconBtn}>↓</button>
                   <button type="button" onClick={() => removeMember(g._key, m._key)} aria-label="멤버 삭제" className="px-1.5 text-[12px] text-red-400/80 hover:text-red-400">삭제</button>
                 </div>
+                <PhotoField kind="people" id={m.id} value={m.photoUrl} onChange={(url) => setPhoto(g._key, m._key, url)} />
                 <div className="flex flex-col gap-1.5 pl-1">
                   <span className="font-mono text-[10px] text-paper/40">약력 (항목별 · 불릿으로 표시됨)</span>
                   {m.bio.map((b, bi) => (

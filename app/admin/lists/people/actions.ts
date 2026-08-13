@@ -5,7 +5,7 @@ import { createClient } from '@/lib/supabase/server';
 
 export type SaveState = { ok: boolean; message: string };
 
-type InMember = { id?: string; role?: string; name?: string; bio?: string };
+type InMember = { id?: string; role?: string; name?: string; bio?: string; photoUrl?: string };
 type InGroup = { id?: string; label?: string; members?: InMember[] };
 
 function makeId(): string {
@@ -34,7 +34,7 @@ export async function savePeople(_prev: SaveState, formData: FormData): Promise<
     label: String(g.label ?? ''),
     sort_order: gi,
   }));
-  const desiredMembers: { id: string; group_id: string; role: string; name: string; bio: string; sort_order: number }[] = [];
+  const desiredMembers: { id: string; group_id: string; role: string; name: string; bio: string; photo_url: string | null; sort_order: number }[] = [];
   groups.forEach((g, gi) => {
     const groupId = desiredGroups[gi].id;
     (g.members ?? []).forEach((m, mi) => {
@@ -44,6 +44,7 @@ export async function savePeople(_prev: SaveState, formData: FormData): Promise<
         role: String(m.role ?? ''),
         name: String(m.name ?? ''),
         bio: String(m.bio ?? ''),
+        photo_url: String(m.photoUrl ?? '') || null,
         sort_order: mi,
       });
     });
