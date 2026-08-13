@@ -33,3 +33,6 @@ next-env.d.ts
 
 # Claude Code local tooling
 .claude/
+
+# TypeScript 증분 빌드
+*.tsbuildinfo
