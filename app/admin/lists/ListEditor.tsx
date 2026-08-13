@@ -68,7 +68,16 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
             <label key={c.key} className="flex flex-col gap-1">
               <span className="font-mono text-[10px] tracking-[0.1em] text-paper/50">{c.label}</span>
               {c.type === 'textarea' ? (
-                <textarea value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} rows={2} className="px-3 py-2 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60 resize-y" />
+                <>
+                  <textarea
+                    value={row[c.key] ?? ''}
+                    onChange={(e) => setVal(row._key, c.key, e.target.value)}
+                    rows={c.markdown ? 6 : 2}
+                    placeholder={c.markdown ? '마크다운 지원 (예: - 항목)' : undefined}
+                    className={`px-3 py-2 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60 resize-y ${c.markdown ? 'font-mono' : ''}`}
+                  />
+                  {c.markdown && <span className="font-mono text-[10px] text-paper/35">마크다운 지원 · 불릿(- ), 굵게(**텍스트**)</span>}
+                </>
               ) : c.type === 'select' ? (
                 <select value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} className="min-h-[40px] px-3 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60">
                   {c.options?.map((o) => (

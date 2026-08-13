@@ -3,6 +3,7 @@ export type ListColumn = {
   label: string;
   type: 'text' | 'textarea' | 'select';
   options?: { value: string; label: string }[];
+  markdown?: boolean;
 };
 
 export type ListConfig = {
@@ -28,7 +29,7 @@ export const ADMIN_LISTS: Record<string, ListConfig> = {
     title: '주요 등장인물',
     columns: [
       { key: 'name', label: '이름', type: 'text' },
-      { key: 'description', label: '설명', type: 'textarea' },
+      { key: 'description', label: '설명', type: 'textarea', markdown: true },
     ],
   },
   timeline: {

@@ -98,7 +98,14 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
                   <button type="button" onClick={() => moveMember(g._key, m._key, 1)} disabled={mi === g.members.length - 1} aria-label="멤버 아래로" className="px-1.5 text-paper/70 disabled:opacity-30 hover:text-gold">↓</button>
                   <button type="button" onClick={() => removeMember(g._key, m._key)} aria-label="멤버 삭제" className="px-1.5 text-[12px] text-red-400/80 hover:text-red-400">삭제</button>
                 </div>
-                <textarea value={m.bio} onChange={(e) => setMember(g._key, m._key, 'bio', e.target.value)} placeholder="약력(선택)" aria-label="약력" rows={1} className={`${inputCls} py-1.5 resize-y`} />
+                <textarea
+                  value={m.bio}
+                  onChange={(e) => setMember(g._key, m._key, 'bio', e.target.value)}
+                  placeholder="약력 · 마크다운 지원 (예: - 2025 …)"
+                  aria-label="약력"
+                  rows={5}
+                  className={`${inputCls} py-2 font-mono resize-y`}
+                />
               </div>
             ))}
             <button type="button" onClick={() => addMember(g._key)} className="min-h-[36px] border border-dashed border-gold/30 text-gold text-[13px] rounded-sm hover:bg-gold/[0.08]">+ 멤버 추가</button>
