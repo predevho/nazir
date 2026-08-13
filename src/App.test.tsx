@@ -18,6 +18,6 @@ describe('routing', () => {
   });
   it('renders the join heading at /join', async () => {
     renderAt('/join');
-    expect(await screen.findByRole('heading', { name: /함께하기/ })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: /함께하기/, level: 2 })).toBeInTheDocument();
   });
 });
