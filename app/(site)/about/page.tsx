@@ -1,3 +1,4 @@
+import { MarkdownText } from '@/components/MarkdownText';
 import { getContent } from '@/lib/content';
 
 export const revalidate = 60;
@@ -61,7 +62,7 @@ export default async function About() {
                 <span className="font-mono text-[10px] text-paper/40">배우 사진 1:1</span>
               </div>
               <h4 className="font-display text-2xl text-gold m-0">{c.name}</h4>
-              <p className="text-[13px] font-light leading-[1.95] text-paper/[0.72] m-0">{c.description}</p>
+              <MarkdownText className="text-[13px] font-light text-paper/[0.72]">{c.description}</MarkdownText>
             </article>
           ))}
         </div>

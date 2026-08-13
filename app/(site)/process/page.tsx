@@ -1,5 +1,6 @@
 import { Accordion } from '@/components/Accordion';
 import { StatusChip } from '@/components/StatusChip';
+import { MarkdownText } from '@/components/MarkdownText';
 import { getContent } from '@/lib/content';
 
 export const revalidate = 60;
@@ -28,7 +29,7 @@ export default async function Process() {
       <div className="grid gap-px bg-gold/[0.14] border border-gold/[0.14] mb-[clamp(48px,8vw,72px)]">
         {people.map((g) => (
           <Accordion key={g.id} label={g.label} defaultOpen={g.label === '헤더진'}>
-            <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(130px,1fr))]">
+            <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
               {g.members.map((m) => (
                 <div key={m.id} className="flex flex-col gap-1.5">
                   <div className="aspect-square rounded-sm overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
@@ -40,7 +41,7 @@ export default async function Process() {
                   </div>
                   {m.role && <span className="font-mono text-[10px] tracking-[0.06em] text-gold">{m.role}</span>}
                   <span className="font-display text-sm text-paper leading-tight">{m.name}</span>
-                  {m.bio && <span className="text-[12px] font-light text-paper/60 leading-relaxed">{m.bio}</span>}
+                  <MarkdownText className="text-[12px] font-light text-paper/70">{m.bio}</MarkdownText>
                 </div>
               ))}
             </div>
