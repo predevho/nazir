@@ -20,7 +20,7 @@ npm start        # 프로덕션 서버
 |------|------|
 | `app/` | App Router — `layout.tsx`(공통 레이아웃·폰트·헤더/푸터/커튼), `page.tsx`(홈), `about/`·`process/`·`join/` |
 | `content/` | 콘텐츠 타입(`types.ts`)과 데이터(`data.ts`) |
-| `lib/content.ts` | 데이터 접근 계층(`getContent`) — 현재 로컬 데이터, 이후 Supabase로 교체 예정 |
+| `lib/content.ts` | 데이터 접근 계층(`getContent`) — Supabase 우선, env 없으면 로컬 데이터로 폴백 |
 | `components/` | 공통 UI (Header, Footer, StatusChip, Accordion, CopyButton, Curtain, Spotlight, HeroBackdrop) |
 
 페이지는 **서버 컴포넌트**로 `await getContent()`를 호출하고, 인터랙티브 요소(계좌 복사·아코디언·커튼·스포트라이트·헤더)만 `'use client'`입니다. 데이터 출처가 바뀌어도 페이지는 `lib/content.ts`에만 의존합니다.
@@ -40,6 +40,15 @@ npm start        # 프로덕션 서버
 
 참고: 지금은 사진 업로드가 없어 인물 사진은 비어 있습니다(Phase 3에서 추가).
 
+## 관리자 (Phase 3A)
+
+관리자 인증이 추가되었습니다. `/admin`은 로그인해야 접근할 수 있고, 미인증 시 `/admin/login`으로 이동합니다.
+
+- **계정 생성**: Supabase 대시보드 → Authentication → Users → **Add user**로 관리자 이메일·비밀번호를 만듭니다. 공개 가입은 사용하지 않습니다(권장: Authentication 설정에서 Sign up 비활성화).
+- **로그인**: `/admin/login`에서 로그인 → `/admin` 대시보드 진입. 로그아웃 버튼 제공.
+- **확인 절차**: 계정 생성 후 `npm run dev` → `/admin` 접속 시 로그인 페이지로 이동 → 로그인 → 대시보드 → 로그아웃까지 확인.
+- 쓰기 권한은 로그인 세션 + RLS "auth write" 정책으로 처리합니다(`service_role` 키 미사용). 실제 콘텐츠 편집 UI는 Phase 3B에서 추가됩니다.
+
 ## 라우팅
 
 - `/` 홈 · `/about` 대하여 · `/process` 무대에 오르기까지 · `/join` 함께하기
@@ -48,7 +57,9 @@ npm start        # 프로덕션 서버
 
 - **Phase 1 (완료)** — 시안을 React 반응형 웹으로 이식
 - **Phase 2A (완료)** — Next.js(App Router)로 전환
-- **Phase 2B (완료)** — 콘텐츠를 Supabase(DB·Storage)로 이관 (`@supabase/ssr`, 자동 폴백)
-- **Phase 3** — 관리자 편집 기능(텍스트·사진), Supabase Auth 로그인
+- **Phase 2B (완료)** — 콘텐츠를 Supabase(DB·Storage)로 이관 (`@supabase/supabase-js`, 자동 폴백, ISR)
+- **Phase 3A (완료)** — 관리자 인증(`@supabase/ssr` 로그인·로그아웃, `/admin` 보호)
+- **Phase 3B** — 관리자 콘텐츠 편집(텍스트 CRUD, 저장 시 즉시 반영)
+- **Phase 3C** — 사진 업로드(Storage `images`)
 
 설계·계획 문서: `docs/superpowers/`
