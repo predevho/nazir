@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { emailToUsername } from '@/lib/adminUsername';
+import { ADMIN_LISTS } from '@/lib/adminLists';
 import { logout } from './actions';
 
 export default async function AdminPage() {
@@ -23,10 +24,21 @@ export default async function AdminPage() {
           <span className="font-display text-lg text-gold">단일 문구 편집</span>
           <p className="text-sm text-paper/60 mt-1">인사말 · 시놉시스 · 공연 날짜 · 계좌 · 링크 등</p>
         </Link>
-        <div className="border border-dashed border-gold/20 rounded-sm p-5 opacity-60">
-          <span className="font-display text-lg text-paper/70">목록 편집 (인물 · 일정 · 명단)</span>
-          <p className="text-sm text-paper/50 mt-1">다음 단계(3B-2)에서 추가됩니다.</p>
+      </div>
+      <div className="border-t border-gold/15 pt-6 mb-10">
+        <p className="font-mono text-[11px] tracking-[0.2em] text-gold mb-3">목록 편집</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {Object.values(ADMIN_LISTS).map((l) => (
+            <Link
+              key={l.key}
+              href={`/admin/lists/${l.key}`}
+              className="border border-gold/25 bg-velvet rounded-sm px-4 py-3 text-sm text-paper hover:border-gold/55 transition-colors"
+            >
+              {l.title}
+            </Link>
+          ))}
         </div>
+        <p className="text-[13px] text-paper/40 mt-3">참여자 명단(중첩)은 다음 단계(3B-3)에서 추가됩니다.</p>
       </div>
       <form action={logout}>
         <button
