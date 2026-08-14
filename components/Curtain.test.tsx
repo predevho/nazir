@@ -11,7 +11,7 @@ describe('Curtain', () => {
     vi.useFakeTimers();
     render(<Curtain />);
     expect(screen.getByTestId('curtain')).toBeInTheDocument();
-    act(() => vi.advanceTimersByTime(1800));
+    act(() => vi.advanceTimersByTime(2400));
     expect(screen.queryByTestId('curtain')).not.toBeInTheDocument();
   });
 });

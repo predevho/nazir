@@ -22,12 +22,17 @@ export default {
       keyframes: {
         curtainL: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-101%)' } },
         curtainR: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(101%)' } },
+        curtainSway: {
+          '0%,100%': { backgroundPositionX: '0px', transform: 'skewX(0deg) scaleX(1)' },
+          '50%': { backgroundPositionX: '15px', transform: 'skewX(-1.1deg) scaleX(1.02)' },
+        },
         riseIn: { from: { opacity: '0', transform: 'translateY(14px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
         glow: { '0%,100%': { opacity: '.55' }, '50%': { opacity: '.9' } },
       },
       animation: {
-        curtainL: 'curtainL 1.3s cubic-bezier(.7,0,.2,1) .25s forwards',
-        curtainR: 'curtainR 1.3s cubic-bezier(.7,0,.2,1) .25s forwards',
+        curtainL: 'curtainL 1.3s cubic-bezier(.7,0,.2,1) .95s forwards',
+        curtainR: 'curtainR 1.3s cubic-bezier(.7,0,.2,1) .95s forwards',
+        curtainSway: 'curtainSway 2.4s ease-in-out infinite',
         glow: 'glow 6s ease-in-out infinite',
       },
     },
