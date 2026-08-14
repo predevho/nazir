@@ -12,14 +12,14 @@ export default async function PeopleAdminPage() {
 
   const [{ data: groups }, { data: members }] = await Promise.all([
     supabase.from('people_groups').select('id,label,sort_order').order('sort_order'),
-    supabase.from('people_members').select('id,group_id,role,name,bio,photo_url,sort_order').order('sort_order'),
+    supabase.from('people_members').select('id,group_id,role,team,name,tagline,bio,photo_url,sort_order').order('sort_order'),
   ]);
   const initialGroups: InitialGroup[] = (groups ?? []).map((g) => ({
     id: g.id,
     label: g.label,
     members: (members ?? [])
       .filter((m) => m.group_id === g.id)
-      .map((m) => ({ id: m.id, role: m.role ?? '', name: m.name ?? '', bio: m.bio ?? '', photo_url: m.photo_url ?? null })),
+      .map((m) => ({ id: m.id, role: m.role ?? '', team: m.team ?? '', name: m.name ?? '', tagline: m.tagline ?? '', bio: m.bio ?? '', photo_url: m.photo_url ?? null })),
   }));
 
   return (
