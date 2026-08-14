@@ -4,6 +4,8 @@ import { getContent } from '@/lib/content';
 import { findPersonById } from '@/lib/people';
 import { MarkdownText } from '@/components/MarkdownText';
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const { people } = await getContent();
   return people.flatMap((g) => g.members.map((m) => ({ id: m.id })));

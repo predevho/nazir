@@ -42,7 +42,7 @@ export async function savePeople(_prev: SaveState, formData: FormData): Promise<
         id: m.id && String(m.id).trim() ? String(m.id) : makeId(),
         group_id: groupId,
         role: String(m.role ?? ''),
-        team: String(m.team ?? ''),
+        team: String(m.team ?? '').trim(),
         name: String(m.name ?? ''),
         tagline: String(m.tagline ?? ''),
         bio: String(m.bio ?? ''),
