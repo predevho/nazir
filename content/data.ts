@@ -219,9 +219,9 @@ export const content: AllContent = {
     qnaIntro:
       '<나지르>에 대해 궁금한 점이나 응원의 말을 자유롭게 남겨 주세요. 작품, 공연 준비 과정에 대한 질문도 좋고, 짧은 기도와 응원의 한 마디도 큰 힘이 됩니다.',
     qnaUrl: 'https://www.joey.team/b/hS1LZbUjUeYC7HxjompE',
-    instagramMain: 'https://www.instagram.com/',
-    instagramMusical: 'https://www.instagram.com/',
-    youtube: 'https://www.youtube.com/',
+    instagramMain: 'https://www.instagram.com/pray_sound_official/',
+    instagramMusical: 'https://www.instagram.com/musical_naz/',
+    youtube: 'https://www.youtube.com/@PRAYSOUND2025',
     contactInstagram: 'https://www.instagram.com/musical_naz/',
   },
   characters,

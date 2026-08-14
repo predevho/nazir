@@ -16,7 +16,7 @@ export function Footer({ site }: { site?: SiteContent }) {
         <div className="flex flex-col gap-2.5">
           <span className="font-mono text-[10px] tracking-[0.18em] text-paper/45">FOLLOW</span>
           <a href={site?.instagramMain ?? '#'} target="_blank" rel="noopener" className="text-[13.5px] font-light">Instagram — Pray Sound</a>
-          <a href={site?.instagramMusical ?? '#'} target="_blank" rel="noopener" className="text-[13.5px] font-light">Instagram — 뮤지컬 나지르</a>
+          <a href={site?.instagramMusical ?? '#'} target="_blank" rel="noopener" className="text-[13.5px] font-light">Instagram — musical_naz</a>
           <a href={site?.youtube ?? '#'} target="_blank" rel="noopener" className="text-[13.5px] font-light">YouTube — Pray Sound</a>
         </div>
       </div>

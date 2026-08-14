@@ -55,7 +55,7 @@ export const ADMIN_SECTIONS: AdminSection[] = [
     title: '푸터 · SNS',
     fields: [
       { key: 'instagramMain', label: '인스타그램 — Pray Sound (URL)' },
-      { key: 'instagramMusical', label: '인스타그램 — 뮤지컬 나지르 (URL)' },
+      { key: 'instagramMusical', label: '인스타그램 — musical_naz (URL)' },
       { key: 'youtube', label: '유튜브 (URL)' },
       { key: 'contactInstagram', label: '문의 인스타그램 (URL)' },
     ],
