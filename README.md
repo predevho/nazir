@@ -35,7 +35,7 @@ npm start        # 프로덕션 서버
 2. 대시보드 SQL Editor에서 `supabase/migrations/0001_init.sql` 전체를 실행(스키마·RLS·이미지 버킷 생성).
 3. 이어서 `supabase/seed.sql`을 실행(현재 콘텐츠 입력, 재실행 가능).
 4. 프로젝트의 Project Settings > API에서 Project URL과 anon(public) key를 복사.
-5. 프로젝트 루트에 `.env.local` 생성 후 `.env.example`을 참고해 `NEXT_PUBLIC_SUPABASE_URL`·`NEXT_PUBLIC_SUPABASE_ANON_KEY` 입력.
+5. 프로젝트 루트에 `.env.local` 생성 후 `.env.example`을 참고해 `NEXT_PUBLIC_SUPABASE_URL`·`NEXT_PUBLIC_SUPABASE_ANON_KEY` 입력. (선택) `VISIT_IP_SALT` — 방문자 IP 해시용 솔트. 미설정 시 기본값으로 동작하나, Vercel 환경변수에 임의 문자열로 설정하면 해시 프라이버시가 강화됩니다.
 6. `npm run dev`(또는 재빌드) → 콘텐츠가 Supabase에서 로드됨. 관리자 수정은 ISR로 최대 60초 내 반영.
 
 ### 추가 마이그레이션
@@ -45,6 +45,7 @@ npm start        # 프로덕션 서버
 - **`0003_storage_write_policies.sql` (사진 교체·삭제)** — `images` 버킷에 authenticated **UPDATE·DELETE** 정책을 추가해 사진 덮어쓰기와 제거를 허용합니다(기존 public read·auth insert는 유지). 대시보드 SQL Editor에서 **1회** 실행하세요. 미적용 시 사진 업로드(덮어쓰기)·제거가 실패합니다.
 - **`0004_people_team_tagline.sql` (세부팀·한줄소개)** — `people_members`에 `team`·`tagline` 컬럼을 추가하고, 팀원(g1)의 기존 `role`(팀명)을 `team`으로 이동합니다(`role`은 비움). 대시보드 SQL Editor에서 **1회** 실행하세요. ⚠️ **미적용 상태로 배포하면** 새 코드가 없는 컬럼을 조회하다 실패해 **전체 콘텐츠가 로컬 시드로 폴백**됩니다 — 배포 직전/직후 반드시 실행하세요.
 - **`0005_visits.sql` (방문자 집계)** — `visits` 테이블과 `record_visit()`·`get_visit_stats()` 함수를 추가합니다(RLS on, 함수로만 접근). 대시보드 SQL Editor에서 **1회** 실행하세요. 신규 테이블이라 미적용이어도 기존 콘텐츠 폴백은 없고, 관리자 대시보드가 "집계 준비 중"으로만 표시됩니다.
+- **`0006_visits_ip_cap.sql` (인플레이션 방어)** — `visits`에 `ip_hash` 컬럼을 추가하고 `record_visit`에 **IP당 하루 상한(100)** 을 넣습니다(원본 IP 미저장, 솔트 해시만). 대시보드 SQL Editor에서 **1회** 실행하세요. 미적용이어도 앱은 정상이며 상한만 미동작합니다.
 
 참고: 사진 업로드는 Phase 3C에서 구현되었습니다(관리자 편집기에서 등장인물·참여자 사진을 업로드하면 공개 카드에 표시).
 
@@ -107,5 +108,6 @@ npm start        # 프로덕션 서버
 - **Phase 3C (완료)** — 사진 업로드(등장인물·참여자, 브라우저 압축 → Storage `images`, 공개 카드 표시)
 - **참여자 세부팀 + 개인 상세페이지 (완료)** — 헤더진·팀원 세부팀 그룹핑, 개인 상세 라우트 `/people/[id]`, team·tagline 필드(마이그레이션 `0004`)
 - **방문자 대시보드 (완료)** — 관리자 허브에 오늘·총 방문자·최근 7일. 익명 쿠키 비콘(`/api/visit` → `record_visit`), IP·PII 미저장, 관리자 방문 제외. 통계는 로그인 관리자만(`get_visit_stats`). 마이그레이션 `0005`.
+- **방문자 인플레이션 방어 (완료)** — `/api/visit`에서 봇 User-Agent 필터 + IP당 하루 상한(100). IP는 라우트에서 `SHA-256(IP + VISIT_IP_SALT)` 해시만 계산·저장(원본 IP 미저장). 페이지·UX 영향 없음(캡차 없음). 마이그레이션 `0006`.
 
 설계·계획 문서: `docs/superpowers/`
