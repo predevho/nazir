@@ -197,7 +197,7 @@ const facts: Fact[] = [
 
 export const content: AllContent = {
   site: {
-    heroVerse: '“사람이 마음으로 자기의 길을 계획할지라도 그의 걸음을 인도하시는 이는 여호와시니라”',
+    heroVerse: '“사람이 마음으로 자기의 길을 계획할지라도\n그의 걸음을 인도하시는 이는 여호와시니라”',
     heroSubtitle: '구별된 사람들',
     heroMeta: '2027 창작뮤지컬 · 제작 PRAYSOUND\n연출 정은수 · 2027.01–02 예정',
     aboutGreeting: '인사말 원문이 확보되는 대로 이 자리에 들어갑니다. 3~5문단 분량을 기준으로 여백을 잡아두었습니다.',
