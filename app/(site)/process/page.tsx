@@ -1,7 +1,9 @@
 import { Accordion } from '@/components/Accordion';
 import { StatusChip } from '@/components/StatusChip';
 import { MarkdownText } from '@/components/MarkdownText';
+import Link from 'next/link';
 import { getContent } from '@/lib/content';
+import { groupMembersByTeam } from '@/lib/people';
 
 export const revalidate = 60;
 
@@ -29,19 +31,30 @@ export default async function Process() {
       <div className="grid gap-px bg-gold/[0.14] border border-gold/[0.14] mb-[clamp(48px,8vw,72px)]">
         {people.map((g) => (
           <Accordion key={g.id} label={g.label} defaultOpen={g.label === '헤더진'}>
-            <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
-              {g.members.map((m) => (
-                <div key={m.id} className="flex flex-col gap-1.5">
-                  <div className="aspect-square rounded-sm overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
-                    {m.photoUrl ? (
-                      <img src={m.photoUrl} alt={m.name} loading="lazy" className="w-full h-full object-cover" />
-                    ) : (
-                      <span className="font-mono text-[10px] text-paper/40">사진</span>
-                    )}
+            <div className="flex flex-col gap-4">
+              {groupMembersByTeam(g.members).map((bucket) => (
+                <div key={bucket.team || '_'} className="flex flex-col gap-2">
+                  {bucket.team && (
+                    <span className="font-mono text-[11px] tracking-[0.14em] text-gold/80 border-l-2 border-gold/40 pl-2">{bucket.team}</span>
+                  )}
+                  <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
+                    {bucket.members.map((m) => (
+                      <div key={m.id} className="flex flex-col gap-1.5">
+                        <Link href={`/people/${m.id}`} className="flex flex-col gap-1.5 group">
+                          <div className="aspect-square rounded-sm overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
+                            {m.photoUrl ? (
+                              <img src={m.photoUrl} alt={m.name} loading="lazy" className="w-full h-full object-cover transition-opacity group-hover:opacity-80" />
+                            ) : (
+                              <span className="font-mono text-[10px] text-paper/40">사진</span>
+                            )}
+                          </div>
+                          {m.role && <span className="font-mono text-[10px] tracking-[0.06em] text-gold">{m.role}</span>}
+                          <span className="font-display text-sm text-paper leading-tight group-hover:text-gold transition-colors">{m.name}</span>
+                        </Link>
+                        <MarkdownText className="text-[12px] font-light text-paper/70">{m.bio}</MarkdownText>
+                      </div>
+                    ))}
                   </div>
-                  {m.role && <span className="font-mono text-[10px] tracking-[0.06em] text-gold">{m.role}</span>}
-                  <span className="font-display text-sm text-paper leading-tight">{m.name}</span>
-                  <MarkdownText className="text-[12px] font-light text-paper/70">{m.bio}</MarkdownText>
                 </div>
               ))}
             </div>
