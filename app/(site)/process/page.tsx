@@ -37,7 +37,7 @@ export default async function Process() {
                   {bucket.team && (
                     <span className="font-mono text-[11px] tracking-[0.14em] text-gold/80 border-l-2 border-gold/40 pl-2">{bucket.team}</span>
                   )}
-                  <div className="grid gap-3 [grid-template-columns:repeat(auto-fit,minmax(180px,1fr))]">
+                  <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
                     {bucket.members.map((m) => (
                       <div key={m.id} className="flex flex-col gap-1.5">
                         <Link href={`/people/${m.id}`} className="flex flex-col gap-1.5 group">
