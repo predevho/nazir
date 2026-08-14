@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { emailToUsername } from '@/lib/adminUsername';
 import { ADMIN_LISTS } from '@/lib/adminLists';
+import { getVisitStats } from './visitStats';
+import { barHeights } from '@/lib/visits';
 import { logout } from './actions';
 
 export default async function AdminPage() {
@@ -12,10 +14,40 @@ export default async function AdminPage() {
   } = await supabase.auth.getUser();
   if (!user) redirect('/admin/login');
 
+  const stats = await getVisitStats();
+  const heights = stats ? barHeights(stats.last7, 44) : [];
+
   return (
     <section className="max-w-[760px] mx-auto px-5 py-[clamp(32px,6vw,56px)]">
       <h1 className="font-display font-bold text-[clamp(24px,5vw,32px)] text-paper mb-2">관리자</h1>
       <p className="text-sm text-paper/60 mb-8">로그인됨: {emailToUsername(user.email ?? '')}</p>
+      {stats ? (
+        <div className="mb-8">
+          <div className="grid gap-3 sm:grid-cols-2">
+            <div className="border border-gold/25 bg-velvet rounded-sm p-5">
+              <span className="font-mono text-[10px] tracking-[0.18em] text-paper/45">오늘 방문자</span>
+              <p className="font-display text-[clamp(28px,6vw,40px)] text-gold mt-1">{stats.today.toLocaleString()}</p>
+            </div>
+            <div className="border border-gold/25 bg-velvet rounded-sm p-5">
+              <span className="font-mono text-[10px] tracking-[0.18em] text-paper/45">총 방문자</span>
+              <p className="font-display text-[clamp(28px,6vw,40px)] text-gold mt-1">{stats.total.toLocaleString()}</p>
+            </div>
+          </div>
+          <div className="mt-3 border border-gold/15 bg-velvet/60 rounded-sm p-4">
+            <span className="font-mono text-[10px] tracking-[0.18em] text-paper/45">최근 7일</span>
+            <div className="flex items-end gap-2 h-[52px] mt-2">
+              {stats.last7.map((d, i) => (
+                <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
+                  <div className="w-full bg-gold/70 rounded-sm" style={{ height: `${heights[i]}px` }} title={`${d.day}: ${d.count}`} />
+                  <span className="font-mono text-[9px] text-paper/40">{d.day}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <p className="text-sm text-paper/50 mb-8">방문자 집계 준비 중입니다.</p>
+      )}
       <div className="grid gap-3 mb-10">
         <Link
           href="/admin/content"
