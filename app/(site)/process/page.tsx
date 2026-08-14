@@ -9,7 +9,7 @@ export default async function Process() {
   const { site, timeline, people, budget } = await getContent();
   return (
     <section className="max-w-[900px] mx-auto px-5 py-[clamp(48px,9vw,88px)] pb-[clamp(100px,14vw,140px)]">
-      <p className="font-mono text-[11px] tracking-[0.2em] text-gold mb-3">02 / PROCESS</p>
+      <p className="font-mono text-[11px] tracking-[0.2em] text-gold mb-3">02 / IN THE MAKING</p>
       <h2 className="font-display font-bold text-[clamp(30px,7.5vw,46px)] leading-[1.35] text-paper mb-4">무대에 오르기까지</h2>
       <p className="text-sm font-light leading-[2] text-paper/[0.72] mb-[clamp(40px,8vw,64px)] max-w-[56ch]">{site.processIntro}</p>
 
