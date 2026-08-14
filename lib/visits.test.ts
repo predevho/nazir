@@ -13,6 +13,11 @@ describe('getOrCreateVisitorId', () => {
     expect(r.setCookie).toContain('SameSite=Lax');
     expect(r.setCookie).toContain('Max-Age=');
   });
+  it('nz_vid 값이 비어 있으면 새로 생성한다', () => {
+    const r = getOrCreateVisitorId('nz_vid=; x=1', () => 'GEN');
+    expect(r.id).toBe('GEN');
+    expect(r.setCookie).toContain('nz_vid=GEN');
+  });
 });
 
 describe('barHeights', () => {

@@ -17,7 +17,8 @@ export function getOrCreateVisitorId(
     .map((c) => c.trim())
     .find((c) => c.startsWith(`${COOKIE_NAME}=`));
   if (existing) {
-    return { id: existing.slice(COOKIE_NAME.length + 1), setCookie: null };
+    const value = existing.slice(COOKIE_NAME.length + 1);
+    if (value) return { id: value, setCookie: null };
   }
   const id = gen();
   const setCookie = `${COOKIE_NAME}=${id}; Max-Age=31536000; Path=/; SameSite=Lax`;
