@@ -6,10 +6,8 @@ import { AdminNav } from '../AdminNav';
 
 export default async function ContentAdminPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect('/admin/login');
+  const { data: claimsData } = await supabase.auth.getClaims();
+  if (!claimsData?.claims) redirect('/admin/login');
 
   const { site } = await getContent();
   const values: Record<string, string> = {};

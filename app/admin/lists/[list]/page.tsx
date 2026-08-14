@@ -10,10 +10,8 @@ export default async function ListAdminPage({ params }: { params: Promise<{ list
   if (!config) notFound();
 
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect('/admin/login');
+  const { data: claimsData } = await supabase.auth.getClaims();
+  if (!claimsData?.claims) redirect('/admin/login');
 
   const { data } = await supabase.from(config.table).select('*').order('sort_order');
   const rows = (data ?? []) as Record<string, string>[];

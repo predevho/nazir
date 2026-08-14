@@ -5,10 +5,8 @@ import { PeopleEditor, type InitialGroup } from './PeopleEditor';
 
 export default async function PeopleAdminPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect('/admin/login');
+  const { data: claimsData } = await supabase.auth.getClaims();
+  if (!claimsData?.claims) redirect('/admin/login');
 
   const [{ data: groups }, { data: members }] = await Promise.all([
     supabase.from('people_groups').select('id,label,sort_order').order('sort_order'),

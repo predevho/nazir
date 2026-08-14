@@ -9,10 +9,9 @@ import { logout } from './actions';
 
 export default async function AdminPage() {
   const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect('/admin/login');
+  const { data: claimsData } = await supabase.auth.getClaims();
+  if (!claimsData?.claims) redirect('/admin/login');
+  const username = emailToUsername(String(claimsData.claims.email ?? ''));
 
   const stats = await getVisitStats();
   const heights = stats ? barHeights(stats.last7, 44) : [];
@@ -20,7 +19,7 @@ export default async function AdminPage() {
   return (
     <section className="max-w-[760px] mx-auto px-5 py-[clamp(32px,6vw,56px)]">
       <h1 className="font-display font-bold text-[clamp(24px,5vw,32px)] text-paper mb-2">관리자</h1>
-      <p className="text-sm text-paper/60 mb-8">로그인됨: {emailToUsername(user.email ?? '')}</p>
+      <p className="text-sm text-paper/60 mb-8">로그인됨: {username}</p>
       {stats ? (
         <div className="mb-8">
           <div className="grid gap-3 sm:grid-cols-2">
