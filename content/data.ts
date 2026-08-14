@@ -172,14 +172,19 @@ const people: PeopleGroup[] = peopleSeeds.map((g, gi) => ({
   id: `g${gi}`,
   label: g.label,
   sortOrder: gi,
-  members: g.members.map((m, i) => ({
-    id: `g${gi}m${i}`,
-    role: m.role,
-    name: m.name,
-    bio: '',
-    photoUrl: null,
-    sortOrder: i,
-  })),
+  members: g.members.map((m, i) => {
+    const isTeamGroup = gi === 1; // 팀원
+    return {
+      id: `g${gi}m${i}`,
+      role: isTeamGroup ? '' : m.role,
+      team: isTeamGroup ? m.role : '',
+      name: m.name,
+      tagline: '',
+      bio: '',
+      photoUrl: null,
+      sortOrder: i,
+    };
+  }),
 }));
 
 const facts: Fact[] = [

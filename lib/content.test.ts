@@ -29,8 +29,8 @@ describe('assembleContent', () => {
         { id: 'g0', label: '헤더진', sort_order: 0 },
       ],
       members: [
-        { id: 'g0m0', group_id: 'g0', role: '연출', name: '정은수', bio: '', photo_url: null, sort_order: 0 },
-        { id: 'g1m0', group_id: 'g1', role: '기획팀', name: '김은성', bio: '', photo_url: null, sort_order: 0 },
+        { id: 'g0m0', group_id: 'g0', role: '연출', team: '연출팀', name: '정은수', tagline: '', bio: '', photo_url: null, sort_order: 0 },
+        { id: 'g1m0', group_id: 'g1', role: '', team: '기획팀', name: '김은성', tagline: '한 줄', bio: '', photo_url: null, sort_order: 0 },
       ],
     });
     expect(result.site.accountNumber).toBe('1234-56-7890');
@@ -39,6 +39,8 @@ describe('assembleContent', () => {
     expect(result.characters[0].photoUrl).toBe('http://img/a.jpg');
     expect(result.people.map((g) => g.label)).toEqual(['헤더진', '팀원']);
     expect(result.people[0].members[0].name).toBe('정은수');
+    expect(result.people[0].members[0].team).toBe('연출팀');
+    expect(result.people[1].members[0].tagline).toBe('한 줄');
   });
 
   it('content_blocks에 없는 site 필드는 로컬 기본값으로 채운다', () => {
