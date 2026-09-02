@@ -1,0 +1,19 @@
+# core.autocrlf=true 환경에서 바이너리가 개행 변환으로 손상되는 것을 막는다.
+# Git이 자동 판별하긴 하지만, 폰트·이미지는 명시해 두는 편이 안전하다.
+*.woff  binary
+*.woff2 binary
+*.otf   binary
+*.ttf   binary
+*.eot   binary
+
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.avif binary
+*.ico  binary
+*.pdf  binary
+
+# 텍스트 파일은 저장소에 LF로 저장한다.
+* text=auto eol=lf

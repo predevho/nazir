@@ -2,6 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
+/* 시안 폰트. 파일은 public/fonts/ 에 두며, 배치 방법은 그 폴더의 README.md 참고.
+   woff2 → otf → ttf 순으로 찾고, 앞의 것이 404면 다음으로 넘어간다.
+   셋 다 없으면 아래 대체 폰트로 렌더링되며 빌드는 정상이다. */
+@font-face {
+  font-family: 'Heir of Light';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/HeirOfLight-Regular.woff2') format('woff2'),
+       url('/fonts/HeirOfLight-Regular.otf') format('opentype'),
+       url('/fonts/HeirOfLight-Regular.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Heir of Light';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/HeirOfLight-Bold.woff2') format('woff2'),
+       url('/fonts/HeirOfLight-Bold.otf') format('opentype'),
+       url('/fonts/HeirOfLight-Bold.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'Griun Gossi';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/GriunGossi-Regular.woff2') format('woff2'),
+       url('/fonts/GriunGossi-Regular.otf') format('opentype'),
+       url('/fonts/GriunGossi-Regular.ttf') format('truetype');
+}
+
 html, body { margin: 0; padding: 0; background: #0B0A0E; }
 * { box-sizing: border-box; }
 body {
