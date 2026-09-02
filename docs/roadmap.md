@@ -2,7 +2,8 @@
 
 2026-09-02 기준. 새 Figma 시안 반영 작업의 남은 작업 목록입니다.
 결정 근거는 [decisions.md](decisions.md), 실측 토큰은 [design-tokens.md](design-tokens.md),
-클라이언트 의견은 [client-feedback.md](client-feedback.md)를 참고하세요.
+클라이언트 의견은 [client-feedback.md](client-feedback.md),
+모바일 변환 현황은 [mobile-ui.md](mobile-ui.md)를 참고하세요.
 
 ---
 
@@ -15,6 +16,7 @@
 - [x] Tailwind에 `ds-*` 색상 6종 / `font-heir` / `font-griun` / `max-w-content` 추가
 - [x] `/fonts/*` 영구 캐시 헤더 (`next.config.ts`)
 - [x] `.gitattributes` — 폰트 바이너리 손상 방지 (`core.autocrlf=true` 환경)
+- [x] **모바일 랜딩페이지 시안** (390 폭) — Figma 섹션 `모바일 UI` → [mobile-ui.md](mobile-ui.md)
 
 ---
 
