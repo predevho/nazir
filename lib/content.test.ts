@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { getContent, assembleContent } from './content';
+import { content as seed } from '../content/data';
 
 describe('getContent (폴백 경로)', () => {
   it('env가 없으면 로컬 데이터를 반환한다', async () => {
@@ -70,7 +71,10 @@ describe('assembleContent', () => {
 
   it('about_letters 테이블이 없는 배포(0008 이전)에서는 로컬 시드로 떨어진다', () => {
     const result = assembleContent(empty);
-    expect(result.letters.map((l) => l.section)).toEqual(['greeting']);
+    // 시드에 편지를 더 넣고 빼도 이 테스트가 깨지지 않도록 개수를 박지 않는다.
+    // 확인할 것은 "테이블이 없으면 시드가 그대로 나온다"는 사실 하나다.
+    expect(result.letters).toEqual(seed.letters);
+    expect(result.letters.length).toBeGreaterThan(0);
     expect(result.site.heroSubtitle).toBe('구별된 사람들');
   });
 

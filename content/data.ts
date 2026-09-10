@@ -189,9 +189,12 @@ const people: PeopleGroup[] = peopleSeeds.map((g, gi) => ({
 }));
 
 /**
- * 편지 이미지 시드. 인스타그램 `The Leader's Letter` 게시물의 1장째다.
- * 나머지는 운영진이 관리자 페이지(`/admin/lists/letters`)에서 추가한다 —
+ * 편지 이미지 시드. 인스타그램 `The Leader's Letter` 게시물 두 장을 그대로 옮겼다.
+ * 더 늘리거나 바꾸는 것은 운영진이 관리자 페이지(`/admin/lists/letters`)에서 한다 —
  * 장수는 고정이 아니라 등록한 만큼 `1 / N`으로 표시된다.
+ *
+ * Praysound 소개(`praysound`) 쪽 편지는 아직 원본을 받지 못해 비어 있고,
+ * 그 화면에는 "이미지가 아직 등록되지 않았습니다" 안내가 나간다.
  */
 const letters: AboutLetter[] = [
   {
@@ -200,6 +203,13 @@ const letters: AboutLetter[] = [
     imageUrl: '/images/about-letter-1.webp',
     caption: '리더의 편지 1장 — 사명을 지닌 모든 분들께',
     sortOrder: 0,
+  },
+  {
+    id: 'l1',
+    section: 'greeting',
+    imageUrl: '/images/about-letter-2.webp',
+    caption: '리더의 편지 2장 — 사명을 찾는 길에는 많은 수고와 어려움이 따르는 것 같습니다',
+    sortOrder: 1,
   },
 ];
 
