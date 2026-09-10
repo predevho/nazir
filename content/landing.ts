@@ -22,7 +22,7 @@ export const LANDING_CARDS: LandingCard[] = [
     title: '<나지르>에 대하여',
     subtitle: '연출의 인사말 · Praysound · 작품 소개',
     description: 'Praysound가 전하고 싶었던 위로가\n창작뮤지컬 <나지르>로 이어진\n여정을 소개합니다.',
-    icon: '/images/landing-icon-1.png',
+    icon: '/images/landing-icon-1.webp',
     copyConfirmed: true,
   },
   {
@@ -30,7 +30,7 @@ export const LANDING_CARDS: LandingCard[] = [
     title: '제작 과정',
     subtitle: '제작 일정 · 제작 예산',
     description: '<나지르>가 무대에 오르기까지\n준비 과정과 앞으로의 필요를\n공유합니다.',
-    icon: '/images/landing-icon-2.png',
+    icon: '/images/landing-icon-2.webp',
     copyConfirmed: true,
   },
   {
@@ -39,7 +39,7 @@ export const LANDING_CARDS: LandingCard[] = [
     subtitle: '헤더진 · 스탭진 · 배우',
     // 시안 미작성(1번 카드 복붙) — 임시 문구
     description: '각자의 자리에서 기도하며\n<나지르>를 함께 세워가는\n사람들을 소개합니다.',
-    icon: '/images/landing-icon-3.png',
+    icon: '/images/landing-icon-3.webp',
     copyConfirmed: false,
   },
   {
@@ -48,7 +48,7 @@ export const LANDING_CARDS: LandingCard[] = [
     subtitle: '후원으로 함께하기 · 기도로 동참하기',
     // 시안 미작성(1번 카드 복붙) — 임시 문구
     description: '이 무대가 온전히 세워지도록\n후원과 기도로 함께해 주세요.',
-    icon: '/images/landing-icon-4.png',
+    icon: '/images/landing-icon-4.webp',
     copyConfirmed: false,
   },
   {
@@ -57,7 +57,7 @@ export const LANDING_CARDS: LandingCard[] = [
     subtitle: '<나지르>를 향한 응원의 한마디',
     // 시안 미작성(1번 카드 복붙) — 임시 문구
     description: '준비하는 사람들에게 남기는\n짧은 응원 한 마디가\n큰 힘이 됩니다.',
-    icon: '/images/landing-icon-5.png',
+    icon: '/images/landing-icon-5.webp',
     copyConfirmed: false,
   },
 ];

@@ -9,8 +9,11 @@ export const revalidate = 60;
  * 히어로에 텍스트가 없고 카피가 이미지 안에 그려져 있어, h1은 화면에서 숨기고
  * 스크린리더에만 남긴다.
  *
- * 히어로·카드 아이콘 이미지는 public/images/ 에 둔다 (public/images/README.md 참고).
- * 파일이 없으면 배경만 비고 레이아웃은 그대로 유지된다.
+ * 오버레이는 CSS로 얹지 않는다. 원본 포스터가 2904×3871 세로 이미지를 잘라 쓰는
+ * 구조라 노드째 내보냈고, 그 결과물에 검정 20%가 이미 반영돼 있다
+ * (내보낸 PNG의 채널 최대값이 204 = 255×0.8). 한 번 더 얹으면 이중으로 어두워진다.
+ *
+ * 이미지는 public/images/ 에 둔다 (public/images/README.md 참고).
  */
 export default function Home() {
   return (
@@ -21,8 +24,7 @@ export default function Home() {
         className="w-full bg-ds-bg bg-cover bg-center bg-no-repeat"
         style={{
           aspectRatio: '1920 / 757',
-          backgroundImage:
-            'linear-gradient(0deg, rgba(0,0,0,.2), rgba(0,0,0,.2)), url(/images/landing-hero.png)',
+          backgroundImage: 'url(/images/landing-hero.webp)',
         }}
       />
 
