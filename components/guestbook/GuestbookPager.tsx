@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Chevron } from '@/components/ui/Chevron';
 
 /**
  * 응원글 페이지 이동. 시안에는 게시판 페이지네이션 UI가 없어(명세에도 규칙이 없다)
@@ -18,11 +19,11 @@ export function GuestbookPager({ page, totalPages }: { page: number; totalPages:
     >
       {page > 1 ? (
         <Link href={href(page - 1)} aria-label="이전 페이지" className="tap-target px-2 hover:text-ds-key2">
-          ‹
+          <Chevron dir="left" />
         </Link>
       ) : (
         <span aria-hidden className="px-2 text-ds-text/25">
-          ‹
+          <Chevron dir="left" />
         </span>
       )}
       <span>
@@ -30,11 +31,11 @@ export function GuestbookPager({ page, totalPages }: { page: number; totalPages:
       </span>
       {page < totalPages ? (
         <Link href={href(page + 1)} aria-label="다음 페이지" className="tap-target px-2 hover:text-ds-key2">
-          ›
+          <Chevron dir="right" />
         </Link>
       ) : (
         <span aria-hidden className="px-2 text-ds-text/25">
-          ›
+          <Chevron dir="right" />
         </span>
       )}
     </nav>

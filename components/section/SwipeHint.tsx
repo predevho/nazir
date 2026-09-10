@@ -1,4 +1,5 @@
 'use client';
+import { Chevron } from '@/components/ui/Chevron';
 
 /** 한 번 보고 나면 다시 띄우지 않는다. 기기별로 남는 값이라 서버는 모른다. */
 export const SWIPE_HINT_KEY = 'nazir:swipe-hint-seen';
@@ -44,9 +45,7 @@ export function SwipeHint({ visible, onDismiss }: { visible: boolean; onDismiss:
         tabIndex={visible ? 0 : -1}
         className={`${visible ? 'pointer-events-auto' : ''} flex items-center gap-2 rounded-full border border-ds-key2/40 bg-ds-panel/90 px-4 py-2 font-heir text-[13px] leading-none text-ds-text shadow-lg backdrop-blur-sm`}
       >
-        <span aria-hidden className="motion-safe:animate-swipe-nudge text-[16px] text-ds-key2">
-          ‹
-        </span>
+        <Chevron dir="left" className="motion-safe:animate-swipe-nudge text-[16px] text-ds-key2" />
         왼쪽으로 밀어 다음 장으로
       </button>
     </div>

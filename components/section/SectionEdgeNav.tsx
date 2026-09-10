@@ -2,6 +2,7 @@
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import type { Neighbors } from '@/lib/sectionNav';
+import { Chevron } from '@/components/ui/Chevron';
 
 /**
  * 화면 좌우 끝에 붙는 이전·다음 버튼. 인스타그램 캐러셀과 같은 자리다.
@@ -54,14 +55,14 @@ export function SectionEdgeNav({ neighbors }: { neighbors: Neighbors }) {
       {/* 첫 장·끝 장에서는 빈 자리를 남겨 반대쪽 버튼이 제자리에 머물게 한다. */}
       {prev ? (
         <Link href={prev.href} aria-label={`이전: ${prev.label}`} className={edge}>
-          ‹
+          <Chevron dir="left" />
         </Link>
       ) : (
         <span />
       )}
       {next ? (
         <Link href={next.href} aria-label={`다음: ${next.label}`} className={edge}>
-          ›
+          <Chevron dir="right" />
         </Link>
       ) : (
         <span />

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { getNeighbors, type SectionItem } from '@/lib/sectionNav';
+import { Chevron } from '@/components/ui/Chevron';
 
 /**
  * 시안 하단 페이지네이션 도트. `Frame 36` 기준으로 지름 18px, gap 60px.
@@ -54,11 +55,11 @@ export function SectionDots({
     >
       {prev ? (
         <Link href={prev.href} aria-label={`이전: ${prev.label}`} className={arrowOn}>
-          ‹
+          <Chevron dir="left" />
         </Link>
       ) : (
         <span aria-hidden className={arrowOff}>
-          ‹
+          <Chevron dir="left" />
         </span>
       )}
 
@@ -87,11 +88,11 @@ export function SectionDots({
 
       {next ? (
         <Link href={next.href} aria-label={`다음: ${next.label}`} className={arrowOn}>
-          ›
+          <Chevron dir="right" />
         </Link>
       ) : (
         <span aria-hidden className={arrowOff}>
-          ›
+          <Chevron dir="right" />
         </span>
       )}
     </nav>

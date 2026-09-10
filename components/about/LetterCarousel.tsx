@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react';
 import type { AboutLetter } from '@/content/types';
 import { readSwipe } from '@/lib/sectionNav';
+import { Chevron } from '@/components/ui/Chevron';
 
 /**
  * 시안 `Frame 35`: 편지 이미지 634×846, 아래에 `‹ 1 / N ›` 페이저.
@@ -78,10 +79,10 @@ export function LetterCarousel({ letters, label }: { letters: AboutLetter[]; lab
         {total > 1 && (
           <>
             <button type="button" onClick={() => go(-1)} aria-label="이전 장" className={`${edge} left-3`}>
-              ‹
+              <Chevron dir="left" />
             </button>
             <button type="button" onClick={() => go(1)} aria-label="다음 장" className={`${edge} right-3`}>
-              ›
+              <Chevron dir="right" />
             </button>
           </>
         )}

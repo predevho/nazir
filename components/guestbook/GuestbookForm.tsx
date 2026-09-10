@@ -2,6 +2,7 @@
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MESSAGE_MAX, NAME_MAX } from '@/lib/guestbook';
+import { Chevron } from '@/components/ui/Chevron';
 
 type Status = { kind: 'idle' | 'sending' } | { kind: 'done' | 'error'; message: string };
 
@@ -107,7 +108,7 @@ export function GuestbookForm() {
         >
           {/* 한 줄 폼에서는 시안대로 화살표만, 쌓였을 때는 무엇을 누르는지 글자로 밝힌다. */}
           <span className="sm:hidden">응원 남기기</span>
-          <span aria-hidden>›</span>
+          <Chevron dir="right" />
         </button>
       </div>
 
