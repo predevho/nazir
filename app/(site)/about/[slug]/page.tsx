@@ -4,6 +4,7 @@ import { getContent } from '@/lib/content';
 import { MarkdownText } from '@/components/MarkdownText';
 import { SectionDots } from '@/components/SectionDots';
 import { SwipeNavigator } from '@/components/SwipeNavigator';
+import { SectionEdgeNav } from '@/components/SectionEdgeNav';
 import { getNeighbors } from '@/lib/sectionNav';
 import { LetterCarousel } from '@/components/LetterCarousel';
 import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
@@ -63,6 +64,7 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
 
   return (
     <SwipeNavigator neighbors={neighbors}>
+      <SectionEdgeNav neighbors={neighbors} />
       <section className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,7vw,88px)]">
         <div className="grid gap-x-16 gap-y-12 xl:grid-cols-[497px_1fr]">
           <header className="flex flex-col gap-3">

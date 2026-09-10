@@ -26,15 +26,18 @@ export function SectionDots({
   const { prev, next } = getNeighbors(items, activeSlug, basePath);
 
   /**
-   * 화살표는 시안에 없다. 명세 9행 때문에 더한 것이라 도트의 조형(원형·18px·회색)을
-   * 따르되, 테두리를 둘러 "누르는 것"으로 읽히게 한다.
-   * 글리프만 두었을 때는 옆의 회색 도트와 구분되지 않아 있는 줄도 모른다.
+   * 화살표는 시안에 없다. 명세 9행 때문에 더한 것이라 도트의 조형(원형·회색)을 따르되,
+   * 테두리를 둘러 "누르는 것"으로 읽히게 한다.
+   *
+   * md 이상에서는 숨긴다. 그 폭부터는 화면 좌우 끝의 SectionEdgeNav 가 같은 일을 하고,
+   * 도트 줄에까지 화살표를 두면 같은 기능이 한 화면에 두 번 나온다.
+   * 모바일에서는 반대다 — 가장자리 버튼이 본문을 덮으므로 여기 남는 쪽이 맞다.
    *
    * 끝 페이지에서도 비활성 상태를 지운 자리에 남겨 둔다. 사라지면 도트 줄이 옆으로
    * 밀려 어느 쪽으로 가는 중인지 알기 어려워진다.
    */
   const arrow =
-    'tap-target flex h-8 w-8 items-center justify-center rounded-full border font-heir text-[20px] leading-none transition-colors';
+    'tap-target flex h-8 w-8 items-center justify-center rounded-full border font-heir text-[20px] leading-none transition-colors md:hidden';
   const arrowOn = `${arrow} border-ds-text/30 text-ds-text hover:border-ds-key2 hover:text-ds-key2`;
   const arrowOff = `${arrow} border-ds-text/10 text-ds-text/25`;
 

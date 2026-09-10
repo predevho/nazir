@@ -4,6 +4,7 @@ import { getContent } from '@/lib/content';
 import { CopyButton } from '@/components/CopyButton';
 import { SectionDots } from '@/components/SectionDots';
 import { SwipeNavigator } from '@/components/SwipeNavigator';
+import { SectionEdgeNav } from '@/components/SectionEdgeNav';
 import { getNeighbors } from '@/lib/sectionNav';
 import { MarkdownText } from '@/components/MarkdownText';
 import { JOIN_SECTIONS, findJoinSection } from '@/content/join';
@@ -47,6 +48,7 @@ export default async function JoinSectionPage({ params }: { params: Promise<{ sl
 
   return (
     <SwipeNavigator neighbors={neighbors}>
+      <SectionEdgeNav neighbors={neighbors} />
       <section className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,7vw,88px)]">
         <div className="grid gap-x-16 gap-y-12 xl:grid-cols-[497px_1fr]">
           <header className="flex flex-col gap-3">

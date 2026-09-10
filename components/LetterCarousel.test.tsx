@@ -58,6 +58,21 @@ describe('LetterCarousel', () => {
     expect(screen.getByText('1 / 3')).toBeInTheDocument();
   });
 
+  it('puts the arrows on the image itself, not in a row under it', () => {
+    // 인스타그램 캐러셀과 같은 자리다. 좌우 가장자리에 겹쳐 올린다.
+    const { container } = render(<LetterCarousel letters={[letter(1), letter(2)]} label="편지" />);
+    const prev = screen.getByRole('button', { name: '이전 장' });
+    const next = screen.getByRole('button', { name: '다음 장' });
+    for (const b of [prev, next]) {
+      expect(b.className).toContain('absolute');
+      expect(b.className).toContain('tap-target');
+    }
+    expect(prev.className).toContain('left-3');
+    expect(next.className).toContain('right-3');
+    // 겹쳐 올리려면 figure 가 기준 상자여야 한다
+    expect(container.querySelector('figure')?.className).toContain('relative');
+  });
+
   it('wraps around backwards from the first page', async () => {
     const user = userEvent.setup();
     render(<LetterCarousel letters={[letter(1), letter(2), letter(3)]} label="연출의 인사말" />);

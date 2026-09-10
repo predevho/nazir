@@ -55,35 +55,36 @@ export function LetterCarousel({ letters, label }: { letters: AboutLetter[]; lab
     if (dir === 'prev') go(-1);
   }
 
+  /**
+   * 편지 위에 겹쳐 놓는 좌우 버튼. 인스타그램 캐러셀과 같은 자리다.
+   * 글리프만 두면 편지의 손글씨에 묻히므로 반투명 원판을 깔아 띄운다.
+   * 장수 표기(`1 / N`)는 시안에 있는 요소라 아래에 그대로 남긴다.
+   */
+  const edge =
+    'tap-target absolute top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/45 font-heir text-[20px] leading-none text-white backdrop-blur-sm transition-colors hover:border-ds-key2 hover:text-ds-key2';
+
   return (
-    <figure className="m-0" data-swipe-ignore onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+    <figure className="relative m-0" data-swipe-ignore onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <img
         src={current.imageUrl ?? ''}
         alt={current.caption || `${label} ${index + 1}번째 장`}
         className="aspect-[634/846] w-full rounded-lg object-cover"
       />
+
       {total > 1 && (
-        <figcaption className="mt-4 flex items-center justify-center gap-6 font-heir text-[15px] text-ds-text">
-          <button
-            type="button"
-            onClick={() => go(-1)}
-            aria-label="이전 장"
-            className="px-2 leading-none transition-colors hover:text-ds-key2"
-          >
+        <>
+          <button type="button" onClick={() => go(-1)} aria-label="이전 장" className={`${edge} left-3`}>
             ‹
           </button>
-          <span aria-live="polite">
-            {index + 1} / {total}
-          </span>
-          <button
-            type="button"
-            onClick={() => go(1)}
-            aria-label="다음 장"
-            className="px-2 leading-none transition-colors hover:text-ds-key2"
-          >
+          <button type="button" onClick={() => go(1)} aria-label="다음 장" className={`${edge} right-3`}>
             ›
           </button>
-        </figcaption>
+          <figcaption className="mt-4 text-center font-heir text-[15px] text-ds-text">
+            <span aria-live="polite">
+              {index + 1} / {total}
+            </span>
+          </figcaption>
+        </>
       )}
     </figure>
   );
