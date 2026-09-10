@@ -10,6 +10,7 @@ const entry = (over: Partial<AdminEntry> = {}): AdminEntry => ({
   name: '정은수',
   message: '응원합니다',
   isHeld: false,
+  holdReasons: [],
   createdAt: '2026-08-26T04:00:00.000Z',
   replies: [],
   ...over,
@@ -133,5 +134,16 @@ describe('GuestbookAdmin', () => {
     expect(screen.getByText('첫 답글')).toBeInTheDocument();
     expect(screen.getByText('둘째 답글')).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: '지우기' })).toHaveLength(2);
+  });
+
+  it('왜 숨겨졌는지 밝힌다 — 사유 없이 숨김만 보이면 판단할 근거가 없다', () => {
+    render(<GuestbookAdmin entries={[entry({ isHeld: true, holdReasons: ['promo', 'contact'] })]} />);
+    expect(screen.getByText('광고성 문구 · 연락처·아이디')).toBeInTheDocument();
+  });
+
+  it('운영진이 손으로 숨긴 글에는 사유 뱃지를 붙이지 않는다', () => {
+    render(<GuestbookAdmin entries={[entry({ isHeld: true, holdReasons: [] })]} />);
+    expect(screen.getByText('숨김')).toBeInTheDocument();
+    expect(screen.queryByText(/광고성 문구|욕설/)).not.toBeInTheDocument();
   });
 });

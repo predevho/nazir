@@ -3,6 +3,7 @@ import { AdminNav } from '../AdminNav';
 import { createClient } from '@/lib/supabase/server';
 import { GuestbookAdmin, type AdminEntry } from './GuestbookAdmin';
 import { groupRepliesByEntry, type GuestbookReply } from '@/lib/guestbook';
+import type { HoldReason } from '@/lib/moderation';
 
 /** 검토 화면이라 항상 최신 상태를 봐야 한다. */
 export const dynamic = 'force-dynamic';
@@ -15,7 +16,7 @@ export default async function GuestbookAdminPage() {
   // 로그인 상태라 RLS의 `auth all` 정책이 걸려 숨긴 글까지 보인다.
   const { data, error } = await supabase
     .from('guestbook_entries')
-    .select('id,name,message,is_held,created_at')
+    .select('id,name,message,is_held,hold_reasons,created_at')
     .order('created_at', { ascending: false });
 
   // 답글까지 한 번에 읽는다. 숨긴 글의 답글도 여기서는 보여야 한다.
@@ -42,6 +43,7 @@ export default async function GuestbookAdminPage() {
       name: r.name as string,
       message: r.message as string,
       isHeld: r.is_held as boolean,
+      holdReasons: (r.hold_reasons ?? []) as HoldReason[],
       createdAt: r.created_at as string,
       replies: byEntry.get(r.id as string) ?? [],
     }))
@@ -54,7 +56,9 @@ export default async function GuestbookAdminPage() {
         응원 게시판
       </h1>
       <p className="mb-8 text-sm text-ds-text/60">
-        링크가 포함된 글은 등록 시 자동으로 숨겨집니다. 확인 후 공개하거나 삭제하세요.
+        욕설·광고·연락처·도배로 보이는 글은 등록 시 자동으로 숨겨집니다. 왜 걸렸는지는 각
+        글에 표시됩니다. 규칙은 우회가 쉬우니 걸린 글을 그대로 믿지 말고 한 번 읽어 보세요.
+        멀쩡한 글이면 공개하면 됩니다.
         <br />
         답글은 운영진만 답니다. 남기면 게시판의 해당 쪽지 아래에 바로 붙습니다.
       </p>

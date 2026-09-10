@@ -2,12 +2,15 @@
 import { useActionState, useState } from 'react';
 import { moderateEntry, saveReply, type ModerateState } from './actions';
 import { REPLY_MAX, formatNoteDate, type GuestbookReply } from '@/lib/guestbook';
+import { describeHold, type HoldReason } from '@/lib/moderation';
 
 export type AdminEntry = {
   id: string;
   name: string;
   message: string;
   isHeld: boolean;
+  /** 왜 숨겨졌는지. 비어 있으면 운영진이 손으로 숨긴 글이다. */
+  holdReasons: HoldReason[];
   createdAt: string;
   replies: GuestbookReply[];
 };
@@ -35,7 +38,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
     <div className="flex flex-col gap-4">
       {held.length > 0 && (
         <p className="border border-ds-key2/40 bg-ds-key2/[0.08] px-4 py-3 text-sm text-ds-text">
-          검토 대기 {held.length}건 — 링크가 포함되어 자동으로 숨겨진 글입니다.
+          검토 대기 {held.length}건 — 규칙에 걸려 자동으로 숨겨진 글입니다.
         </p>
       )}
       {(state.message || replyState.message) && (
@@ -62,6 +65,12 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
               </span>
               {e.isHeld && (
                 <span className="font-mono text-[10px] tracking-[0.14em] text-ds-key2">숨김</span>
+              )}
+              {/* 무엇에 걸렸는지 밝힌다. 사유 없이 숨김만 보이면 판단할 근거가 없다. */}
+              {e.holdReasons.length > 0 && (
+                <span className="border border-ds-key2/40 px-2 py-0.5 text-[11px] text-ds-key2/90">
+                  {describeHold(e.holdReasons)}
+                </span>
               )}
             </div>
             <p className="mt-2 whitespace-pre-line break-words text-sm font-light leading-[1.9] text-ds-text/80">

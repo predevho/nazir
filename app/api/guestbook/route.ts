@@ -3,6 +3,7 @@ import { createHash } from 'crypto';
 import { createReadClient } from '@/lib/supabase/read';
 import { isBotUserAgent } from '@/lib/visitorGuard';
 import { checkSubmission } from '@/lib/guestbook';
+import { screenMessage } from '@/lib/moderation';
 
 /** 방문자 집계와 같은 방식으로 IP를 해시해 둔다. 원본 IP는 저장하지 않는다. */
 function hashIp(req: Request): string {
@@ -47,10 +48,21 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, reason: 'unavailable' }, { status: 503 });
   }
 
+  const message = String(body.message).trim();
+
+  /*
+    욕설·광고·도배 1차 선별. 거절이 아니라 **보류 사유**만 만든다 — 걸린 글도
+    사라지지 않고 운영진 검토 큐로 간다(docs/decisions.md C-4).
+    나중에 AI 판정을 얹을 자리도 여기다: hold 가 false 인 글만 모델에 넘기고,
+    호출이 실패하면 그때도 보류로 보낸다.
+  */
+  const verdict = screenMessage(message);
+
   const { data, error } = await supabase.rpc('submit_guestbook_entry', {
     p_name: String(body.name).trim(),
-    p_message: String(body.message).trim(),
+    p_message: message,
     p_ip_hash: hashIp(req),
+    p_reasons: verdict.reasons,
   });
   if (error) {
     return NextResponse.json({ ok: false, reason: 'unavailable' }, { status: 503 });
