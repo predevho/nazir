@@ -4,6 +4,7 @@ import { GuestbookForm } from '@/components/GuestbookForm';
 import { GuestbookNote } from '@/components/GuestbookNote';
 import { GuestbookPager } from '@/components/GuestbookPager';
 import { PAGE_SIZE, resolvePage, type GuestbookEntry } from '@/lib/guestbook';
+import { pageMeta } from '@/lib/pageMeta';
 
 /** 응원글은 바로 보여야 하므로 캐시하지 않는다. */
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: '응원 게시판',
   description: '창작뮤지컬 <나지르>를 준비하는 사람들에게 응원 한 마디를 남겨 주세요.',
+  ...pageMeta('/guestbook'),
 };
 
 /**

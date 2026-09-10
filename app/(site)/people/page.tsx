@@ -3,12 +3,14 @@ import { getContent } from '@/lib/content';
 import { resolvePeopleTab } from '@/lib/people';
 import { PeopleTabs } from '@/components/PeopleTabs';
 import { PeopleGrid } from '@/components/PeopleGrid';
+import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: '함께하는 사람들',
   description: '창작뮤지컬 <나지르>를 함께 세워가는 헤더진 · 스탭진 · 배우를 소개합니다.',
+  ...pageMeta('/people'),
 };
 
 /**

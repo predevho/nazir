@@ -8,6 +8,7 @@ import { getNeighbors } from '@/lib/sectionNav';
 import { LetterCarousel } from '@/components/LetterCarousel';
 import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
 import type { AllContent } from '@/content/types';
+import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;
 
@@ -23,7 +24,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const section = findAboutSection(slug);
   if (!section) return {};
-  return { title: `${section.title} · 〈나지르〉에 대하여` };
+  return {
+    title: `${section.title} · 〈나지르〉에 대하여`,
+    ...pageMeta(`/about/${section.slug}`),
+  };
 }
 
 /**

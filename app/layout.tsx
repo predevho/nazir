@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { getSiteUrl } from '@/lib/siteUrl';
+import { OG_BASE } from '@/lib/pageMeta';
 
 const title = '나지르 · 구별된 사람들';
 const description =
@@ -18,15 +19,10 @@ export const metadata: Metadata = {
   title: { default: title, template: '%s · 나지르' },
   description,
   applicationName: '나지르',
-  openGraph: {
-    type: 'website',
-    locale: 'ko_KR',
-    siteName: '나지르',
-    // title·description을 여기 고정하면 서브페이지를 공유해도 홈 제목이 나간다.
-    // 비워두면 각 페이지의 title·description이 그대로 og로 올라간다.
-    url: '/',
-    images: [{ url: '/images/og.jpg', width: 1200, height: 630, alt: '창작뮤지컬 〈나지르〉' }],
-  },
+  // title·description을 여기 고정하면 서브페이지를 공유해도 홈 제목이 나간다.
+  // 비워두면 각 페이지의 title·description이 그대로 og로 올라간다.
+  alternates: { canonical: '/' },
+  openGraph: { ...OG_BASE, url: '/' },
   twitter: {
     card: 'summary_large_image',
     images: ['/images/og.jpg'],

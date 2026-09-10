@@ -7,6 +7,7 @@ import { SwipeNavigator } from '@/components/SwipeNavigator';
 import { getNeighbors } from '@/lib/sectionNav';
 import { TimelineCard } from '@/components/TimelineCard';
 import { PROCESS_SECTIONS, findProcessSection } from '@/content/process';
+import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;
 
@@ -22,7 +23,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const section = findProcessSection(slug);
   if (!section) return {};
-  return { title: section.title };
+  return { title: section.title, ...pageMeta(`/process/${section.slug}`) };
 }
 
 /**

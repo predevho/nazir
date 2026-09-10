@@ -7,6 +7,7 @@ import { SwipeNavigator } from '@/components/SwipeNavigator';
 import { getNeighbors } from '@/lib/sectionNav';
 import { MarkdownText } from '@/components/MarkdownText';
 import { JOIN_SECTIONS, findJoinSection } from '@/content/join';
+import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;
 
@@ -22,7 +23,10 @@ export async function generateMetadata({
   const { slug } = await params;
   const section = findJoinSection(slug);
   if (!section) return {};
-  return { title: `${section.title} · 후원과 기도` };
+  return {
+    title: `${section.title} · 후원과 기도`,
+    ...pageMeta(`/join/${section.slug}`),
+  };
 }
 
 /**

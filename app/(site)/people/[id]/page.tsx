@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
 import { findPersonById } from '@/lib/people';
 import { MarkdownText } from '@/components/MarkdownText';
+import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;
 
@@ -21,6 +22,7 @@ export async function generateMetadata({
     description: [groupLabel, member.team, member.role, member.name]
       .filter(Boolean)
       .join(' · '),
+    ...pageMeta(`/people/${member.id}`),
   };
 }
 
