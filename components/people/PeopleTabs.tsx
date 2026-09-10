@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { PeopleGroup } from '../content/types';
+import type { PeopleGroup } from '@/content/types';
 
 /**
  * 시안 탭 바: 925×45, 3등분. 활성은 노랑 + 밑줄, 비활성은 회색.

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
-import { MarkdownText } from '@/components/MarkdownText';
-import { SectionDots } from '@/components/SectionDots';
-import { SwipeNavigator } from '@/components/SwipeNavigator';
-import { SectionEdgeNav } from '@/components/SectionEdgeNav';
+import { MarkdownText } from '@/components/ui/MarkdownText';
+import { SectionDots } from '@/components/section/SectionDots';
+import { SwipeNavigator } from '@/components/section/SwipeNavigator';
+import { SectionEdgeNav } from '@/components/section/SectionEdgeNav';
 import { getNeighbors } from '@/lib/sectionNav';
-import { LetterCarousel } from '@/components/LetterCarousel';
+import { LetterCarousel } from '@/components/about/LetterCarousel';
 import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
 import type { AllContent } from '@/content/types';
 import { pageMeta } from '@/lib/pageMeta';

@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
-import type { AboutLetter } from '../content/types';
-import { readSwipe } from '../lib/sectionNav';
+import type { AboutLetter } from '@/content/types';
+import { readSwipe } from '@/lib/sectionNav';
 
 /**
  * 시안 `Frame 35`: 편지 이미지 634×846, 아래에 `‹ 1 / N ›` 페이저.

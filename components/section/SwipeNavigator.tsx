@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { readSwipe, type Neighbors } from '../lib/sectionNav';
+import { readSwipe, type Neighbors } from '@/lib/sectionNav';
 import { SwipeHint, hintAlreadySeen, markHintSeen } from './SwipeHint';
 
 /**

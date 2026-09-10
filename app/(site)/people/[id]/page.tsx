@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
 import { findPersonById } from '@/lib/people';
-import { MarkdownText } from '@/components/MarkdownText';
+import { MarkdownText } from '@/components/ui/MarkdownText';
 import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;

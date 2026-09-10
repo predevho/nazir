@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { MESSAGE_MAX, NAME_MAX } from '../lib/guestbook';
+import { MESSAGE_MAX, NAME_MAX } from '@/lib/guestbook';
 
 type Status = { kind: 'idle' | 'sending' } | { kind: 'done' | 'error'; message: string };
 

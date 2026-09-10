@@ -1,8 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { SectionDots } from './SectionDots';
-import { ABOUT_SECTIONS } from '../content/about';
-import { JOIN_SECTIONS } from '../content/join';
+import { ABOUT_SECTIONS } from '@/content/about';
+import { JOIN_SECTIONS } from '@/content/join';
 
 describe('SectionDots', () => {
   it('renders one dot per sub page', () => {

@@ -1,6 +1,6 @@
 import { content as localContent } from '../content/data';
 import type { AboutLetterSection, AllContent, SiteContent, TimelineStatus } from '../content/types';
-import { createServerClient } from './supabase';
+import { createReadClient } from './supabase/read';
 
 type Rows = {
   blocks: { key: string; value: string }[];
@@ -60,7 +60,7 @@ export function assembleContent(rows: Rows): AllContent {
 
 /** Supabase 우선, 미설정/실패 시 로컬 폴백. */
 export async function getContent(): Promise<AllContent> {
-  const client = createServerClient();
+  const client = createReadClient();
   if (!client) return localContent;
   try {
     const [blocks, facts, characters, timeline, budget, prayers, groups, members, letters] = await Promise.all([

@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { createServerClient } from '@/lib/supabase';
-import { GuestbookForm } from '@/components/GuestbookForm';
-import { GuestbookNote } from '@/components/GuestbookNote';
-import { GuestbookPager } from '@/components/GuestbookPager';
+import { createReadClient } from '@/lib/supabase/read';
+import { GuestbookForm } from '@/components/guestbook/GuestbookForm';
+import { GuestbookNote } from '@/components/guestbook/GuestbookNote';
+import { GuestbookPager } from '@/components/guestbook/GuestbookPager';
 import { PAGE_SIZE, resolvePage, type GuestbookEntry } from '@/lib/guestbook';
 import { pageMeta } from '@/lib/pageMeta';
 
@@ -29,7 +29,7 @@ export default async function GuestbookPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: rawPage } = await searchParams;
-  const supabase = createServerClient();
+  const supabase = createReadClient();
 
   let entries: GuestbookEntry[] = [];
   let page = 1;

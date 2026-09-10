@@ -1,5 +1,5 @@
 import { LANDING_CARDS } from '@/content/landing';
-import { LandingCards } from '@/components/LandingCards';
+import { LandingCards } from '@/components/landing/LandingCards';
 
 export const revalidate = 60;
 

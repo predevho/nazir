@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { TimelineCard } from './TimelineCard';
-import type { TimelineEvent } from '../content/types';
+import type { TimelineEvent } from '@/content/types';
 
 const events = (n: number): TimelineEvent[] =>
   Array.from({ length: n }, (_, i) => ({

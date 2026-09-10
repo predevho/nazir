@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { LetterCarousel } from './LetterCarousel';
-import type { AboutLetter } from '../content/types';
+import type { AboutLetter } from '@/content/types';
 
 const letter = (n: number, over: Partial<AboutLetter> = {}): AboutLetter => ({
   id: `l${n}`,

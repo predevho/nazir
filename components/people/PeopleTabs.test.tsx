@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { PeopleTabs } from './PeopleTabs';
-import type { PeopleGroup } from '../content/types';
+import type { PeopleGroup } from '@/content/types';
 
 const groups: PeopleGroup[] = [
   { id: 'g0', label: '헤더진', sortOrder: 0, members: [] },

@@ -1,4 +1,4 @@
-import type { SiteContent } from '../content/types';
+import type { SiteContent } from '@/content/types';
 
 /**
  * 시안 규격: 배경 #181A1B, 3컬럼 각 413px · 간격 64px,

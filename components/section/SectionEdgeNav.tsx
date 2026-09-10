@@ -1,7 +1,7 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import type { Neighbors } from '../lib/sectionNav';
+import type { Neighbors } from '@/lib/sectionNav';
 
 /**
  * 화면 좌우 끝에 붙는 이전·다음 버튼. 인스타그램 캐러셀과 같은 자리다.

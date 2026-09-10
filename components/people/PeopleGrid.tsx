@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import type { PeopleMember } from '../content/types';
-import { memberRoleLabel } from '../lib/people';
+import type { PeopleMember } from '@/content/types';
+import { memberRoleLabel } from '@/lib/people';
 
 /**
  * 시안 규격: 그리드 1398×708, 열 gap 12px · 행 gap 8px, 카드 270×350

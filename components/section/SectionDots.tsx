@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { getNeighbors, type SectionItem } from '../lib/sectionNav';
+import { getNeighbors, type SectionItem } from '@/lib/sectionNav';
 
 /**
  * 시안 하단 페이지네이션 도트. `Frame 36` 기준으로 지름 18px, gap 60px.

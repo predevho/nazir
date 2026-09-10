@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { getContent } from '@/lib/content';
 import { resolvePeopleTab } from '@/lib/people';
-import { PeopleTabs } from '@/components/PeopleTabs';
-import { PeopleGrid } from '@/components/PeopleGrid';
+import { PeopleTabs } from '@/components/people/PeopleTabs';
+import { PeopleGrid } from '@/components/people/PeopleGrid';
 import { pageMeta } from '@/lib/pageMeta';
 
 export const revalidate = 60;

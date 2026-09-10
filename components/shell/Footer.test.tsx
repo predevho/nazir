@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Footer } from './Footer';
-import { content } from '../content/data';
+import { content } from '@/content/data';
 
 describe('Footer', () => {
   it('renders the three columns from the design', () => {

@@ -18,12 +18,41 @@ npm start        # 프로덕션 서버
 
 | 경로 | 설명 |
 |------|------|
-| `app/` | App Router — `layout.tsx`(공통 레이아웃·폰트·헤더/푸터/커튼), `page.tsx`(홈), `about/`·`process/`·`join/` |
-| `content/` | 콘텐츠 타입(`types.ts`)과 데이터(`data.ts`) |
-| `lib/content.ts` | 데이터 접근 계층(`getContent`) — Supabase 우선, env 없으면 로컬 데이터로 폴백 |
-| `components/` | 공통 UI (Header, Footer, StatusChip, Accordion, CopyButton, Curtain, Spotlight, HeroBackdrop) |
+| `app/(site)/` | 공개 화면. `layout.tsx`(헤더·푸터·커튼), 랜딩, `about/`·`process/`·`join/`·`people/`·`guestbook/` |
+| `app/admin/` | 관리자 화면. 로그인·콘텐츠 편집·목록 편집·응원글 관리 |
+| `app/api/` | `guestbook`(응원글 등록), `visit`(방문 기록) |
+| `components/` | 화면 단위로 묶은 UI (아래 표) |
+| `content/` | 콘텐츠 타입(`types.ts`)·시드(`data.ts`)와 세부 페이지 정의(`about.ts`·`join.ts`·`process.ts`·`landing.ts`) |
+| `lib/` | 화면에 의존하지 않는 로직. `content.ts`(데이터 접근), `sectionNav.ts`, `guestbook.ts`, `pageMeta.ts`, `image/`, `supabase/` |
+| `supabase/migrations/` | 배포 DB에 1회씩 실행하는 SQL. 번호순으로 적용합니다 |
+| `docs/` | 시안 대조·결정 기록·로드맵·모바일 작업 현황 |
+| `proxy.ts` | Next 16 미들웨어. `/admin/*` 세션 갱신 |
 
-페이지는 **서버 컴포넌트**로 `await getContent()`를 호출하고, 인터랙티브 요소(계좌 복사·아코디언·커튼·스포트라이트·헤더)만 `'use client'`입니다. 데이터 출처가 바뀌어도 페이지는 `lib/content.ts`에만 의존합니다.
+### `components/` — 폴더 이름이 곧 쓰이는 화면입니다
+
+| 폴더 | 들어 있는 것 |
+|------|------|
+| `shell/` | 전 화면 공통 껍데기 — `Header` · `Footer` · `Curtain` · `VisitBeacon` |
+| `section/` | 세부 페이지 이동 — `SectionDots` · `SectionEdgeNav` · `SwipeNavigator` · `SwipeHint` |
+| `landing/` | `LandingCards` |
+| `about/` | `LetterCarousel` |
+| `process/` | `TimelineCard` |
+| `people/` | `PeopleGrid` · `PeopleTabs` |
+| `guestbook/` | `GuestbookForm` · `GuestbookNote` · `GuestbookPager` |
+| `ui/` | 여러 화면이 함께 쓰는 조각 — `CopyButton` · `MarkdownText` |
+
+테스트는 대상 파일 옆에 둡니다(`SectionDots.tsx` ↔ `SectionDots.test.tsx`).
+
+### `lib/supabase/` — 클라이언트가 넷입니다
+
+| 파일 | 쓰임 |
+|------|------|
+| `read.ts` | 공개 콘텐츠 읽기. 세션 없음 → ISR 캐싱 가능. env 없으면 `null`(로컬 시드로 폴백) |
+| `server.ts` | 로그인이 필요한 서버 작업. 쿠키를 실어 나릅니다 |
+| `client.ts` | 브라우저용 |
+| `middleware.ts` | `proxy.ts`가 부르는 세션 갱신 |
+
+페이지는 **서버 컴포넌트**로 `await getContent()`를 호출하고, 손이 닿는 것(계좌 복사·헤더 메뉴·스와이프·응원 폼·편지 캐러셀)만 `'use client'`입니다. 데이터 출처가 바뀌어도 페이지는 `lib/content.ts`에만 의존합니다.
 
 ## Supabase 연결 (선택)
 

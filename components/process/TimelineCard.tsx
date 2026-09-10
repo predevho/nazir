@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import type { TimelineEvent } from '../content/types';
-import { TIMELINE_PREVIEW_COUNT } from '../content/process';
+import type { TimelineEvent } from '@/content/types';
+import { TIMELINE_PREVIEW_COUNT } from '@/content/process';
 
 /**
  * 시안 `제작 과정` 01의 일정 카드.

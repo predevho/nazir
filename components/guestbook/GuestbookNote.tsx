@@ -1,4 +1,4 @@
-import { formatNoteDate, noteStyle, type GuestbookEntry } from '../lib/guestbook';
+import { formatNoteDate, noteStyle, type GuestbookEntry } from '@/lib/guestbook';
 
 /**
  * 시안 쪽지 카드 (코멘트 #43).

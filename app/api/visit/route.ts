@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createHash } from 'crypto';
-import { createServerClient } from '@/lib/supabase';
+import { createReadClient } from '@/lib/supabase/read';
 import { isBotUserAgent } from '@/lib/visitorGuard';
 
 function hashIp(req: Request): string {
@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     }
     const { visitorId } = await req.json();
     if (typeof visitorId === 'string' && visitorId.length >= 8 && visitorId.length <= 64) {
-      const supabase = createServerClient();
+      const supabase = createReadClient();
       if (supabase) {
         await supabase.rpc('record_visit', { p_visitor_id: visitorId, p_ip_hash: hashIp(req) });
       }

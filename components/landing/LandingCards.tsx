@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import type { LandingCard } from '../content/landing';
+import type { LandingCard } from '@/content/landing';
 
 /**
  * 데스크톱 시안: 행 1398×350, gap 12px → 카드 5개 각 270×350.

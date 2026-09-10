@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { PeopleGrid } from './PeopleGrid';
-import type { PeopleMember } from '../content/types';
+import type { PeopleMember } from '@/content/types';
 
 const member = (over: Partial<PeopleMember> = {}): PeopleMember => ({
   id: 'g0m0',

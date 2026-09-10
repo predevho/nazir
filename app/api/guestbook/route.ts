@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createHash } from 'crypto';
-import { createServerClient } from '@/lib/supabase';
+import { createReadClient } from '@/lib/supabase/read';
 import { isBotUserAgent } from '@/lib/visitorGuard';
 import { checkSubmission } from '@/lib/guestbook';
 
@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     );
   }
 
-  const supabase = createServerClient();
+  const supabase = createReadClient();
   if (!supabase) {
     return NextResponse.json({ ok: false, reason: 'unavailable' }, { status: 503 });
   }

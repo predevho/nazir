@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { LandingCards } from './LandingCards';
-import { LANDING_CARDS } from '../content/landing';
+import { LANDING_CARDS } from '@/content/landing';
 
 describe('LandingCards', () => {
   it('renders the five cards from the design in order', () => {
