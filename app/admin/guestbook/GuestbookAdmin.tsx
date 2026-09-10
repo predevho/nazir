@@ -77,8 +77,13 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
               {e.message}
             </p>
 
-            <div className="mt-3 flex flex-wrap gap-2">
-              <form action={formAction}>
+            {/*
+              폼으로 감싼 버튼과 안 감싼 버튼이 섞여 있다. 폼이 박스를 하나 더 만들어
+              정렬 기준이 서로 달라지므로, 폼에 display:contents 를 줘서 버튼이 직접
+              flex 항목이 되게 했다. items-center 로 높이도 맞춘다.
+            */}
+            <div className="mt-3 flex flex-wrap items-center gap-2">
+              <form action={formAction} className="contents">
                 <input type="hidden" name="id" value={e.id} />
                 <input type="hidden" name="op" value={e.isHeld ? 'release' : 'hold'} />
                 <button
@@ -92,7 +97,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
 
               {confirming === e.id ? (
                 <>
-                  <form action={formAction} onSubmit={() => setConfirming(null)}>
+                  <form action={formAction} onSubmit={() => setConfirming(null)} className="contents">
                     <input type="hidden" name="id" value={e.id} />
                     <input type="hidden" name="op" value="delete" />
                     <button
@@ -130,12 +135,15 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                     {r.message}
                   </p>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <span className="font-mono text-[11px] text-ds-text/40">
+                    {/* 날짜는 숫자라 monospace 가 맞고, 한글 라벨은 아니다.
+                        monospace 스택에 한글 글리프가 없어 글자마다 다른 폰트로 떨어진다. */}
+                    <span className="font-mono text-[11px] leading-none text-ds-text/40">
                       {formatNoteDate(r.createdAt)}
                     </span>
                     {/*
-                      원글 쪽 버튼과 같은 11px 을 쓴다. 답글 줄만 10px 이라 한 화면에
-                      두 크기가 섞여 있었다. 화면에 보이는 말도 원글 쪽(삭제)에 맞춘다.
+                      두 버튼은 클래스가 같아야 한다. 하나는 폼 안, 하나는 밖이라
+                      구조가 어긋나 있었고 크기도 10px/11px 로 갈렸다.
+                      폼에 display:contents 를 줘서 둘 다 같은 flex 의 직접 항목이 된다.
 
                       aria-label 로 "답글"을 붙여 원글의 삭제 버튼과 구분한다 —
                       화면에는 같은 글자가 두 번 나오므로, 소리로 듣는 사람에게는
@@ -145,18 +153,18 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                       type="button"
                       onClick={() => setComposing(composing === r.id ? null : r.id)}
                       aria-label={composing === r.id ? '답글 수정 접기' : '답글 수정'}
-                      className="cursor-pointer font-mono text-[11px] text-ds-key2 hover:underline"
+                      className="cursor-pointer text-[12px] leading-none text-ds-key2 hover:underline"
                     >
                       {composing === r.id ? '접기' : '수정'}
                     </button>
-                    <form action={replyAction}>
+                    <form action={replyAction} className="contents">
                       <input type="hidden" name="op" value="delete" />
                       <input type="hidden" name="replyId" value={r.id} />
                       <button
                         type="submit"
                         disabled={replyPending}
                         aria-label="답글 삭제"
-                        className="cursor-pointer font-mono text-[11px] text-ds-text/45 hover:text-red-300 disabled:opacity-40"
+                        className="cursor-pointer text-[12px] leading-none text-ds-text/45 hover:text-red-300 disabled:opacity-40"
                       >
                         삭제
                       </button>
