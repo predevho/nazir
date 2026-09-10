@@ -110,18 +110,27 @@
 
 설계 트레이드오프는 `decisions.md` "응원 게시판" 절에 정리돼 있습니다.
 
-- [ ] 테이블 마이그레이션
-  - `guestbook_entries` — 이름, 메시지, 생성일, `ip_hash`, `is_hearted`(운영진 하트), 보류 플래그
-  - `guestbook_replies` — 1:N (운영진 답글)
-- [ ] 공개 작성 API + 봇 대응 4종
-  - Rate limit (IP 해시, **시간당 10건 이상으로 넉넉히** — 단체 관람 오탐 주의)
-  - Honeypot 필드 (`autocomplete="off"`)
+**1차(읽기·쓰기)는 완료.** 하트·대댓글은 확정 대기라 빠져 있습니다.
+
+- [x] 테이블 마이그레이션 `0009_guestbook.sql`
+  - `guestbook_entries` — 이름, 메시지, 생성일, `ip_hash`, `is_held`(보류 플래그)
+  - `is_hearted` · `guestbook_replies`는 확정 후 별도 마이그레이션
+  - 공개 읽기는 RLS로 `is_held = false`만. anon 직접 insert는 막고
+    `submit_guestbook_entry` SECURITY DEFINER 함수로만 받는다
+    (브라우저에 노출된 anon 키로 우회 삽입할 수 없게 — `record_visit`과 같은 패턴)
+- [x] 공개 작성 API `POST /api/guestbook` + 봇 대응 4종
+  - Rate limit — IP 해시, **시간당 15건** (단체 관람 오탐 여유)
+  - Honeypot 필드 (`autocomplete="off"`, 화면 밖 배치)
   - 제출 시간 검사 (3초 미만 차단)
   - 링크 포함 글 보류 (삭제 아님)
-- [ ] 쪽지 카드 렌더
-  - `428×224`, 악보 배경 정사각형·직사각형 교대
+  - 허니팟·시간 위반은 이유를 알려주지 않는다(우회 힌트가 되므로)
+- [x] 쪽지 카드 렌더
+  - 악보 배경 정사각형(`note-square`)·직사각형(`note-wide`) 교대
   - 테이프 `77×36`, 각도 **8° / −8° 교대**
-  - 배치: 좌상단 이름 / 가운데 내용 / 좌하단 아이콘 / 우하단 날짜
+  - 배치: 좌상단 이름 / 가운데 내용 / 우하단 날짜
+  - ⚠️ 좌하단 댓글 아이콘은 대댓글이 없어 넣지 않았다(눌러도 안 되는 아이콘 방지)
+- [ ] **페이지네이션** — 지금은 최신 24개까지만. 명세에 규칙이 없어 보류
+  (figma-spec-review 6-1 2번)
 - [ ] 대댓글 확장 인터랙션 — 아이콘 클릭 시 레이어 확장
   - **디자이너 요청 필요**: 9-slice용 3분할 악보 이미지 **또는** 답글용 작은 쪽지 이미지
   - CSS 세로 늘림은 악보 오선이 왜곡되므로 사용하지 않음
@@ -168,8 +177,8 @@
 
 ## 배포 전 점검
 
-- [ ] **마이그레이션 적용** — `0007`(people_groups 라벨 팀원→스탭진) · `0008`(about_letters).
-      Supabase 대시보드 SQL Editor에서 직접 실행해야 합니다
+- [ ] **마이그레이션 적용** — `0007`(people_groups 라벨 팀원→스탭진) · ~~`0008`(about_letters)~~ 적용 완료 ·
+      `0009`(guestbook). Supabase 대시보드 SQL Editor에서 직접 실행해야 합니다
 - [ ] **관리자에서 고칠 값** — 은행명 `KAKAOBANK` → `카카오뱅크`,
       예산 총액 `₩ 9,000,000` → 시안 표기 `9,000,000원`
 - [ ] Vercel 배포 후 `/fonts/HeirOfLight-Regular.otf` 200 확인
