@@ -101,4 +101,37 @@ describe('GuestbookAdmin', () => {
     expect(box.value).toBe('고맙습니다');
     expect(container.querySelector('input[name="replyId"][value="r1"]')).toBeInTheDocument();
   });
+
+  it('답글을 연 그 글에 붙인다 — 늘 첫 글로 가면 안 된다', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <GuestbookAdmin entries={[entry({ id: 'first' }), entry({ id: 'second' })]} />,
+    );
+    const openButtons = screen.getAllByRole('button', { name: '+ 답글 달기' });
+    expect(openButtons).toHaveLength(2);
+
+    await user.click(openButtons[1]);
+    const ids = [...container.querySelectorAll('input[name="entryId"]')].map((n) =>
+      n.getAttribute('value'),
+    );
+    expect(ids).toEqual(['second']);
+  });
+
+  it('한 글에 답글이 여러 개 붙을 수 있다 (1:N)', () => {
+    render(
+      <GuestbookAdmin
+        entries={[
+          entry({
+            replies: [
+              { id: 'r1', entryId: 'e1', message: '첫 답글', createdAt: '2026-08-27T04:00:00.000Z' },
+              { id: 'r2', entryId: 'e1', message: '둘째 답글', createdAt: '2026-08-28T04:00:00.000Z' },
+            ],
+          }),
+        ]}
+      />,
+    );
+    expect(screen.getByText('첫 답글')).toBeInTheDocument();
+    expect(screen.getByText('둘째 답글')).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: '지우기' })).toHaveLength(2);
+  });
 });
