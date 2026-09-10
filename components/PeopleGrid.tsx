@@ -4,7 +4,8 @@ import { memberRoleLabel } from '../lib/people';
 
 /**
  * 시안 규격: 그리드 1398×708, 열 gap 12px · 행 gap 8px, 카드 270×350
- * (배경 #CBA610, 테두리 0.5px #DAC32D). 5열 × 2행.
+ * (배경 #CBA610, 테두리 0.5px #DAC32D, 반경 8px,
+ * 그림자 X10 Y10 흐림30 #000000 6%). 5열 × 2행.
  *
  * 시안 카드 내부는 비어 있어 구성은 Figma 코멘트 #37을 따른다 — 사진 + 역할 + 이름,
  * 클릭하면 개인 페이지(`/people/[id]`). 요구사항 명세서 32~34행에는 상세페이지 항목이
@@ -22,7 +23,7 @@ export function PeopleGrid({ members }: { members: PeopleMember[] }) {
           <li key={m.id}>
             <Link
               href={`/people/${m.id}`}
-              className="group flex aspect-[27/35] flex-col overflow-hidden border-[0.5px] border-ds-key2 bg-ds-key2-fill transition-opacity hover:opacity-90"
+              className="group flex aspect-[27/35] flex-col overflow-hidden rounded-lg border-[0.5px] border-ds-key2 bg-ds-key2-fill shadow-[10px_10px_30px_rgba(0,0,0,0.06)] transition-opacity hover:opacity-90"
             >
               <div className="flex flex-[26] items-center justify-center overflow-hidden bg-ds-key1/10">
                 {m.photoUrl ? (
