@@ -76,11 +76,13 @@ describe('SectionEdgeNav', () => {
     expect(wrap.className).toContain('opacity-100');
   });
 
-  it('only shows from md up, since edge buttons cover the copy on a phone', () => {
-    // 390 화면에서는 SectionDots 안의 화살표와 스와이프가 같은 일을 한다.
+  it('only shows from 2xl up, where the buttons fit outside the 1398px content column', () => {
+    // 그 아래 폭에서는 화면 끝 버튼이 본문 카드를 덮는다(768·1024 에서 36px).
+    // 좁은 쪽은 SectionDots 안의 화살표가, 모바일은 스와이프와 코치마크가 맡는다.
     const { container } = render(<SectionEdgeNav neighbors={both} />);
     const wrap = container.firstElementChild as HTMLElement;
     expect(wrap.className).toContain('hidden');
-    expect(wrap.className).toContain('md:flex');
+    expect(wrap.className).toContain('2xl:flex');
+    expect(wrap.className).not.toContain('md:flex');
   });
 });

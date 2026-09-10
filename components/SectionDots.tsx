@@ -26,23 +26,24 @@ export function SectionDots({
   const { prev, next } = getNeighbors(items, activeSlug, basePath);
 
   /**
-   * 화살표는 시안에 없다. 명세 9행 때문에 더한 것이라 도트의 조형(원형·회색)을 따르되,
-   * 테두리를 둘러 "누르는 것"으로 읽히게 한다.
+   * 화살표는 시안에 없다. 명세 9행 때문에 더한 것이라 도트의 조형(원형)을 따르되,
+   * 키컬러 노랑으로 칠해 회색 도트와 확실히 구분한다.
    *
-   * md 이상에서는 숨긴다. 그 폭부터는 화면 좌우 끝의 SectionEdgeNav 가 같은 일을 하고,
-   * 도트 줄에까지 화살표를 두면 같은 기능이 한 화면에 두 번 나온다.
-   * 모바일에서는 반대다 — 가장자리 버튼이 본문을 덮으므로 여기 남는 쪽이 맞다.
+   * 폭에 따라 이 줄에 있을지, 화면 좌우 끝(SectionEdgeNav)에 있을지가 갈린다.
+   *   ~767  없음. 스와이프와 코치마크가 대신한다. 좁은 화면에 버튼까지 두면 번잡하다.
+   *   768~1535  여기. 화면 끝에 두면 콘텐츠 폭 1398 때문에 본문 카드를 최대 36px 덮는다.
+   *   1536~  화면 좌우 끝. 그 폭부터 본문 바깥에 버튼이 들어갈 여백이 생긴다.
    *
    * 끝 페이지에서도 비활성 상태를 지운 자리에 남겨 둔다. 사라지면 도트 줄이 옆으로
    * 밀려 어느 쪽으로 가는 중인지 알기 어려워진다.
    */
   const arrow =
-    'tap-target flex h-8 w-8 items-center justify-center rounded-full border font-heir text-[20px] leading-none transition-colors md:hidden';
-  const arrowOn = `${arrow} border-ds-text/30 text-ds-text hover:border-ds-key2 hover:text-ds-key2`;
-  const arrowOff = `${arrow} border-ds-text/10 text-ds-text/25`;
+    'tap-target hidden h-9 w-9 items-center justify-center rounded-full border font-heir text-[20px] leading-none transition-colors md:flex 2xl:hidden';
+  const arrowOn = `${arrow} border-ds-key2/50 text-ds-key2 hover:border-ds-key2 hover:bg-ds-key2 hover:text-ds-key1`;
+  const arrowOff = `${arrow} border-ds-text/10 text-ds-text/20`;
 
   return (
-    // gap-7(28px)이면 화살표와 첫 도트의 터치 범위(각 44px)가 겹치지 않는다.
+    // 화살표가 없는 모바일에서는 도트만 남아 gap 이 쓰이지 않는다.
     // 도트 사이 간격은 시안값 60px 그대로다 — 화살표는 시안에 없는 추가 요소라 여기만 조정한다.
     <nav aria-label={`${label} 세부 페이지`} className="flex items-center gap-7">
       {prev ? (
@@ -57,10 +58,8 @@ export function SectionDots({
 
       {/*
         시안 간격은 60px이지만 그건 1920 폭 기준이다. 390에서는 도트 4개(72) +
-        간격 3개(180) + 화살표 2개(64) + 그 여백(56) = 372px 로 콘텐츠 폭 342를 넘는다.
-        body 의 overflow-x-hidden 이 가려줄 뿐 끝 도트가 잘린다.
-        모바일만 32px로 좁힌다 — 중심 간 50px이라 44px 터치 범위도 겹치지 않고,
-        전체 288px로 342 안에 들어온다.
+        간격 3개(180) = 252px 로 콘텐츠 폭 342 안에 겨우 들어가고, 터치 범위 44px끼리
+        서로 겹친다. 모바일만 32px로 좁힌다 — 중심 간 50px이라 겹치지 않는다.
       */}
       <ul className="flex items-center gap-8 sm:gap-[60px]">
         {items.map((item) => {
