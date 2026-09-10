@@ -80,11 +80,30 @@ export function checkSubmission(input: {
  * 시안은 쪽지 배경으로 정사각형·직사각형 악보를 번갈아 쓰고,
  * 테이프를 8° / −8°로 교대해 붙인다 (코멘트 #43).
  */
-export function noteStyle(index: number): { background: string; tapeAngle: number } {
-  return {
-    background: index % 2 === 0 ? '/images/note-square.webp' : '/images/note-wide.webp',
-    tapeAngle: index % 2 === 0 ? 8 : -8,
-  };
+export function noteStyle(index: number): NoteStyle {
+  return index % 2 === 0
+    ? { background: '/images/note-square.webp', slice: '72 44 92 44', border: '30px 22px 38px 22px', tapeAngle: 8 }
+    : { background: '/images/note-wide.webp', slice: '80 50 100 50', border: '30px 20px 38px 20px', tapeAngle: -8 };
+}
+
+/**
+ * 쪽지 배경은 찢어진 악보 비트맵이다. 답글이 붙어 종이가 길어져야 하는데,
+ * `background-size: 100% 100%` 로 늘리면 악보 오선 간격이 벌어지고 찢어진 가장자리가
+ * 같이 늘어나 눈에 띄게 어색해진다 — docs/decisions.md C-2.
+ *
+ * 그래서 `border-image` 로 같은 이미지를 9칸으로 잘라 쓴다. 네 모서리와 가장자리는
+ * 그대로 두고 가운데만 반복시키므로 높이가 변해도 종이 질감이 유지된다.
+ * `slice` 는 원본 픽셀 기준 자르는 위치, `border` 는 화면에서 그 조각이 차지할 두께다.
+ *
+ * 이 방법이면 디자이너에게 3분할 이미지를 따로 받을 필요가 없다.
+ */
+export interface NoteStyle {
+  background: string;
+  /** border-image-slice — 원본 이미지에서 자를 위치(px) */
+  slice: string;
+  /** border-width — 잘린 조각이 화면에서 차지할 두께 */
+  border: string;
+  tapeAngle: number;
 }
 
 /** 한 페이지에 깔리는 쪽지 수. 시안 그리드가 4열이라 4의 배수로 둔다. */

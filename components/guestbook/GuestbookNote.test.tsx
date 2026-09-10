@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { GuestbookNote } from './GuestbookNote';
 
 const entry = {
@@ -32,46 +33,62 @@ describe('GuestbookNote', () => {
     expect(b.querySelector('span')?.getAttribute('style')).toContain('rotate(-8deg)');
   });
 
-  it('붙은 답글을 쪽지 아래에 함께 보여준다 (명세 45행)', () => {
-    render(
-      <ul>
-        <GuestbookNote
-          entry={entry}
-          index={0}
-          replies={[
-            { id: 'r1', entryId: entry.id, message: '고맙습니다', createdAt: '2026-08-27T04:00:00.000Z' },
-          ]}
-        />
-      </ul>,
-    );
-    expect(screen.getByText('고맙습니다')).toBeInTheDocument();
-    // 누가 쓴 답글인지 밝힌다. 답글은 운영진만 단다 — decisions.md C-2
-    expect(screen.getByText('제작팀')).toBeInTheDocument();
+  const reply = (id: string, message: string) => ({
+    id, entryId: entry.id, message, createdAt: '2026-08-27T04:00:00.000Z',
   });
 
-  it('답글이 없으면 아무 자리도 차지하지 않는다', () => {
+  it('댓글 아이콘을 눌러야 답글이 펼쳐진다 — 시안이 정한 동작', async () => {
+    const user = userEvent.setup();
+    render(
+      <ul>
+        <GuestbookNote entry={entry} index={0} replies={[reply('r1', '고맙습니다')]} />
+      </ul>,
+    );
+    const toggle = screen.getByRole('button', { name: '답글 1개 보기' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+
+    await user.click(toggle);
+    expect(screen.getByText('고맙습니다')).toBeVisible();
+    expect(screen.getByRole('button', { name: '답글 접기' })).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('접혀 있을 때는 답글이 화면에 없다', () => {
+    render(
+      <ul>
+        <GuestbookNote entry={entry} index={0} replies={[reply('r1', '고맙습니다')]} />
+      </ul>,
+    );
+    expect(screen.getByText('고맙습니다')).not.toBeVisible();
+  });
+
+  it('답글이 없으면 아이콘도 두지 않는다 — 눌러도 아무 일 없는 아이콘은 없는 것만 못하다', () => {
     render(
       <ul>
         <GuestbookNote entry={entry} index={0} />
       </ul>,
     );
-    expect(screen.queryByText('제작팀')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 
-  it('답글이 여러 개면 순서대로 쌓는다 (1:N)', () => {
+  it('답글이 여러 개면 개수를 아이콘 옆에 적고 순서대로 쌓는다 (1:N)', async () => {
+    const user = userEvent.setup();
     render(
       <ul>
-        <GuestbookNote
-          entry={entry}
-          index={0}
-          replies={[
-            { id: 'r1', entryId: entry.id, message: '먼저', createdAt: '2026-08-27T04:00:00.000Z' },
-            { id: 'r2', entryId: entry.id, message: '나중', createdAt: '2026-08-28T04:00:00.000Z' },
-          ]}
-        />
+        <GuestbookNote entry={entry} index={0} replies={[reply('r1', '먼저'), reply('r2', '나중')]} />
       </ul>,
     );
-    const shown = screen.getAllByText(/먼저|나중/).map((n) => n.textContent);
-    expect(shown).toEqual(['먼저', '나중']);
+    await user.click(screen.getByRole('button', { name: '답글 2개 보기' }));
+    expect(screen.getAllByText(/먼저|나중/).map((n) => n.textContent)).toEqual(['먼저', '나중']);
+  });
+
+  it('종이를 늘리지 않고 9칸으로 잘라 쓴다 — 늘리면 악보 오선이 벌어진다', () => {
+    const { container } = render(
+      <ul>
+        <GuestbookNote entry={entry} index={0} />
+      </ul>,
+    );
+    const paper = container.querySelector('article') as HTMLElement;
+    expect(paper.style.borderImage).toContain('note-square.webp');
+    expect(paper.style.backgroundImage).toBe('');
   });
 });

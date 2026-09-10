@@ -60,9 +60,22 @@ describe('checkSubmission', () => {
 
 describe('noteStyle', () => {
   it('alternates the sheet-music background and the tape angle (comment #43)', () => {
-    expect(noteStyle(0)).toEqual({ background: '/images/note-square.webp', tapeAngle: 8 });
-    expect(noteStyle(1)).toEqual({ background: '/images/note-wide.webp', tapeAngle: -8 });
+    expect(noteStyle(0).background).toBe('/images/note-square.webp');
+    expect(noteStyle(0).tapeAngle).toBe(8);
+    expect(noteStyle(1).background).toBe('/images/note-wide.webp');
+    expect(noteStyle(1).tapeAngle).toBe(-8);
     expect(noteStyle(2)).toEqual(noteStyle(0));
+  });
+
+  it('그림마다 자르는 위치가 따로다 — 두 이미지의 찢어진 폭이 다르다', () => {
+    // 답글이 붙어 종이가 길어져도 오선이 벌어지지 않게 9칸으로 잘라 쓴다.
+    // 자르는 값이 이미지에 안 맞으면 가장자리가 뭉개진다.
+    for (const i of [0, 1]) {
+      const { slice, border } = noteStyle(i);
+      expect(slice.split(' ')).toHaveLength(4);
+      expect(border.split(' ')).toHaveLength(4);
+    }
+    expect(noteStyle(0).slice).not.toBe(noteStyle(1).slice);
   });
 });
 
