@@ -2,15 +2,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { NAV_ITEMS as items } from "@/content/nav";
 
-/** 시안 GNB 메뉴 5개. 라벨은 Figma `개발자용 페이지` 그대로(꺾쇠 없음). */
-const items = [
-  { to: "/about", label: "나지르에 대하여" },
-  { to: "/process", label: "제작 과정" },
-  { to: "/people", label: "함께하는 사람들" },
-  { to: "/join", label: "후원과 기도" },
-  { to: "/guestbook", label: "응원 게시판" },
-];
 
 const isActive = (pathname: string, to: string) =>
   pathname === to || pathname.startsWith(`${to}/`);
