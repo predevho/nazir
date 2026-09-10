@@ -208,8 +208,9 @@
 - [x] **캐시 헤더 확인** — `/fonts/*` 에 `public, max-age=31536000, immutable` 적용 확인
 - [x] **프로덕션 빌드 확인** — `next build` 통과. 정적/동적 분리도 의도대로입니다
       (콘텐츠 페이지 SSG + 1분 revalidate, `/guestbook`·`/admin/*`·API는 동적)
-- [ ] **`NEXT_PUBLIC_SITE_URL` 설정** — Vercel 환경변수에 실제 도메인을 넣어야 합니다.
-      비면 Vercel 자동 도메인을 쓰는데, 카톡 공유 썸네일이 그 주소로 나갑니다
+- [ ] **`NEXT_PUBLIC_SITE_URL` 설정** — Vercel 환경변수에 `https://nazir.cloud` 를 넣어야 합니다.
+      비면 Vercel 자동 도메인(`*.vercel.app`)을 쓰는데, 카톡 공유 썸네일과 sitemap.xml 이 그 주소로 나갑니다.
+      Production·Preview·Development 세 환경 모두에 걸어두면 프리뷰 배포에서도 같은 주소를 씁니다
 - [ ] Vercel 배포 후 `/fonts/HeirOfLight-Regular.woff2` 200 확인
 - [ ] 배포 후 공유 카드 확인 — 카카오톡 채팅에 링크를 붙여넣어 썸네일·제목이 뜨는지
 - [ ] **마이그레이션 적용** — `0007`(people_groups 라벨 팀원→스탭진) · ~~`0008`~~ · ~~`0009`~~ 적용 완료.
