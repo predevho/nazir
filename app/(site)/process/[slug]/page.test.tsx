@@ -38,6 +38,25 @@ describe('ProcessSectionPage', () => {
     expect(screen.queryByText('미공개')).not.toBeInTheDocument();
   });
 
+  it('keeps the budget list at two columns and gives every row but the first a divider', async () => {
+    // 예전에는 sm 미만에서 1열로 떨어뜨리면서도 구분선은 2열 기준(i >= 2)으로 그렸다.
+    // 그 결과 모바일에서는 3번째 항목 앞에만 선이 생겼다.
+    const { container } = await show('budget');
+    const list = [...container.querySelectorAll('ul')].find((u) => u.children.length === 8)!;
+    expect(list.className).toContain('grid-cols-2');
+    expect(list.className).not.toContain('sm:grid-cols');
+
+    const cells = [...list.children];
+    // 첫 줄(0·1)만 윗선이 없고 나머지는 모두 있다
+    expect(cells.filter((c) => c.className.includes('border-t-')).length).toBe(cells.length - 2);
+    expect(cells[0].className).not.toContain('border-t-');
+    expect(cells[1].className).not.toContain('border-t-');
+    // 왼쪽 칸에만 세로선. 마지막 칸이 왼쪽에 홀로 남으면 갈 곳 없는 선이라 빼야 한다
+    expect(cells[0].className).toContain('border-r-');
+    expect(cells[1].className).not.toContain('border-r-');
+    expect(cells[cells.length - 1].className).not.toContain('border-r-');
+  });
+
   it('marks the current dot on each sub page', async () => {
     await show('budget');
     expect(screen.getByRole('link', { name: '02 제작 예산' })).toHaveAttribute(
