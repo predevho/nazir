@@ -236,6 +236,8 @@ export const content: AllContent = {
     heroSubtitle: '구별된 사람들',
     heroMeta: '2027 창작뮤지컬 · 제작 PRAYSOUND\n연출 정은수 · 2027.01–02 예정',
     aboutGreeting: '인사말 원문이 확보되는 대로 이 자리에 들어갑니다. 3~5문단 분량을 기준으로 여백을 잡아두었습니다.',
+    aboutWork: '',
+    aboutCharacters: '',
     praysoundStory1: 'Praysound는 세상 모든 아픔에 하나님의 위로를 전달하는 매개가 되어 궁극적으로 영혼 구원의 사명을 이루는 사역팀입니다.',
     praysoundStory2:
       '앞으로 Praysound는 — 실패를 지나온 사람에게 다시 일어설 용기를 / 상처 입은 사람에게 하나님의 위로를 / 길을 잃은 사람에게 그 언젠가 말씀하신 부르심의 기억을 선물하고 싶습니다. <나지르>는 그 선물입니다.',
@@ -260,9 +262,7 @@ export const content: AllContent = {
     accountNumber: '3333-23-3584437',
     accountHolder: '예금주 정은수',
     prayerIntro: '무대보다 먼저, 우리의 마음이 하나님 앞에 준비되기를 원합니다.',
-    qnaIntro:
-      '<나지르>에 대해 궁금한 점이나 응원의 말을 자유롭게 남겨 주세요. 작품, 공연 준비 과정에 대한 질문도 좋고, 짧은 기도와 응원의 한 마디도 큰 힘이 됩니다.',
-    qnaUrl: 'https://www.joey.team/b/hS1LZbUjUeYC7HxjompE',
+    guestbookIntro: '<나지르>를 준비하는 사람들에게\n여러분의 한 마디가 큰 힘이 됩니다.',
     instagramMain: 'https://www.instagram.com/pray_sound_official/',
     instagramMusical: 'https://www.instagram.com/musical_naz/',
     youtube: 'https://www.youtube.com/@PRAYSOUND2025',

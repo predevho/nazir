@@ -72,6 +72,12 @@ export interface SiteContent {
   aboutGreeting: string;
   praysoundStory1: string;
   praysoundStory2: string;
+  /**
+   * 대하여 03·04 의 좌측 설명. 시안이 더미 텍스트라 비워 두었고, 확정 문구가 오면
+   * 관리자에서 채운다. 비어 있으면 화면에 아무것도 그리지 않는다(명세 6·7행).
+   */
+  aboutWork: string;
+  aboutCharacters: string;
   logline: string;
   synopsis: string;
   facts: Fact[];
@@ -91,8 +97,13 @@ export interface SiteContent {
   accountNumber: string;
   accountHolder: string;
   prayerIntro: string;
-  qnaIntro: string;
-  qnaUrl: string;
+  /**
+   * 응원 게시판 제목 아래 안내 문구(명세 6행). 줄바꿈이 그대로 화면에 반영된다.
+   *
+   * 예전 `qnaIntro`·`qnaUrl` 을 대신한다. Q&A 섹션이 응원 게시판으로 바뀌면서 그 두 칸은
+   * 관리자에만 남고 그리는 곳이 없어졌다 — 고쳐도 아무 데도 안 나오는 칸이었다.
+   */
+  guestbookIntro: string;
   instagramMain: string;
   instagramMusical: string;
   youtube: string;

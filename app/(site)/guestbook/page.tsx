@@ -11,6 +11,7 @@ import {
   type GuestbookReply,
 } from '@/lib/guestbook';
 import { pageMeta } from '@/lib/pageMeta';
+import { getContent } from '@/lib/content';
 
 /** 응원글은 바로 보여야 하므로 캐시하지 않는다. */
 export const dynamic = 'force-dynamic';
@@ -35,6 +36,7 @@ export default async function GuestbookPage({
   searchParams: Promise<{ page?: string }>;
 }) {
   const { page: rawPage } = await searchParams;
+  const { site } = await getContent();
   const supabase = createReadClient();
 
   let entries: GuestbookEntry[] = [];
@@ -101,11 +103,12 @@ export default async function GuestbookPage({
         <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
           응원 게시판
         </h1>
-        <p className="mt-4 font-heir text-[15px] leading-[2] text-ds-text/70">
-          &lt;나지르&gt;를 준비하는 사람들에게
-          <br />
-          여러분의 한 마디가 큰 힘이 됩니다.
-        </p>
+        {/* 관리자에서 고치는 문구다. 줄바꿈을 넣은 그대로 나가도록 pre-line 으로 둔다. */}
+        {site.guestbookIntro.trim() && (
+          <p className="mt-4 whitespace-pre-line font-heir text-[15px] leading-[2] text-ds-text/70">
+            {site.guestbookIntro}
+          </p>
+        )}
       </header>
 
       <div className="mt-[clamp(40px,6vw,72px)]">

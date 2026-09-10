@@ -41,10 +41,11 @@ export async function generateMetadata({
 
 /**
  * 좌측 컬럼 본문. 시안은 4개 다 `간단한 설명 간단한 설명…` 더미라(코멘트 #42)
- * 실제 문구가 있는 01·02만 채운다.
+ * 실제 문구가 있는 01·02만 채워 두었다.
  *
- * 03·04는 비워둔다. 로그라인·시놉시스·인물 설명이 이미 우측에 있어서 아무거나 끌어다
- * 넣으면 같은 문장이 한 화면에 두 번 나온다. 확정 문구가 오면 여기에 채우면 된다.
+ * 03·04 도 관리자에서 채울 수 있다. 다만 기본값은 비어 있다 — 로그라인·시놉시스·인물
+ * 설명이 이미 우측에 있어서 아무거나 끌어다 넣으면 같은 문장이 한 화면에 두 번 나온다.
+ * 비어 있으면 아래에서 아예 그리지 않으므로 빈 자리가 남지 않는다.
  */
 function intro(section: AboutSection, content: AllContent): string {
   switch (section.slug) {
@@ -52,8 +53,10 @@ function intro(section: AboutSection, content: AllContent): string {
       return content.site.aboutGreeting;
     case 'praysound':
       return `${content.site.praysoundStory1}\n\n${content.site.praysoundStory2}`;
-    default:
-      return '';
+    case 'work':
+      return content.site.aboutWork;
+    case 'characters':
+      return content.site.aboutCharacters;
   }
 }
 
@@ -80,9 +83,12 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
             <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
               {section.title}
             </h1>
-            <MarkdownText className="mt-4 max-w-[586px] font-heir text-[15px] leading-[2] text-ds-text/70">
-              {intro(section, content)}
-            </MarkdownText>
+            {/* 비어 있으면 그리지 않는다. 빈 문단이 남으면 제목 아래 여백만 벌어진다. */}
+            {intro(section, content).trim() && (
+              <MarkdownText className="mt-4 max-w-[586px] font-heir text-[15px] leading-[2] text-ds-text/70">
+                {intro(section, content)}
+              </MarkdownText>
+            )}
           </header>
 
           <div className="min-w-0">

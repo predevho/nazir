@@ -35,6 +35,8 @@ export const ADMIN_SECTIONS: AdminSection[] = [
       { key: 'aboutGreeting', label: '연출의 인사말', multiline: true },
       { key: 'praysoundStory1', label: 'Praysound 이야기 1', multiline: true },
       { key: 'praysoundStory2', label: 'Praysound 이야기 2', multiline: true },
+      { key: 'aboutWork', label: '03 작품 소개 — 왼쪽 설명 (비우면 안 나옵니다)', multiline: true },
+      { key: 'aboutCharacters', label: '04 작품 속 인물 — 왼쪽 설명 (비우면 안 나옵니다)', multiline: true },
       { key: 'logline', label: '로그라인', multiline: true },
       { key: 'synopsis', label: '시놉시스', multiline: true },
     ],
@@ -70,9 +72,12 @@ export const ADMIN_SECTIONS: AdminSection[] = [
       { key: 'accountHolder', label: '예금주 표기 (예: 예금주 정은수)' },
       { key: 'prayerIntro', label: '02 기도로 동참하기 — 왼쪽 본문', multiline: true },
       { key: 'prayerNote', label: '기도 제목 카드 안내 문구', multiline: true },
-      { key: 'qnaIntro', label: 'Q&A 안내 문구', multiline: true },
-      { key: 'qnaUrl', label: 'Q&A 링크 (URL)' },
     ],
+  },
+  {
+    title: '응원 게시판',
+    where: [{ path: '/guestbook', label: '응원 게시판' }],
+    fields: [{ key: 'guestbookIntro', label: '제목 아래 안내 문구 (줄바꿈 그대로 나갑니다)', multiline: true }],
   },
   {
     title: '푸터 · SNS',
