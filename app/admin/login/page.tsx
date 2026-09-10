@@ -1,11 +1,9 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { usernameToEmail } from '@/lib/adminUsername';
 
 export default function LoginPage() {
-  const router = useRouter();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
@@ -20,13 +18,26 @@ export default function LoginPage() {
       email: usernameToEmail(username),
       password,
     });
-    setLoading(false);
     if (error) {
+      setLoading(false);
       setError('로그인에 실패했습니다. 아이디와 비밀번호를 확인해 주세요.');
       return;
     }
-    router.push('/admin');
-    router.refresh();
+    /*
+      `router.push` 가 아니라 문서를 통째로 다시 연다.
+
+      로그인 전에 `/admin` 을 열면 미들웨어가 `/admin/login` 으로 돌려보내는데, 그 결과가
+      브라우저의 라우터 캐시에 남는다. 로그인한 뒤 `router.push('/admin')` 을 하면 캐시에
+      남은 그 결과가 다시 재생되어 로그인 화면에 그대로 머문다 — 눌러도 아무 일이 없는
+      것처럼 보이고, 새로고침하면 그제야 들어가진다.
+
+      세션 쿠키는 위 `signInWithPassword` 가 이미 심어 두었다. 문서를 새로 열면 그 쿠키가
+      실려 나가고 미들웨어가 로그인된 사용자를 본다 — 사용자가 손으로 하던 새로고침과 같다.
+
+      성공하면 `loading` 을 되돌리지 않는다. 페이지가 넘어갈 때까지 버튼을 잠가
+      두 번 눌리는 것을 막는다.
+    */
+    window.location.assign('/admin');
   }
 
   return (
