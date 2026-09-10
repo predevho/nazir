@@ -3,6 +3,7 @@ import { useActionState, useState } from 'react';
 import { savePeople, type SaveState } from './actions';
 import { PhotoField } from '../PhotoField';
 import { ListToolbar } from '../ListToolbar';
+import { ListPager } from '../ListPager';
 import { applyView, moveWithinVisible, EMPTY_VIEW, type ViewState } from '@/lib/adminView';
 
 type BioLine = { _key: string; text: string };
@@ -201,6 +202,11 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
               </div>
                     );
                   })}
+                  <ListPager
+                    page={res.page}
+                    pages={res.pages}
+                    onChange={(page) => setView(g._key, { page })}
+                  />
                 </>
               );
             })()}

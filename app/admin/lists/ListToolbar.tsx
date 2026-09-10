@@ -35,6 +35,25 @@ export function ListToolbar({
   const filtering = view.query !== '' || view.facet !== '';
   const field =
     'min-h-[36px] rounded-sm border border-ds-key2/25 bg-ds-bg px-3 text-[13px] text-ds-text outline-none focus:border-ds-key2/60';
+  /*
+    셀렉트 화살표는 우리가 그린다. OS 가 그리는 기본 화살표는 테두리·모서리와
+    어울리는 자리가 플랫폼마다 달라, 화면에서 상자 밖으로 삐져나온 것처럼 보인다.
+    appearance-none 으로 지우고 배경 이미지로 넣은 뒤 오른쪽에 자리를 비워 둔다.
+  */
+  const selectField = `${field} min-w-0 max-w-full cursor-pointer appearance-none pr-9`;
+  /*
+    화살표는 인라인 스타일로 넣는다. Tailwind 의 `bg-[url('data:...')]` 로는
+    이 data URI 가 클래스로 만들어지지 않아 background-image 가 none 이 된다 —
+    화살표가 아예 없는, 손대기 전보다 나쁜 상태가 된다.
+  */
+  const ARROW =
+    "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%23DAC32D' stroke-width='1.5'><path d='M1 1l5 5 5-5'/></svg>\")";
+  const selectStyle: React.CSSProperties = {
+    backgroundImage: ARROW,
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'right 12px center',
+    backgroundSize: '12px 8px',
+  };
 
   return (
     <div className="flex flex-col gap-2 border border-ds-key2/15 bg-ds-panel/60 p-3">
@@ -58,7 +77,8 @@ export function ListToolbar({
             <select
               value={view.facet}
               onChange={(e) => onChange({ facet: e.target.value, page: 1 })}
-              className={field}
+              className={selectField}
+              style={selectStyle}
             >
               <option value="">{facetLabel ?? '분류'} 전체</option>
               {facetOptions.map((o) => (

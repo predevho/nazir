@@ -24,6 +24,14 @@ describe('ListEditor', () => {
   });
 });
 
+const timelineRows = (n: number) =>
+  Array.from({ length: n }, (_, i) => ({
+    id: `t${i}`,
+    period: `26.0${(i % 9) + 1}`,
+    title: i % 2 === 0 ? `합숙 ${i}` : `연습 ${i}`,
+    status: i < 4 ? '완료' : i < 8 ? '진행 중' : '예정',
+  }));
+
 describe('ListEditor — 찾기·거르기·페이지', () => {
   const timeline = (n: number) =>
     Array.from({ length: n }, (_, i) => ({
@@ -95,5 +103,38 @@ describe('ListEditor — 찾기·거르기·페이지', () => {
     await user.selectOptions(screen.getByRole('combobox', { name: '상태로 거르기' }), '완료');
     await user.click(screen.getAllByRole('button', { name: '위로 이동' })[1]);
     expect(saved(container).slice(0, 2).map((r: { id: string }) => r.id)).toEqual(['t1', 't0']);
+  });
+
+  it('짧고 거를 기준도 없는 목록에는 찾기 칸을 두지 않는다', () => {
+    // 작품 개요(5) · 제작 예산(8) · 기도 제목(6) 은 한 화면에 다 들어온다.
+    // 찾기 칸이 자리만 차지하고 하는 일이 없다.
+    render(<ListEditor config={ADMIN_LISTS.budget} initialRows={
+      Array.from({ length: 8 }, (_, i) => ({ id: `b${i}`, name: `항목${i}` }))
+    } />);
+    expect(screen.queryByRole('searchbox')).not.toBeInTheDocument();
+  });
+
+  it('길어지면 저절로 나타난다', () => {
+    render(<ListEditor config={ADMIN_LISTS.budget} initialRows={
+      Array.from({ length: 11 }, (_, i) => ({ id: `b${i}`, name: `항목${i}` }))
+    } />);
+    expect(screen.getByRole('searchbox')).toBeInTheDocument();
+  });
+
+  it('거를 기준이 있으면 짧아도 남긴다 — 편지는 9장이지만 페이지별로 갈라 봐야 한다', () => {
+    render(<ListEditor config={ADMIN_LISTS.letters} initialRows={
+      Array.from({ length: 9 }, (_, i) => ({ id: `p${i}`, section: 'praysound', image_url: '', caption: '' }))
+    } />);
+    expect(screen.getByRole('combobox', { name: '들어갈 페이지로 거르기' })).toBeInTheDocument();
+  });
+
+  it('목록 아래에도 쪽 번호를 둔다 — 다 훑고 내려온 자리에서 바로 넘길 수 있어야 한다', async () => {
+    const user = userEvent.setup();
+    render(<ListEditor config={ADMIN_LISTS.timeline} initialRows={timelineRows(20)} />);
+    const pager = screen.getByRole('navigation', { name: '목록 쪽 이동' });
+    expect(pager).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: '2쪽' }));
+    expect(screen.getByText('2 / 2')).toBeInTheDocument();
   });
 });

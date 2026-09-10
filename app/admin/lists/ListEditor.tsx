@@ -4,7 +4,8 @@ import type { ListConfig } from '@/lib/adminLists';
 import { saveList, type SaveState } from './actions';
 import { PhotoField } from './PhotoField';
 import { ListToolbar } from './ListToolbar';
-import { applyView, moveWithinVisible, sortForView, EMPTY_VIEW, type ViewState } from '@/lib/adminView';
+import { ListPager } from './ListPager';
+import { applyView, moveWithinVisible, sortForView, ADMIN_PAGE_SIZE, EMPTY_VIEW, type ViewState } from '@/lib/adminView';
 
 type Row = { _key: string; id: string } & Record<string, string>;
 
@@ -54,6 +55,13 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
     ? sortForView(rows, facetCol.options?.map((o) => o.value) ?? null, (r) => r[facetCol.key] ?? '')
     : rows;
 
+  /*
+    한 화면에 다 들어오고 거를 기준도 없는 목록에는 툴바를 두지 않는다.
+    작품 개요(5) · 제작 예산(8) · 기도 제목(6) 처럼 짧은 목록에서 찾기 칸은
+    자리만 차지하고 하는 일이 없다. 늘어나면 저절로 다시 나타난다.
+  */
+  const needsToolbar = rows.length > ADMIN_PAGE_SIZE || Boolean(facetCol);
+
   const result = applyView(ordered, view, {
     text: (r) => config.columns.map((c) => r[c.key] ?? '').join(' '),
     facet: facetCol ? (r) => r[facetCol.key] ?? '' : undefined,
@@ -71,6 +79,7 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
       <input type="hidden" name="listKey" value={config.key} />
       <input type="hidden" name="rows" value={JSON.stringify(payload)} readOnly />
 
+      {needsToolbar && (
       <ListToolbar
         view={{ ...view, page: result.page }}
         onChange={(next) => setView((v) => ({ ...v, ...next }))}
@@ -83,6 +92,7 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
         sortOn={grouped}
         onToggleSort={facetCol ? () => setGrouped((g) => !g) : undefined}
       />
+      )}
 
       {result.matched.length === 0 && (
         <p className="border border-ds-key2/15 bg-ds-panel/60 px-4 py-6 text-center text-sm text-ds-text/50">
@@ -134,6 +144,7 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
         </div>
         );
       })}
+      <ListPager page={result.page} pages={result.pages} onChange={(page) => setView((v) => ({ ...v, page }))} />
       <button type="button" onClick={addRow} className="min-h-[44px] border border-dashed border-ds-key2/40 text-ds-key2 text-sm rounded-sm hover:bg-ds-key2/[0.08]">+ 행 추가</button>
       <div className="flex items-center gap-4 sticky bottom-0 bg-ds-bg/90 backdrop-blur py-4">
         <button type="submit" disabled={pending} className="min-h-[48px] px-6 bg-ds-key2 text-ds-key1 font-medium rounded-sm hover:opacity-90 transition-colors disabled:opacity-60">
