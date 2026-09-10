@@ -80,8 +80,11 @@ describe('GuestbookAdmin', () => {
       />,
     );
     expect(screen.getByText('고맙습니다')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '고치기' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '지우기' })).toBeInTheDocument();
+    // 화면에는 원글 쪽과 같은 '수정'·'삭제'로 보이고, 구분은 aria-label 이 맡는다.
+    expect(screen.getByRole('button', { name: '답글 수정' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '답글 삭제' })).toBeInTheDocument();
+    // 원글 삭제 버튼과 섞이지 않는다
+    expect(screen.getByRole('button', { name: '삭제' })).toBeInTheDocument();
   });
 
   it('edits in place — 고치기 는 새 답글이 아니라 그 답글을 가리킨다', async () => {
@@ -97,7 +100,7 @@ describe('GuestbookAdmin', () => {
         ]}
       />,
     );
-    await user.click(screen.getByRole('button', { name: '고치기' }));
+    await user.click(screen.getByRole('button', { name: '답글 수정' }));
     const box = screen.getByLabelText('답글 내용') as HTMLTextAreaElement;
     expect(box.value).toBe('고맙습니다');
     expect(container.querySelector('input[name="replyId"][value="r1"]')).toBeInTheDocument();
@@ -133,7 +136,7 @@ describe('GuestbookAdmin', () => {
     );
     expect(screen.getByText('첫 답글')).toBeInTheDocument();
     expect(screen.getByText('둘째 답글')).toBeInTheDocument();
-    expect(screen.getAllByRole('button', { name: '지우기' })).toHaveLength(2);
+    expect(screen.getAllByRole('button', { name: '답글 삭제' })).toHaveLength(2);
   });
 
   it('왜 숨겨졌는지 밝힌다 — 사유 없이 숨김만 보이면 판단할 근거가 없다', () => {

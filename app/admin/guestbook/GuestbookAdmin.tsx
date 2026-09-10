@@ -130,15 +130,24 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                     {r.message}
                   </p>
                   <div className="mt-1 flex flex-wrap items-center gap-2">
-                    <span className="font-mono text-[10px] text-ds-text/40">
+                    <span className="font-mono text-[11px] text-ds-text/40">
                       {formatNoteDate(r.createdAt)}
                     </span>
+                    {/*
+                      원글 쪽 버튼과 같은 11px 을 쓴다. 답글 줄만 10px 이라 한 화면에
+                      두 크기가 섞여 있었다. 화면에 보이는 말도 원글 쪽(삭제)에 맞춘다.
+
+                      aria-label 로 "답글"을 붙여 원글의 삭제 버튼과 구분한다 —
+                      화면에는 같은 글자가 두 번 나오므로, 소리로 듣는 사람에게는
+                      무엇을 지우는 건지 구분이 필요하다.
+                    */}
                     <button
                       type="button"
                       onClick={() => setComposing(composing === r.id ? null : r.id)}
-                      className="cursor-pointer font-mono text-[10px] text-ds-key2 hover:underline"
+                      aria-label={composing === r.id ? '답글 수정 접기' : '답글 수정'}
+                      className="cursor-pointer font-mono text-[11px] text-ds-key2 hover:underline"
                     >
-                      {composing === r.id ? '접기' : '고치기'}
+                      {composing === r.id ? '접기' : '수정'}
                     </button>
                     <form action={replyAction}>
                       <input type="hidden" name="op" value="delete" />
@@ -146,9 +155,10 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                       <button
                         type="submit"
                         disabled={replyPending}
-                        className="cursor-pointer font-mono text-[10px] text-ds-text/45 hover:text-red-300 disabled:opacity-40"
+                        aria-label="답글 삭제"
+                        className="cursor-pointer font-mono text-[11px] text-ds-text/45 hover:text-red-300 disabled:opacity-40"
                       >
-                        지우기
+                        삭제
                       </button>
                     </form>
                   </div>
@@ -189,7 +199,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
   );
 }
 
-/** 새 답글과 고치기가 같은 칸을 쓴다. replyId 가 있으면 고치는 중이다. */
+/** 새 답글과 수정이 같은 칸을 쓴다. replyId 가 있으면 고치는 중이다. */
 function ReplyForm({
   action,
   pending,
@@ -229,7 +239,7 @@ function ReplyForm({
           disabled={pending}
           className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 font-mono text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
         >
-          {replyId ? '고치기' : '답글 남기기'}
+          {replyId ? '수정' : '답글 남기기'}
         </button>
         <button
           type="button"
