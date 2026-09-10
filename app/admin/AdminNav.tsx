@@ -4,8 +4,8 @@ import Link from 'next/link';
 export function AdminNav() {
   return (
     <nav className="flex items-center gap-4">
-      <Link href="/admin" className="font-mono text-[11px] text-gold hover:text-gold-soft">← 관리자</Link>
-      <Link href="/" className="font-mono text-[11px] text-paper/55 hover:text-gold">홈 ↗</Link>
+      <Link href="/admin" className="font-mono text-[11px] text-ds-key2 hover:opacity-80">← 관리자</Link>
+      <Link href="/" className="font-mono text-[11px] text-ds-text/55 hover:opacity-80">홈 ↗</Link>
     </nav>
   );
 }

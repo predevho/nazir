@@ -23,8 +23,8 @@ export default async function PeopleAdminPage() {
   return (
     <section className="max-w-[820px] mx-auto px-5 py-[clamp(32px,6vw,56px)]">
       <AdminNav />
-      <h1 className="font-display font-bold text-[clamp(24px,5vw,32px)] text-paper mt-3 mb-2">참여자 명단</h1>
-      <p className="text-sm text-paper/60 mb-8">그룹·개인 추가 · 수정 · 삭제 · 순서변경 · 사진 업로드 후 저장하면 즉시 반영됩니다.</p>
+      <h1 className="font-heir font-bold text-[clamp(24px,5vw,32px)] text-ds-text mt-3 mb-2">참여자 명단</h1>
+      <p className="text-sm text-ds-text/60 mb-8">그룹·개인 추가 · 수정 · 삭제 · 순서변경 · 사진 업로드 후 저장하면 즉시 반영됩니다.</p>
       <PeopleEditor initialGroups={initialGroups} />
     </section>
   );

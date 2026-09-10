@@ -5,15 +5,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        stage: '#0B0A0E',
-        velvet: '#17131F',
-        'velvet-2': '#1D1727',
-        gold: '#E9B949',
-        'gold-soft': '#F5D488',
-        'gold-deep': '#8A6F2E',
-        paper: '#F2EADA',
-        ink: '#1A1712',
-        // 시안 토큰 — docs/design-tokens.md 참고. 기존 색과 병행하며, 화면 단위로 옮겨간다.
+        // 시안 토큰 — docs/design-tokens.md 참고. 옛 팔레트(gold/paper/velvet/ink/stage)는
+        // 전 화면 전환이 끝나 제거했다.
         'ds-bg': '#0B0A0E',        // 전체 배경
         'ds-panel': '#181A1B',     // 배경색 (카드·푸터 패널)
         'ds-key1': '#2C0F09',      // 키컬러 1 (노란 면 위 텍스트)
@@ -25,12 +18,11 @@ export default {
         content: '1398px', // 시안 콘텐츠 폭 (1920 - 좌우 261)
       },
       fontFamily: {
-        display: ["'Gowun Batang'", 'serif'],
-        body: ["'IBM Plex Sans KR'", 'system-ui', 'sans-serif'],
-        mono: ["'IBM Plex Mono'", 'monospace'],
         // 시안 폰트. 파일은 public/fonts/ (README.md 참고), 없으면 아래 대체 폰트로 렌더링된다.
-        heir: ["'Heir of Light'", "'Gowun Batang'", 'serif'],
-        griun: ["'Griun Gossi'", "'Gowun Batang'", 'serif'],
+        heir: ["'Heir of Light'", 'serif'],
+        griun: ["'Griun Gossi'", 'serif'],
+        // 관리자 화면의 수치·레이블용. 시안에는 없는 영역이라 시스템 폰트로 충분하다.
+        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       keyframes: {
         curtainL: { from: { transform: 'translateX(0)' }, to: { transform: 'translateX(-101%)' } },

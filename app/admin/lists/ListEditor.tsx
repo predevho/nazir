@@ -56,18 +56,18 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
       <input type="hidden" name="listKey" value={config.key} />
       <input type="hidden" name="rows" value={JSON.stringify(payload)} readOnly />
       {rows.map((row, idx) => (
-        <div key={row._key} className="border border-gold/20 bg-velvet rounded-sm p-4 flex flex-col gap-3">
+        <div key={row._key} className="border border-ds-key2/20 bg-ds-panel rounded-sm p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] text-paper/40">#{idx + 1}</span>
+            <span className="font-mono text-[11px] text-ds-text/40">#{idx + 1}</span>
             <div className="flex gap-1">
-              <button type="button" onClick={() => move(row._key, -1)} disabled={idx === 0} aria-label="위로 이동" className="px-2 py-1 text-paper/70 disabled:opacity-30 hover:text-gold">↑</button>
-              <button type="button" onClick={() => move(row._key, 1)} disabled={idx === rows.length - 1} aria-label="아래로 이동" className="px-2 py-1 text-paper/70 disabled:opacity-30 hover:text-gold">↓</button>
+              <button type="button" onClick={() => move(row._key, -1)} disabled={idx === 0} aria-label="위로 이동" className="px-2 py-1 text-ds-text/70 disabled:opacity-30 hover:opacity-80">↑</button>
+              <button type="button" onClick={() => move(row._key, 1)} disabled={idx === rows.length - 1} aria-label="아래로 이동" className="px-2 py-1 text-ds-text/70 disabled:opacity-30 hover:opacity-80">↓</button>
               <button type="button" onClick={() => removeRow(row._key)} aria-label="행 삭제" className="px-2 py-1 text-[13px] text-red-400/80 hover:text-red-400">삭제</button>
             </div>
           </div>
           {config.columns.map((c) => (
             <label key={c.key} className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] tracking-[0.1em] text-paper/50">{c.label}</span>
+              <span className="font-mono text-[10px] tracking-[0.1em] text-ds-text/50">{c.label}</span>
               {c.type === 'image' ? (
                 <PhotoField kind="characters" id={row.id} value={row[c.key] ?? ''} onChange={(url) => setVal(row._key, c.key, url)} />
               ) : c.type === 'textarea' ? (
@@ -77,29 +77,29 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
                     onChange={(e) => setVal(row._key, c.key, e.target.value)}
                     rows={c.markdown ? 6 : 2}
                     placeholder={c.markdown ? '마크다운 지원 (예: - 항목)' : undefined}
-                    className={`px-3 py-2 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60 resize-y ${c.markdown ? 'font-mono' : ''}`}
+                    className={`px-3 py-2 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60 resize-y ${c.markdown ? 'font-mono' : ''}`}
                   />
-                  {c.markdown && <span className="font-mono text-[10px] text-paper/35">마크다운 지원 · 불릿(- ), 굵게(**텍스트**)</span>}
+                  {c.markdown && <span className="font-mono text-[10px] text-ds-text/35">마크다운 지원 · 불릿(- ), 굵게(**텍스트**)</span>}
                 </>
               ) : c.type === 'select' ? (
-                <select value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} className="min-h-[40px] px-3 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60">
+                <select value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} className="min-h-[40px] px-3 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60">
                   {c.options?.map((o) => (
                     <option key={o.value} value={o.value}>{o.label}</option>
                   ))}
                 </select>
               ) : (
-                <input type="text" value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} className="min-h-[40px] px-3 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60" />
+                <input type="text" value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} className="min-h-[40px] px-3 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60" />
               )}
             </label>
           ))}
         </div>
       ))}
-      <button type="button" onClick={addRow} className="min-h-[44px] border border-dashed border-gold/40 text-gold text-sm rounded-sm hover:bg-gold/[0.08]">+ 행 추가</button>
-      <div className="flex items-center gap-4 sticky bottom-0 bg-stage/90 backdrop-blur py-4">
-        <button type="submit" disabled={pending} className="min-h-[48px] px-6 bg-gold text-ink font-medium rounded-sm hover:bg-gold-soft transition-colors disabled:opacity-60">
+      <button type="button" onClick={addRow} className="min-h-[44px] border border-dashed border-ds-key2/40 text-ds-key2 text-sm rounded-sm hover:bg-ds-key2/[0.08]">+ 행 추가</button>
+      <div className="flex items-center gap-4 sticky bottom-0 bg-ds-bg/90 backdrop-blur py-4">
+        <button type="submit" disabled={pending} className="min-h-[48px] px-6 bg-ds-key2 text-ds-key1 font-medium rounded-sm hover:opacity-90 transition-colors disabled:opacity-60">
           {pending ? '저장 중…' : '저장'}
         </button>
-        {state.message && <span className={`text-sm ${state.ok ? 'text-gold' : 'text-red-400'}`}>{state.message}</span>}
+        {state.message && <span className={`text-sm ${state.ok ? 'text-ds-key2' : 'text-red-400'}`}>{state.message}</span>}
       </div>
     </form>
   );

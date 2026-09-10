@@ -141,9 +141,14 @@
 
 ## 4단계 — 정리
 
-- [ ] 옛 팔레트 제거 (`gold` / `gold-soft` / `gold-deep` / `paper` / `velvet` / `velvet-2` / `ink`)
-- [ ] Google Fonts `<link>` 제거 (`app/layout.tsx`) — 시안 폰트 전환 완료 후
-- [ ] 본문 폰트가 확정되면 해당 폰트만 `<link rel="preload">` 추가
+- [x] **옛 팔레트 제거** — `gold` / `gold-soft` / `gold-deep` / `paper` / `velvet` / `velvet-2` /
+      `ink` / `stage` 를 전부 `ds-*` 로 옮기고 `tailwind.config.ts` 에서 삭제했습니다(203곳).
+      공개 화면뿐 아니라 관리자 화면도 같은 토큰을 씁니다.
+- [x] **Google Fonts `<link>` 제거** — 공개 화면은 자체 호스팅하는 시안 폰트만 쓰고,
+      관리자 화면과 기본 본문은 시스템 폰트로 갑니다. 외부 폰트 요청 0건.
+- [x] **미사용 컴포넌트 정리** — `HeroBackdrop` · `Spotlight` · `Accordion` · `StatusChip`.
+      랜딩·제작 과정을 새 시안으로 갈아엎으면서 참조가 사라졌습니다.
+- [ ] 본문 폰트가 확정되면(코멘트 #38) 해당 폰트만 `<link rel="preload">` 추가
 
 ## 5단계 — 모바일 (웹 확정 후)
 
@@ -190,6 +195,7 @@
       후원 계좌를 안내하는 사이트라 완전히 무관하다고 보기는 어려움 — 인지 필요
 - [ ] 폰트 전송량: 신규 방문 1명당 최대 3.81MB
       (woff2 2.68MB + OTF gzip 573KB·586KB). Hobby 100GB/월 기준 약 27,000 신규 방문분
+- [ ] `public/fonts/`에 woff2가 없어 매 방문 OTF를 받습니다. woff2를 넣으면 전송량이 크게 줍니다
 
 ---
 

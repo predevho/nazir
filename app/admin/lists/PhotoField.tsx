@@ -53,7 +53,7 @@ export function PhotoField({ kind, id, value, onChange }: Props) {
         {value ? (
           <img src={value} alt="미리보기" className="w-full h-full object-cover" />
         ) : (
-          <span className="font-mono text-[10px] text-paper/40">사진 없음</span>
+          <span className="font-mono text-[10px] text-ds-text/40">사진 없음</span>
         )}
       </div>
       <div className="flex flex-col gap-1.5">
@@ -66,10 +66,10 @@ export function PhotoField({ kind, id, value, onChange }: Props) {
             const f = e.target.files?.[0];
             if (f) handleFile(f);
           }}
-          className="text-[12px] text-paper/70 file:mr-2 file:min-h-[32px] file:px-3 file:border file:border-gold/30 file:bg-transparent file:text-gold file:rounded-sm file:text-[12px] file:cursor-pointer"
+          className="text-[12px] text-ds-text/70 file:mr-2 file:min-h-[32px] file:px-3 file:border file:border-ds-key2/30 file:bg-transparent file:text-ds-key2 file:rounded-sm file:text-[12px] file:cursor-pointer"
         />
         <div className="flex items-center gap-2">
-          {busy && <span className="text-[11px] text-paper/50">처리 중…</span>}
+          {busy && <span className="text-[11px] text-ds-text/50">처리 중…</span>}
           {value && !busy && (
             <button type="button" onClick={handleRemove} className="text-[12px] text-red-400/80 hover:text-red-400">
               사진 제거

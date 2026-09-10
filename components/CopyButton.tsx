@@ -20,7 +20,7 @@ export function CopyButton({ value, idleLabel, doneLabel, className }: {
     <button
       type="button"
       onClick={copy}
-      className={className ?? 'min-h-[48px] cursor-pointer bg-gold/[0.12] border border-gold/50 text-gold font-body text-sm font-medium rounded-sm hover:bg-gold/20 transition-colors'}
+      className={className ?? 'min-h-[48px] cursor-pointer bg-ds-key2/[0.12] border border-ds-key2/50 text-ds-key2 text-sm font-medium rounded-sm hover:bg-ds-key2/20 transition-colors'}
     >
       {copied ? doneLabel : idleLabel}
     </button>

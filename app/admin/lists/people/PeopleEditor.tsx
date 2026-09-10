@@ -127,23 +127,23 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
     members: g.members.map((m) => ({ id: m.id, role: m.role, team: m.team, name: m.name, tagline: m.tagline, bio: serializeBio(m.bio), photoUrl: m.photoUrl })),
   }));
 
-  const inputCls = 'min-h-[38px] px-2.5 bg-stage border border-gold/25 rounded-sm text-paper text-sm outline-none focus:border-gold/60';
-  const iconBtn = 'px-1.5 text-paper/70 disabled:opacity-30 hover:text-gold';
+  const inputCls = 'min-h-[38px] px-2.5 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60';
+  const iconBtn = 'px-1.5 text-ds-text/70 disabled:opacity-30 hover:opacity-80';
 
   return (
     <form action={formAction} className="flex flex-col gap-6">
       <input type="hidden" name="groups" value={JSON.stringify(payload)} readOnly />
       {groups.map((g, gi) => (
-        <div key={g._key} className="border border-gold/25 bg-velvet rounded-sm p-4 flex flex-col gap-3">
+        <div key={g._key} className="border border-ds-key2/25 bg-ds-panel rounded-sm p-4 flex flex-col gap-3">
           <div className="flex items-center gap-2">
-            <input value={g.label} onChange={(e) => setLabel(g._key, e.target.value)} aria-label="그룹 이름" className={`flex-1 font-display ${inputCls}`} />
+            <input value={g.label} onChange={(e) => setLabel(g._key, e.target.value)} aria-label="그룹 이름" className={`flex-1 font-heir ${inputCls}`} />
             <button type="button" onClick={() => moveGroup(g._key, -1)} disabled={gi === 0} aria-label="그룹 위로" className={iconBtn}>↑</button>
             <button type="button" onClick={() => moveGroup(g._key, 1)} disabled={gi === groups.length - 1} aria-label="그룹 아래로" className={iconBtn}>↓</button>
             <button type="button" onClick={() => removeGroup(g._key)} aria-label="그룹 삭제" className="px-2 py-1 text-[13px] text-red-400/80 hover:text-red-400">그룹 삭제</button>
           </div>
-          <div className="flex flex-col gap-3 pl-3 border-l border-gold/15">
+          <div className="flex flex-col gap-3 pl-3 border-l border-ds-key2/15">
             {g.members.map((m, mi) => (
-              <div key={m._key} className="flex flex-col gap-2 bg-stage/40 rounded-sm p-2.5">
+              <div key={m._key} className="flex flex-col gap-2 bg-ds-bg/40 rounded-sm p-2.5">
                 <div className="flex gap-2 items-center">
                   <input value={m.role} onChange={(e) => setField(g._key, m._key, 'role', e.target.value)} placeholder="역할(선택)" aria-label="역할" className={`w-[34%] ${inputCls}`} />
                   <input value={m.name} onChange={(e) => setField(g._key, m._key, 'name', e.target.value)} placeholder="이름" aria-label="이름" className={`flex-1 ${inputCls}`} />
@@ -157,30 +157,30 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
                 </div>
                 <PhotoField kind="people" id={m.id} value={m.photoUrl} onChange={(url) => setPhoto(g._key, m._key, url)} />
                 <div className="flex flex-col gap-1.5 pl-1">
-                  <span className="font-mono text-[10px] text-paper/40">약력 (항목별 · 불릿으로 표시됨)</span>
+                  <span className="font-mono text-[10px] text-ds-text/40">약력 (항목별 · 불릿으로 표시됨)</span>
                   {m.bio.map((b, bi) => (
                     <div key={b._key} className="flex gap-1.5 items-center">
-                      <span className="text-gold/50 text-xs select-none">•</span>
+                      <span className="text-ds-key2/50 text-xs select-none">•</span>
                       <input value={b.text} onChange={(e) => setBio(g._key, m._key, b._key, e.target.value)} placeholder="예: 2025 Praysound 리더" aria-label="약력 항목" className={`flex-1 ${inputCls}`} />
                       <button type="button" onClick={() => moveBio(g._key, m._key, b._key, -1)} disabled={bi === 0} aria-label="약력 위로" className={iconBtn}>↑</button>
                       <button type="button" onClick={() => moveBio(g._key, m._key, b._key, 1)} disabled={bi === m.bio.length - 1} aria-label="약력 아래로" className={iconBtn}>↓</button>
                       <button type="button" onClick={() => removeBio(g._key, m._key, b._key)} aria-label="약력 항목 삭제" className="px-1.5 text-[12px] text-red-400/80 hover:text-red-400">✕</button>
                     </div>
                   ))}
-                  <button type="button" onClick={() => addBio(g._key, m._key)} className="self-start min-h-[32px] px-3 border border-dashed border-gold/30 text-gold text-[12px] rounded-sm hover:bg-gold/[0.08]">+ 약력 항목</button>
+                  <button type="button" onClick={() => addBio(g._key, m._key)} className="self-start min-h-[32px] px-3 border border-dashed border-ds-key2/30 text-ds-key2 text-[12px] rounded-sm hover:bg-ds-key2/[0.08]">+ 약력 항목</button>
                 </div>
               </div>
             ))}
-            <button type="button" onClick={() => addMember(g._key)} className="min-h-[36px] border border-dashed border-gold/30 text-gold text-[13px] rounded-sm hover:bg-gold/[0.08]">+ 멤버 추가</button>
+            <button type="button" onClick={() => addMember(g._key)} className="min-h-[36px] border border-dashed border-ds-key2/30 text-ds-key2 text-[13px] rounded-sm hover:bg-ds-key2/[0.08]">+ 멤버 추가</button>
           </div>
         </div>
       ))}
-      <button type="button" onClick={addGroup} className="min-h-[44px] border border-dashed border-gold/40 text-gold text-sm rounded-sm hover:bg-gold/[0.08]">+ 그룹 추가</button>
-      <div className="flex items-center gap-4 sticky bottom-0 bg-stage/90 backdrop-blur py-4">
-        <button type="submit" disabled={pending} className="min-h-[48px] px-6 bg-gold text-ink font-medium rounded-sm hover:bg-gold-soft transition-colors disabled:opacity-60">
+      <button type="button" onClick={addGroup} className="min-h-[44px] border border-dashed border-ds-key2/40 text-ds-key2 text-sm rounded-sm hover:bg-ds-key2/[0.08]">+ 그룹 추가</button>
+      <div className="flex items-center gap-4 sticky bottom-0 bg-ds-bg/90 backdrop-blur py-4">
+        <button type="submit" disabled={pending} className="min-h-[48px] px-6 bg-ds-key2 text-ds-key1 font-medium rounded-sm hover:opacity-90 transition-colors disabled:opacity-60">
           {pending ? '저장 중…' : '저장'}
         </button>
-        {state.message && <span className={`text-sm ${state.ok ? 'text-gold' : 'text-red-400'}`}>{state.message}</span>}
+        {state.message && <span className={`text-sm ${state.ok ? 'text-ds-key2' : 'text-red-400'}`}>{state.message}</span>}
       </div>
     </form>
   );

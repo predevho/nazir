@@ -36,12 +36,13 @@
 html, body { margin: 0; padding: 0; background: #0B0A0E; }
 * { box-sizing: border-box; }
 body {
-  font-family: 'IBM Plex Sans KR', system-ui, sans-serif;
+  /* 시안 본문 폰트가 확정되기 전까지는 시스템 폰트. 화면별로는 font-heir 를 명시해 쓴다. */
+  font-family: system-ui, -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
-a { color: #E9B949; text-decoration: none; }
-a:hover { color: #F5D488; }
-:focus-visible { outline: 2px solid #E9B949; outline-offset: 3px; }
+a { color: #DAC32D; text-decoration: none; }
+a:hover { opacity: 0.85; }
+:focus-visible { outline: 2px solid #DAC32D; outline-offset: 3px; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

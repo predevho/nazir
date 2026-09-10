@@ -23,7 +23,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
     <section className="max-w-[820px] mx-auto px-5 py-[clamp(32px,7vw,64px)]">
       <Link
         href={`/people?tab=${encodeURIComponent(groupLabel)}`}
-        className="font-mono text-[11px] text-gold hover:text-gold-soft"
+        className="font-mono text-[11px] text-ds-key2 hover:opacity-80"
       >
         ← 함께하는 사람들
       </Link>
@@ -32,17 +32,17 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
           {member.photoUrl ? (
             <img src={member.photoUrl} alt={member.name} className="w-full h-full object-cover" />
           ) : (
-            <span className="font-mono text-[11px] text-paper/40">사진</span>
+            <span className="font-mono text-[11px] text-ds-text/40">사진</span>
           )}
         </div>
         <div className="flex flex-col gap-3">
-          {meta && <span className="font-mono text-[11px] tracking-[0.12em] text-gold">{meta}</span>}
-          <h1 className="font-display font-bold text-[clamp(28px,6vw,44px)] text-paper leading-tight m-0">{member.name}</h1>
-          {member.tagline && <p className="font-display text-[15px] text-paper/70 leading-relaxed">{member.tagline}</p>}
+          {meta && <span className="font-mono text-[11px] tracking-[0.12em] text-ds-key2">{meta}</span>}
+          <h1 className="font-heir font-bold text-[clamp(28px,6vw,44px)] text-ds-text leading-tight m-0">{member.name}</h1>
+          {member.tagline && <p className="font-heir text-[15px] text-ds-text/70 leading-relaxed">{member.tagline}</p>}
           {member.bio && (
-            <div className="mt-2 pt-4 border-t border-gold/15">
-              <span className="font-mono text-[10px] tracking-[0.18em] text-paper/45">약력</span>
-              <MarkdownText className="mt-2 text-[14px] font-light leading-[1.9] text-paper/[0.82]">{member.bio}</MarkdownText>
+            <div className="mt-2 pt-4 border-t border-ds-key2/15">
+              <span className="font-mono text-[10px] tracking-[0.18em] text-ds-text/45">약력</span>
+              <MarkdownText className="mt-2 text-[14px] font-light leading-[1.9] text-ds-text/[0.82]">{member.bio}</MarkdownText>
             </div>
           )}
         </div>

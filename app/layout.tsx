@@ -9,15 +9,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="bg-stage text-paper min-h-screen overflow-x-hidden">{children}</body>
+      {/*
+        Google Fonts 링크를 제거했다. 공개 화면은 시안 폰트(Heir of Light · Griun Gossi)만
+        쓰고, 그 둘은 public/fonts/ 에서 자체 호스팅한다. 관리자 화면은 시스템 폰트로 충분하다.
+        본문 폰트가 따로 확정되면(코멘트 #38) 그때 그 폰트만 preload로 추가한다.
+      */}
+      <body className="bg-ds-bg text-ds-text min-h-screen overflow-x-hidden">{children}</body>
     </html>
   );
 }
