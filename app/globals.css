@@ -48,16 +48,23 @@ a:hover { opacity: 0.85; }
    시안의 도트는 18px, 화살표 글리프도 그 정도라 손끝(권장 44px)보다 한참 작다.
    요소 자체를 키우면 도트 간격 60px 같은 시안 수치가 전부 틀어지므로,
    레이아웃에 영향이 없는 가상 요소로 눌리는 범위만 넓힌다.
-   실제 크기가 이미 44px를 넘으면 max()가 그대로 두므로 넓은 링크에도 안전하다. */
-.tap-target { position: relative; }
-.tap-target::before {
-  content: '';
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: max(100%, 44px);
-  height: max(100%, 44px);
-  transform: translate(-50%, -50%);
+   실제 크기가 이미 44px를 넘으면 max()가 그대로 두므로 넓은 링크에도 안전하다.
+
+   반드시 components 레이어에 둔다. 이 파일 바닥에 그냥 쓰면 @tailwind utilities 보다
+   뒤에 오는데 명시도는 같아서, `absolute` 같은 위치 유틸리티를 조용히 덮어쓴다.
+   편지 캐러셀의 좌우 버튼이 실제로 그렇게 망가졌다 — 클래스는 붙어 있는데
+   position 이 relative 로 계산돼 이미지 위가 아니라 아래로 밀려났다. */
+@layer components {
+  .tap-target { position: relative; }
+  .tap-target::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

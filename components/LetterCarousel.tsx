@@ -64,27 +64,35 @@ export function LetterCarousel({ letters, label }: { letters: AboutLetter[]; lab
     'tap-target absolute top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-white/25 bg-black/45 font-heir text-[20px] leading-none text-white backdrop-blur-sm transition-colors hover:border-ds-key2 hover:text-ds-key2';
 
   return (
-    <figure className="relative m-0" data-swipe-ignore onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
-      <img
-        src={current.imageUrl ?? ''}
-        alt={current.caption || `${label} ${index + 1}번째 장`}
-        className="aspect-[634/846] w-full rounded-lg object-cover"
-      />
+    <figure className="m-0" data-swipe-ignore onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
+      {/*
+        기준 상자는 figure 가 아니라 이미지를 감싼 이 div 다. figure 를 기준으로 잡으면
+        아래 숫자 표기의 높이까지 포함돼 버튼이 이미지 중앙보다 19px 내려간다.
+      */}
+      <div className="relative">
+        <img
+          src={current.imageUrl ?? ''}
+          alt={current.caption || `${label} ${index + 1}번째 장`}
+          className="aspect-[634/846] w-full rounded-lg object-cover"
+        />
+        {total > 1 && (
+          <>
+            <button type="button" onClick={() => go(-1)} aria-label="이전 장" className={`${edge} left-3`}>
+              ‹
+            </button>
+            <button type="button" onClick={() => go(1)} aria-label="다음 장" className={`${edge} right-3`}>
+              ›
+            </button>
+          </>
+        )}
+      </div>
 
       {total > 1 && (
-        <>
-          <button type="button" onClick={() => go(-1)} aria-label="이전 장" className={`${edge} left-3`}>
-            ‹
-          </button>
-          <button type="button" onClick={() => go(1)} aria-label="다음 장" className={`${edge} right-3`}>
-            ›
-          </button>
-          <figcaption className="mt-4 text-center font-heir text-[15px] text-ds-text">
-            <span aria-live="polite">
-              {index + 1} / {total}
-            </span>
-          </figcaption>
-        </>
+        <figcaption className="mt-4 text-center font-heir text-[15px] text-ds-text">
+          <span aria-live="polite">
+            {index + 1} / {total}
+          </span>
+        </figcaption>
       )}
     </figure>
   );

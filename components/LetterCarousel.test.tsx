@@ -69,8 +69,12 @@ describe('LetterCarousel', () => {
     }
     expect(prev.className).toContain('left-3');
     expect(next.className).toContain('right-3');
-    // 겹쳐 올리려면 figure 가 기준 상자여야 한다
-    expect(container.querySelector('figure')?.className).toContain('relative');
+    // 기준 상자는 이미지를 감싼 div 다. figure 를 기준으로 잡으면 아래 숫자 표기
+    // 높이까지 포함돼 버튼이 이미지 중앙보다 내려간다.
+    const box = prev.parentElement!;
+    expect(box.className).toContain('relative');
+    expect(box.querySelector('img')).toBeInTheDocument();
+    expect(box.querySelector('figcaption')).toBeNull();
   });
 
   it('wraps around backwards from the first page', async () => {
