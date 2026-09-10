@@ -43,9 +43,15 @@ export function SectionDots({
   const arrowOff = `${arrow} border-ds-text/10 text-ds-text/20`;
 
   return (
-    // 화살표가 없는 모바일에서는 도트만 남아 gap 이 쓰이지 않는다.
-    // 도트 사이 간격은 시안값 60px 그대로다 — 화살표는 시안에 없는 추가 요소라 여기만 조정한다.
-    <nav aria-label={`${label} 세부 페이지`} className="flex items-center gap-7">
+    // 모바일에서는 가운데로 모은다. 화살표가 빠지면서 도트 4개가 168px 만 쓰는데
+    // 왼쪽에 붙여 두면 오른쪽에 174px 이 비어 한쪽으로 쏠려 보인다.
+    // md 이상은 왼쪽 정렬 그대로다 — 시안이 도트를 좌측 제목 블록 아래에 두었다.
+    //
+    // 도트 사이 간격은 시안값 60px 그대로다. 화살표는 시안에 없는 추가 요소라 거기만 조정했다.
+    <nav
+      aria-label={`${label} 세부 페이지`}
+      className="flex items-center justify-center gap-7 md:justify-start"
+    >
       {prev ? (
         <Link href={prev.href} aria-label={`이전: ${prev.label}`} className={arrowOn}>
           ‹
