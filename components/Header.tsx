@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,32 +16,36 @@ const isActive = (pathname: string, to: string) =>
   pathname === to || pathname.startsWith(`${to}/`);
 
 /**
- * 시안 규격: 높이 80px, 메뉴 그룹 gap 48px, CTA 144×37.
+ * 시안 규격
+ * - 데스크톱: 높이 80px, 메뉴 그룹 gap 48px, CTA 144×37
+ * - 모바일(390): 높이 56px, 로고 + 햄버거만 두고 메뉴는 접는다 (docs/mobile-ui.md)
+ *
  * 시안의 메뉴 그룹은 중앙에서 16.5px 왼쪽으로 치우쳐 있으나 정렬 오차로 보고
  * 완전 중앙으로 구현한다 — docs/decisions.md 8번.
- * 같은 이유로 좌우 여백을 32px로 통일한다(시안은 로고 left:32 / CTA right:18로 비대칭).
- *
- * 좁은 화면에서는 메뉴가 흐름 안에서 가로 스크롤된다. 햄버거 메뉴는
- * 5단계(모바일 브레이크포인트)에서 다룬다 — docs/roadmap.md.
+ * 같은 이유로 좌우 여백을 통일한다(시안은 로고 left:32 / CTA right:18로 비대칭).
  */
 export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
   const pathname = usePathname();
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+
   return (
-    <header className="sticky top-0 z-[100] h-20 bg-ds-bg/95 backdrop-blur-md">
+    <header className="sticky top-0 z-[100] bg-ds-bg/95 backdrop-blur-md">
       <nav
         aria-label="주 메뉴"
-        className="relative mx-auto flex h-full max-w-[1920px] items-center gap-6 px-8"
+        className="relative mx-auto flex h-14 max-w-[1920px] items-center gap-6 px-4 lg:h-20 lg:px-8"
       >
         {/* TODO: 최종 로고 심볼 이미지로 교체 (Figma 코멘트 #24). 시안은 90×94 심볼. */}
         <Link
           href="/"
           aria-label="나지르 홈"
-          className="shrink-0 font-heir text-[44px] leading-none text-ds-key2"
+          onClick={close}
+          className="shrink-0 font-heir text-[34px] leading-none text-ds-key2 lg:text-[44px]"
         >
           N
         </Link>
 
-        <ul className="flex min-w-0 items-center gap-6 overflow-x-auto lg:absolute lg:left-1/2 lg:gap-12 lg:overflow-visible lg:-translate-x-1/2">
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-12 lg:flex">
           {items.map((it) => {
             const active = isActive(pathname, it.to);
             return (
@@ -48,7 +53,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
                 <Link
                   href={it.to}
                   aria-current={active ? "page" : undefined}
-                  className={`whitespace-nowrap border-b pb-1 font-heir text-[16px] font-bold leading-none tracking-[-0.025em] transition-colors lg:text-[20px] ${
+                  className={`whitespace-nowrap border-b pb-1 font-heir text-[20px] font-bold leading-none tracking-[-0.025em] transition-colors ${
                     active
                       ? "border-ds-key2 text-ds-key2"
                       : "border-transparent text-ds-text hover:text-ds-key2"
@@ -65,11 +70,58 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
           href={supportFormUrl ?? "#"}
           target="_blank"
           rel="noopener"
-          className="ml-auto flex h-[37px] w-36 shrink-0 items-center justify-center bg-ds-key2 font-heir text-[16px] leading-none text-ds-key1 transition-opacity hover:opacity-85"
+          className="ml-auto hidden h-[37px] w-36 shrink-0 items-center justify-center bg-ds-key2 font-heir text-[16px] leading-none text-ds-key1 transition-opacity hover:opacity-85 lg:flex"
         >
           후원 바로가기
         </a>
+
+        {/* 시안 모바일 GNB는 햄버거 24×16 하나뿐이다. */}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
+          className="ml-auto flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-[5px] lg:hidden"
+        >
+          <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />
+          <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />
+          <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />
+        </button>
       </nav>
+
+      {open && (
+        <div id="mobile-menu" className="border-t border-ds-text/10 bg-ds-bg px-6 pb-6 pt-2 lg:hidden">
+          <ul className="flex flex-col">
+            {items.map((it) => {
+              const active = isActive(pathname, it.to);
+              return (
+                <li key={it.to}>
+                  <Link
+                    href={it.to}
+                    onClick={close}
+                    aria-current={active ? "page" : undefined}
+                    className={`block py-3 font-heir text-[18px] font-bold tracking-[-0.025em] ${
+                      active ? "text-ds-key2" : "text-ds-text"
+                    }`}
+                  >
+                    {it.label}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+          <a
+            href={supportFormUrl ?? "#"}
+            target="_blank"
+            rel="noopener"
+            onClick={close}
+            className="mt-3 flex h-12 items-center justify-center bg-ds-key2 font-heir text-[16px] text-ds-key1"
+          >
+            후원 바로가기
+          </a>
+        </div>
+      )}
     </header>
   );
 }

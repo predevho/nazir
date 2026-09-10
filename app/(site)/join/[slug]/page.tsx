@@ -38,7 +38,7 @@ export default async function JoinSectionPage({ params }: { params: Promise<{ sl
   const intro = section.slug === 'support' ? site.joinIntro : site.prayerIntro;
 
   return (
-    <section className="mx-auto max-w-content px-8 py-[clamp(48px,7vw,88px)]">
+    <section className="mx-auto max-w-content px-6 lg:px-8 py-[clamp(48px,7vw,88px)]">
       <div className="grid gap-x-16 gap-y-12 lg:grid-cols-[497px_1fr]">
         <header className="flex flex-col gap-3">
           <p className="font-heir text-[20px] leading-none text-ds-text/70">{section.no}</p>

@@ -68,7 +68,7 @@ export default async function GuestbookPage({
   }
 
   return (
-    <section className="mx-auto max-w-content px-8 py-[clamp(48px,7vw,88px)]">
+    <section className="mx-auto max-w-content px-6 lg:px-8 py-[clamp(48px,7vw,88px)]">
       <header className="max-w-[497px]">
         <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
           응원 게시판

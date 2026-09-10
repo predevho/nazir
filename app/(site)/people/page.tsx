@@ -25,7 +25,7 @@ export default async function PeoplePage({
   const active = resolvePeopleTab(people, tab);
 
   return (
-    <section className="mx-auto max-w-content px-8 py-[clamp(48px,9vw,120px)]">
+    <section className="mx-auto max-w-content px-6 lg:px-8 py-[clamp(48px,9vw,120px)]">
       <h1 className="text-center font-heir text-[clamp(30px,5vw,44px)] leading-none text-ds-text">
         함께하는 사람들
       </h1>

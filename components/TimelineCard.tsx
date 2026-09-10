@@ -43,6 +43,7 @@ export function TimelineCard({
       </h2>
       <hr className={`mt-5 border-0 border-t ${rule}`} />
 
+      {/* 기간 표기가 `26.01.12 ~ 26.06.28`처럼 길어서 모바일에서는 날짜와 내용을 두 줄로 흘린다. */}
       {events.length === 0 ? (
         <p className={`py-8 text-center font-heir text-[15px] ${muted}`}>등록된 일정이 없습니다.</p>
       ) : (
@@ -50,10 +51,12 @@ export function TimelineCard({
           {visible.map((e) => (
             <li key={e.id} className="flex items-baseline gap-4">
               <span className={`mt-1 h-2 w-2 flex-none rounded-full ${dot}`} aria-hidden />
-              <span className="w-[150px] flex-none font-heir text-[15px] leading-[1.7]">
-                {e.period}
+              <span className="flex flex-1 flex-col gap-1 sm:flex-row sm:gap-4">
+                <span className="font-heir text-[15px] leading-[1.7] sm:w-[150px] sm:flex-none">
+                  {e.period}
+                </span>
+                <span className="font-heir text-[15px] leading-[1.7]">{e.title}</span>
               </span>
-              <span className="font-heir text-[15px] leading-[1.7]">{e.title}</span>
             </li>
           ))}
         </ol>

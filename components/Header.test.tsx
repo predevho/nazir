@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Header } from './Header';
 
 const { pathname } = vi.hoisted(() => ({ pathname: { current: '/about' } }));
@@ -30,9 +31,40 @@ describe('Header', () => {
   it('links the CTA straight to the support form', () => {
     pathname.current = '/';
     render(<Header supportFormUrl="https://forms.gle/example" />);
-    expect(screen.getByRole('link', { name: '후원 바로가기' })).toHaveAttribute(
-      'href',
-      'https://forms.gle/example',
-    );
+    expect(
+      screen.getAllByRole('link', { name: '후원 바로가기' }).every(
+        (a) => a.getAttribute('href') === 'https://forms.gle/example',
+      ),
+    ).toBe(true);
+  });
+});
+
+describe('Header — 모바일 햄버거', () => {
+  it('starts collapsed', () => {
+    pathname.current = '/';
+    render(<Header />);
+    const toggle = screen.getByRole('button', { name: '메뉴 열기' });
+    expect(toggle).toHaveAttribute('aria-expanded', 'false');
+    // 접혀 있을 때는 데스크톱 메뉴 한 벌만 있다
+    expect(screen.getAllByRole('link', { name: '제작 과정' })).toHaveLength(1);
+  });
+
+  it('opens the menu and exposes the links', async () => {
+    const user = userEvent.setup();
+    pathname.current = '/';
+    render(<Header />);
+    await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
+    expect(screen.getByRole('button', { name: '메뉴 닫기' })).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getAllByRole('link', { name: '제작 과정' })).toHaveLength(2);
+  });
+
+  it('closes again after tapping a link so the page is not covered', async () => {
+    const user = userEvent.setup();
+    pathname.current = '/';
+    render(<Header />);
+    await user.click(screen.getByRole('button', { name: '메뉴 열기' }));
+    const links = screen.getAllByRole('link', { name: '제작 과정' });
+    await user.click(links[links.length - 1]);
+    expect(screen.getByRole('button', { name: '메뉴 열기' })).toBeInTheDocument();
   });
 });
