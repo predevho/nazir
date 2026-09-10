@@ -1,5 +1,6 @@
 import { LANDING_CARDS } from '@/content/landing';
 import { LandingCards } from '@/components/landing/LandingCards';
+import { Curtain } from '@/components/shell/Curtain';
 
 export const revalidate = 60;
 
@@ -18,6 +19,8 @@ export const revalidate = 60;
 export default function Home() {
   return (
     <section>
+      {/* 막은 홈에만 있다. 공통 레이아웃이 아니라 여기 있는 것이 곧 "홈에서만 뜬다"는 보장이다. */}
+      <Curtain />
       <h1 className="sr-only">창작뮤지컬 &lt;나지르&gt; 기록 및 후원 안내</h1>
 
       {/*

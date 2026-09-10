@@ -1,18 +1,18 @@
 import { describe, it, expect, vi, afterEach } from 'vitest';
 import { render, screen, act } from '@testing-library/react';
-import { Curtain } from './Curtain';
+import { readFileSync } from 'node:fs';
 
-// vi.mock 은 끌어올려지므로 바깥 변수를 바로 참조할 수 없다. vi.hoisted 로 같이 올린다.
-const nav = vi.hoisted(() => ({ pathname: '/' }));
-vi.mock('next/navigation', () => ({ usePathname: () => nav.pathname }));
+// 모듈 수준 플래그를 쓰므로 검사마다 모듈을 새로 불러 방문을 초기화한다.
+async function freshCurtain() {
+  vi.resetModules();
+  return (await import('./Curtain')).Curtain;
+}
 
-afterEach(() => {
-  vi.useRealTimers();
-  nav.pathname = '/';
-});
+afterEach(() => vi.useRealTimers());
 
 describe('Curtain', () => {
-  it('홈에서 막이 오르고, 다 열리면 스스로 사라진다', () => {
+  it('막이 올라가고, 다 열리면 스스로 사라진다', async () => {
+    const Curtain = await freshCurtain();
     vi.useFakeTimers();
     render(<Curtain />);
     expect(screen.getByTestId('curtain')).toBeInTheDocument();
@@ -20,24 +20,28 @@ describe('Curtain', () => {
     expect(screen.queryByTestId('curtain')).not.toBeInTheDocument();
   });
 
-  it('홈이 아닌 화면으로 바로 들어오면 막을 치지 않는다', () => {
-    nav.pathname = '/about/greeting';
+  it('한 방문에 한 번만 친다 — 홈으로 돌아올 때마다 가리면 방해가 된다', async () => {
+    const Curtain = await freshCurtain();
+    vi.useFakeTimers();
+    const first = render(<Curtain />);
+    act(() => vi.advanceTimersByTime(2400));
+    first.unmount();
+
+    // 홈을 떠났다 돌아오면 페이지가 다시 마운트된다. 그래도 막은 다시 내려오지 않는다.
     render(<Curtain />);
     expect(screen.queryByTestId('curtain')).not.toBeInTheDocument();
   });
+});
 
-  it('관리자 화면에서도 치지 않는다', () => {
-    nav.pathname = '/admin/lists/timeline';
-    render(<Curtain />);
-    expect(screen.queryByTestId('curtain')).not.toBeInTheDocument();
-  });
-
-  it('다른 화면으로 들어온 뒤 홈으로 이동해도 막이 튀어나오지 않는다', () => {
-    // 판단은 마운트 시점의 경로로 한 번만 한다. 이동에 반응하면 읽던 화면이 가려진다.
-    nav.pathname = '/guestbook';
-    const { rerender } = render(<Curtain />);
-    nav.pathname = '/';
-    rerender(<Curtain />);
-    expect(screen.queryByTestId('curtain')).not.toBeInTheDocument();
+/*
+  "홈에서만 뜬다"를 조건문으로 지키면 조건이 틀릴 수 있다. 놓는 자리로 지킨다 —
+  홈 페이지에만 있고 공통 레이아웃에는 없어야 한다. 레이아웃으로 옮겨지면 여기서 걸린다.
+*/
+describe('Curtain 이 놓인 자리', () => {
+  it('홈 페이지에만 있고 공통 레이아웃에는 없다', () => {
+    const home = readFileSync('app/(site)/page.tsx', 'utf8');
+    const layout = readFileSync('app/(site)/layout.tsx', 'utf8');
+    expect(home).toContain('<Curtain />');
+    expect(layout, '레이아웃에 두면 모든 화면에서 막이 내려온다').not.toContain('Curtain');
   });
 });
