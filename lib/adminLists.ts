@@ -6,16 +6,21 @@ export type ListColumn = {
   markdown?: boolean;
 };
 
+/** 이 목록이 실제로 나오는 공개 화면. 미리보기 제목과 `↗` 링크에 쓴다. */
+export type ListWhere = { path: string; label: string };
+
 export type ListConfig = {
   key: string;
   table: string;
   title: string;
   columns: ListColumn[];
+  where: ListWhere;
 };
 
 export const ADMIN_LISTS: Record<string, ListConfig> = {
   facts: {
     key: 'facts',
+    where: { path: '/about/work', label: '〈나지르〉에 대하여 03 · 작품 개요' },
     table: 'facts',
     title: '작품 개요',
     columns: [
@@ -25,6 +30,7 @@ export const ADMIN_LISTS: Record<string, ListConfig> = {
   },
   characters: {
     key: 'characters',
+    where: { path: '/about/characters', label: '〈나지르〉에 대하여 04 · 작품 속 인물' },
     table: 'characters',
     title: '주요 등장인물',
     columns: [
@@ -35,6 +41,7 @@ export const ADMIN_LISTS: Record<string, ListConfig> = {
   },
   timeline: {
     key: 'timeline',
+    where: { path: '/process/schedule', label: '제작 과정 01 · 제작 일정' },
     table: 'timeline_events',
     title: '제작 일정',
     columns: [
@@ -54,18 +61,21 @@ export const ADMIN_LISTS: Record<string, ListConfig> = {
   },
   budget: {
     key: 'budget',
+    where: { path: '/process/budget', label: '제작 과정 02 · 제작 예산' },
     table: 'budget_items',
     title: '제작 예산 항목',
     columns: [{ key: 'name', label: '항목명', type: 'text' }],
   },
   prayers: {
     key: 'prayers',
+    where: { path: '/join/prayer', label: '후원과 기도 02 · 기도 제목' },
     table: 'prayers',
     title: '기도제목',
     columns: [{ key: 'text', label: '내용', type: 'textarea' }],
   },
   letters: {
     key: 'letters',
+    where: { path: '/about/greeting', label: '〈나지르〉에 대하여 01 · 02' },
     table: 'about_letters',
     title: '편지 이미지 (〈나지르〉에 대하여 01·02)',
     columns: [

@@ -6,11 +6,18 @@ export type AdminField = {
   multiline?: boolean;
 };
 
-export type AdminSection = { title: string; fields: AdminField[] };
+/**
+ * 이 묶음의 문구가 실제로 나오는 화면들. 관리자가 "이 칸을 고치면 어디가 바뀌지?" 를
+ * 묻지 않도록 편집 화면에 링크로 띄운다. 한 묶음이 여러 화면에 걸치는 경우가 있어 배열이다.
+ */
+export type AdminWhere = { path: string; label: string };
+
+export type AdminSection = { title: string; where: AdminWhere[]; fields: AdminField[] };
 
 export const ADMIN_SECTIONS: AdminSection[] = [
   {
     title: '히어로 (홈)',
+    where: [{ path: '/', label: '홈' }],
     fields: [
       { key: 'heroVerse', label: '상단 성구', multiline: true },
       { key: 'heroSubtitle', label: '부제 (예: 구별된 사람들)' },
@@ -19,6 +26,11 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   },
   {
     title: '대하여',
+    where: [
+      { path: '/about/greeting', label: '대하여 01' },
+      { path: '/about/praysound', label: '02' },
+      { path: '/about/work', label: '03' },
+    ],
     fields: [
       { key: 'aboutGreeting', label: '연출의 인사말', multiline: true },
       { key: 'praysoundStory1', label: 'Praysound 이야기 1', multiline: true },
@@ -29,6 +41,11 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   },
   {
     title: '무대에 오르기까지',
+    where: [
+      { path: '/process/schedule', label: '제작 과정 01' },
+      { path: '/process/budget', label: '02' },
+      { path: '/people', label: '함께 세우는 사람들' },
+    ],
     fields: [
       { key: 'processIntro', label: '안내 문구', multiline: true },
       { key: 'peopleIntro', label: '함께 세우는 사람들 안내', multiline: true },
@@ -38,6 +55,10 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   },
   {
     title: '함께하기',
+    where: [
+      { path: '/join/support', label: '후원과 기도 01' },
+      { path: '/join/prayer', label: '02' },
+    ],
     fields: [
       { key: 'joinVerse', label: '성구', multiline: true },
       { key: 'joinVerseRef', label: '성구 출처 (예: 전도서 4:12)' },
@@ -55,6 +76,7 @@ export const ADMIN_SECTIONS: AdminSection[] = [
   },
   {
     title: '푸터 · SNS',
+    where: [{ path: '/', label: '모든 화면 아래 푸터' }],
     fields: [
       { key: 'instagramMain', label: '인스타그램 — Pray Sound (URL)' },
       { key: 'instagramMusical', label: '인스타그램 — musical_naz (URL)' },

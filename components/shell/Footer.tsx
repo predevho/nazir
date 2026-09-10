@@ -31,8 +31,29 @@ export function Footer({ site }: { site?: SiteContent }) {
   return (
     <footer className="bg-ds-panel px-6 xl:px-8 py-[clamp(40px,6vw,64px)]">
       <div className="mx-auto max-w-content">
-        {/* TODO: 최종 로고 이미지로 교체 (Figma 코멘트 #24). 현재는 시안과 동일한 임시 텍스트. */}
-        <p className="font-heir text-[36px] leading-none text-ds-key2">나지르 | NAZIR</p>
+        {/*
+          워드마크. 가로형 로고 이미지는 없다 — 받은 브랜드 자산이 정사각 심볼뿐이라
+          가로로 길게 눕는 이 자리에 그대로 쓸 수 없다. 그래서 심볼과 글자를 나란히 놓아
+          하나의 덩어리로 묶는다. GNB 와 같은 심볼을 쓰므로 위아래가 한 브랜드로 읽힌다.
+          가로형 워드마크가 오면 이 블록을 <img> 하나로 바꾸면 된다.
+
+          구분선 `|` 은 글자가 아니라 획이다. 낭독기가 "세로줄"이라고 읽지 않도록
+          aria-hidden 으로 감추고, 이름 두 개만 읽히게 둔다.
+        */}
+        <div className="flex items-center gap-[clamp(12px,2vw,18px)]">
+          <img
+            src="/images/logo-symbol.webp"
+            alt=""
+            width={308}
+            height={320}
+            className="h-[clamp(38px,5vw,52px)] w-auto"
+          />
+          <p className="flex items-center gap-[clamp(8px,1.4vw,12px)] font-heir text-[clamp(26px,4vw,36px)] leading-none text-ds-key2">
+            나지르
+            <span aria-hidden className="text-ds-key2/40">|</span>
+            NAZIR
+          </p>
+        </div>
 
         <div className="mt-14 grid gap-16 md:grid-cols-3">
           <Column title="문의">

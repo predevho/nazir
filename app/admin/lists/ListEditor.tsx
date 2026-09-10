@@ -5,6 +5,7 @@ import { saveList, type SaveState } from './actions';
 import { PhotoField } from './PhotoField';
 import { ListToolbar } from './ListToolbar';
 import { ListPager } from './ListPager';
+import { ListPreview, type PreviewSite } from './ListPreview';
 import { applyView, moveWithinVisible, sortForView, ADMIN_PAGE_SIZE, EMPTY_VIEW, type ViewState } from '@/lib/adminView';
 
 type Row = { _key: string; id: string } & Record<string, string>;
@@ -22,7 +23,16 @@ function toRow(config: ListConfig, r: Record<string, string>): Row {
 
 const initial: SaveState = { ok: false, message: '' };
 
-export function ListEditor({ config, initialRows }: { config: ListConfig; initialRows: Record<string, string>[] }) {
+export function ListEditor({
+  config,
+  initialRows,
+  site,
+}: {
+  config: ListConfig;
+  initialRows: Record<string, string>[];
+  /** 미리보기 카드가 쓰는, 이 목록 밖의 값(총액·안내 문구). */
+  site: PreviewSite;
+}) {
   const [rows, setRows] = useState<Row[]>(() => initialRows.map((r) => toRow(config, r)));
   const [state, formAction, pending] = useActionState(saveList, initial);
 
@@ -75,7 +85,12 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
   });
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    /*
+      넓은 화면에서는 편집기 오른쪽이 통째로 비어 있었다. 그 자리에 미리보기를 세운다.
+      xl 아래에서는 한 칸으로 떨어지고 미리보기는 스스로 숨는다.
+    */
+    <form action={formAction} className="grid items-start gap-8 xl:grid-cols-[minmax(0,1fr)_minmax(360px,440px)]">
+      <div className="flex min-w-0 flex-col gap-4">
       <input type="hidden" name="listKey" value={config.key} />
       <input type="hidden" name="rows" value={JSON.stringify(payload)} readOnly />
 
@@ -152,6 +167,9 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
         </button>
         {state.message && <span className={`text-sm ${state.ok ? 'text-ds-key2' : 'text-red-400'}`}>{state.message}</span>}
       </div>
+      </div>
+
+      <ListPreview config={config} rows={payload} site={site} />
     </form>
   );
 }

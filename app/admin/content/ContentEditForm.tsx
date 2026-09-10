@@ -11,7 +11,25 @@ export function ContentEditForm({ values }: { values: Record<string, string> }) 
     <form action={formAction} className="flex flex-col gap-10">
       {ADMIN_SECTIONS.map((section) => (
         <fieldset key={section.title} className="flex flex-col gap-4 border-0 m-0 p-0">
-          <legend className="font-heir text-xl text-ds-key2 mb-2">{section.title}</legend>
+          <legend className="font-heir text-xl text-ds-key2">{section.title}</legend>
+          {/*
+            이 묶음이 어느 화면으로 나가는지 밝힌다. 칸 이름만 보고는 `조회수 안내 문구`가
+            어느 페이지의 어느 자리인지 알 수 없어, 고치고 나서 사이트를 뒤져 확인해야 했다.
+          */}
+          <p className="-mt-1 mb-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-ds-text/45">
+            <span>나오는 곳</span>
+            {section.where.map((w) => (
+              <a
+                key={w.path + w.label}
+                href={w.path}
+                target="_blank"
+                rel="noopener"
+                className="underline decoration-ds-text/25 underline-offset-4 hover:text-ds-key2"
+              >
+                {w.label} ↗
+              </a>
+            ))}
+          </p>
           {section.fields.map((f) => (
             <label key={f.key} className="flex flex-col gap-1.5">
               <span className="text-[11px] tracking-[0.12em] text-ds-text/60">{f.label}</span>

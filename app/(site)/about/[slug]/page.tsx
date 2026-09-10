@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
 import { MarkdownText } from '@/components/ui/MarkdownText';
+import { FactsCard } from '@/components/about/FactsCard';
+import { CharacterCards } from '@/components/about/CharacterCards';
 import { SectionDots } from '@/components/section/SectionDots';
 import { SwipeNavigator } from '@/components/section/SwipeNavigator';
 import { SectionEdgeNav } from '@/components/section/SectionEdgeNav';
@@ -96,17 +98,7 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
 
             {section.slug === 'work' && (
               <div className="flex flex-col gap-12">
-                <div className="border border-ds-key2/40 p-8">
-                  <h2 className="font-heir text-[26px] leading-none text-ds-key2">작품 개요</h2>
-                  <dl className="mt-6 m-0 grid gap-3">
-                    {site.facts.map((f) => (
-                      <div key={f.key} className="flex gap-6">
-                        <dt className="min-w-[140px] font-heir text-[15px] text-ds-key2">{f.key}</dt>
-                        <dd className="m-0 font-heir text-[15px] text-ds-text">{f.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </div>
+                <FactsCard facts={site.facts} />
                 <div>
                   <h2 className="font-heir text-[26px] leading-none text-ds-key2">로그라인</h2>
                   <p className="mt-4 max-w-[483px] font-heir text-[20px] leading-[1.78] text-white">
@@ -127,28 +119,7 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
               "이미지 카드 형태"를 요구한다. 사진이 등록된 인물만 사진을 얹어 둘 다 만족시킨다
               — 지금은 전원 미등록이라 화면은 시안과 같고, 관리자가 올리면 카드에 나타난다.
             */}
-            {section.slug === 'characters' && (
-              <ul className="grid gap-3 sm:grid-cols-2">
-                {characters.map((c) => (
-                  <li key={c.id} className="flex gap-5 border border-ds-key2/40 p-6">
-                    {c.photoUrl && (
-                      <img
-                        src={c.photoUrl}
-                        alt={c.name}
-                        loading="lazy"
-                        className="h-24 w-24 flex-none rounded-sm object-cover"
-                      />
-                    )}
-                    <div className="min-w-0">
-                      <h2 className="font-heir text-[22px] leading-none text-ds-key2">{c.name}</h2>
-                      <MarkdownText className="mt-3 font-heir text-[15px] leading-[1.9] text-ds-text/80">
-                        {c.description}
-                      </MarkdownText>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
+            {section.slug === 'characters' && <CharacterCards characters={characters} />}
           </div>
         </div>
 

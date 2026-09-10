@@ -53,13 +53,13 @@ export function GuestbookNote({
         {replies.length > 0 && (
           <div id={panelId} hidden={!open}>
             <hr className="mb-4 mt-1 border-0 border-t border-dashed border-ds-key1/30" />
-            <ul className="m-0 flex list-none flex-col gap-4 p-0">
+            <ul className="m-0 flex list-none flex-col gap-5 p-0">
               {replies.map((reply) => (
                 <li key={reply.id}>
-                  <p className="font-griun text-[13px] leading-none opacity-70">
+                  <p className="font-griun text-[14px] leading-none opacity-70">
                     제작팀 · {formatNoteDate(reply.createdAt)}
                   </p>
-                  <p className="mt-2 whitespace-pre-line break-words break-keep font-griun text-[16px] leading-[1.5]">
+                  <p className="mt-2 whitespace-pre-line break-words break-keep font-griun text-[18px] leading-[1.5]">
                     {reply.message}
                   </p>
                 </li>
