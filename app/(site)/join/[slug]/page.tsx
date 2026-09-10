@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const section = findJoinSection(slug);
   if (!section) return {};
-  return { title: `${section.title} · 후원과 기도 · 나지르` };
+  return { title: `${section.title} · 후원과 기도` };
 }
 
 /**

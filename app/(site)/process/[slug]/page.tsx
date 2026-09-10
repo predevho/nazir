@@ -20,7 +20,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const section = findProcessSection(slug);
   if (!section) return {};
-  return { title: `${section.title} · 나지르` };
+  return { title: section.title };
 }
 
 /**

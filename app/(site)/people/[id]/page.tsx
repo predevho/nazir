@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
@@ -5,6 +6,23 @@ import { findPersonById } from '@/lib/people';
 import { MarkdownText } from '@/components/MarkdownText';
 
 export const revalidate = 60;
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const found = findPersonById(await getContent(), id);
+  if (!found) return {};
+  const { member, groupLabel } = found;
+  return {
+    title: `${member.name} · 함께하는 사람들`,
+    description: [groupLabel, member.team, member.role, member.name]
+      .filter(Boolean)
+      .join(' · '),
+  };
+}
 
 export async function generateStaticParams() {
   const { people } = await getContent();

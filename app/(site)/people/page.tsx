@@ -7,7 +7,7 @@ import { PeopleGrid } from '@/components/PeopleGrid';
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: '함께하는 사람들 · 나지르',
+  title: '함께하는 사람들',
   description: '창작뮤지컬 <나지르>를 함께 세워가는 헤더진 · 스탭진 · 배우를 소개합니다.',
 };
 

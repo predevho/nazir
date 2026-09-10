@@ -9,7 +9,7 @@ import { PAGE_SIZE, resolvePage, type GuestbookEntry } from '@/lib/guestbook';
 export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: '응원 게시판 · 나지르',
+  title: '응원 게시판',
   description: '창작뮤지컬 <나지르>를 준비하는 사람들에게 응원 한 마디를 남겨 주세요.',
 };
 

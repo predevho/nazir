@@ -21,7 +21,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const section = findAboutSection(slug);
   if (!section) return {};
-  return { title: `${section.title} · 〈나지르〉에 대하여 · 나지르` };
+  return { title: `${section.title} · 〈나지르〉에 대하여` };
 }
 
 /**
