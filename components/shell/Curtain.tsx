@@ -23,15 +23,28 @@ function Panel({ side }: { side: 'left' | 'right' }) {
   );
 }
 
+/**
+ * 막이 열리는 연출은 **홈으로 들어올 때 한 번만** 한다.
+ *
+ * 극장에서 막은 공연이 시작할 때 한 번 오른다. 화면을 옮길 때마다 다시 내려왔다
+ * 열리면 연출이 아니라 방해가 된다 — 2.35초 동안 읽던 것이 가려진다.
+ *
+ * 판단 기준은 "지금 홈인가"가 아니라 **"처음 들어온 화면이 홈이었나"** 이다.
+ * 이 컴포넌트는 레이아웃에 있어 화면을 옮겨도 다시 마운트되지 않으므로, 마운트 시점의
+ * 경로가 곧 방문자가 사이트에 들어선 자리다. `지금 홈인가` 로 두면 다른 화면으로 들어온
+ * 사람이 홈으로 이동하는 순간 막이 튀어나온다.
+ */
 export function Curtain() {
   const pathname = usePathname();
+  // 첫 렌더의 값만 담는다. 이후 경로가 바뀌어도 이 값은 그대로다.
+  const [openedAtHome] = useState(() => pathname === '/');
   const [on, setOn] = useState(true);
   useEffect(() => {
+    if (!openedAtHome) return;
     const t = setTimeout(() => setOn(false), 2350);
     return () => clearTimeout(t);
-  }, []);
-  if (pathname.startsWith('/admin')) return null;
-  if (!on) return null;
+  }, [openedAtHome]);
+  if (!openedAtHome || !on) return null;
   return (
     <div data-testid="curtain" className="fixed inset-0 z-[200] pointer-events-none">
       <Panel side="left" />

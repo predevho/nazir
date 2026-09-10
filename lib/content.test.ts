@@ -15,7 +15,7 @@ describe('assembleContent', () => {
     const result = assembleContent({
       blocks: [
         { key: 'accountNumber', value: '1234-56-7890' },
-        { key: 'heroSubtitle', value: '구별된 사람들' },
+        { key: 'accountHolder', value: '예금주 홍길동' },
       ],
       facts: [{ id: 'f1', key: 'FORM', value: '창작 뮤지컬', sort_order: 0 }],
       characters: [
@@ -35,6 +35,7 @@ describe('assembleContent', () => {
       ],
     });
     expect(result.site.accountNumber).toBe('1234-56-7890');
+    expect(result.site.accountHolder).toBe('예금주 홍길동');
     expect(result.site.facts).toEqual([{ key: 'FORM', value: '창작 뮤지컬' }]);
     expect(result.characters.map((c) => c.name)).toEqual(['아론', '한나']);
     expect(result.characters[0].photoUrl).toBe('http://img/a.jpg');
@@ -48,7 +49,7 @@ describe('assembleContent', () => {
     const result = assembleContent({
       blocks: [], facts: [], characters: [], timeline: [], budget: [], prayers: [], groups: [], members: [],
     });
-    expect(result.site.heroSubtitle).toBe('구별된 사람들');
+    expect(result.site.accountHolder).toBe('예금주 정은수');
   });
 
   const empty = {
@@ -75,7 +76,7 @@ describe('assembleContent', () => {
     // 확인할 것은 "테이블이 없으면 시드가 그대로 나온다"는 사실 하나다.
     expect(result.letters).toEqual(seed.letters);
     expect(result.letters.length).toBeGreaterThan(0);
-    expect(result.site.heroSubtitle).toBe('구별된 사람들');
+    expect(result.site.accountHolder).toBe('예금주 정은수');
   });
 
   it('테이블이 있는데 비어 있으면 시드를 되살리지 않는다 (운영진이 지운 상태)', () => {

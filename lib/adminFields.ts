@@ -16,15 +16,6 @@ export type AdminSection = { title: string; where: AdminWhere[]; fields: AdminFi
 
 export const ADMIN_SECTIONS: AdminSection[] = [
   {
-    title: '히어로 (홈)',
-    where: [{ path: '/', label: '홈' }],
-    fields: [
-      { key: 'heroVerse', label: '상단 성구', multiline: true },
-      { key: 'heroSubtitle', label: '부제 (예: 구별된 사람들)' },
-      { key: 'heroMeta', label: '제작 정보 (하단, 줄바꿈 가능)', multiline: true },
-    ],
-  },
-  {
     title: '대하여',
     where: [
       { path: '/about/greeting', label: '대하여 01' },
@@ -86,7 +77,6 @@ export const ADMIN_SECTIONS: AdminSection[] = [
       { key: 'instagramMain', label: '인스타그램 — Pray Sound (URL)' },
       { key: 'instagramMusical', label: '인스타그램 — musical_naz (URL)' },
       { key: 'youtube', label: '유튜브 (URL)' },
-      { key: 'contactInstagram', label: '문의 인스타그램 (URL)' },
       { key: 'contactName', label: '푸터 문의 — 대표 이름' },
       { key: 'contactPhone', label: '푸터 문의 — 연락처' },
     ],

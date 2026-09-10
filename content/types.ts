@@ -66,9 +66,6 @@ export interface Fact {
 }
 
 export interface SiteContent {
-  heroVerse: string;
-  heroSubtitle: string;
-  heroMeta: string;
   aboutGreeting: string;
   praysoundStory1: string;
   praysoundStory2: string;
@@ -107,7 +104,6 @@ export interface SiteContent {
   instagramMain: string;
   instagramMusical: string;
   youtube: string;
-  contactInstagram: string;
   /** 푸터 `문의` 컬럼. 마스킹하지 않고 시안 그대로 노출한다 — Figma 코멘트 #47(대표 확인 완료). */
   contactName: string;
   contactPhone: string;
