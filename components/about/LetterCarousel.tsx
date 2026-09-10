@@ -17,13 +17,25 @@ import { Chevron } from '@/components/ui/Chevron';
  * 좌측 컬럼의 본문 텍스트가 그 대체 수단이고, 각 이미지에는 caption을 alt로 넣는다
  * — docs/figma-spec-review.md 6-2.
  */
-export function LetterCarousel({ letters, label }: { letters: AboutLetter[]; label: string }) {
+export function LetterCarousel({
+  letters,
+  label,
+  aspect = '634/846',
+}: {
+  letters: AboutLetter[];
+  label: string;
+  /** 화면마다 그림의 성격이 달라 틀도 다르다 — content/about.ts 의 letterAspect. */
+  aspect?: string;
+}) {
   const [index, setIndex] = useState(0);
   const slides = letters.filter((l) => l.imageUrl);
 
   if (slides.length === 0) {
     return (
-      <div className="flex aspect-[634/846] w-full items-center justify-center border border-ds-key2/25 bg-ds-panel px-6 text-center">
+      <div
+        className="flex w-full items-center justify-center border border-ds-key2/25 bg-ds-panel px-6 text-center"
+        style={{ aspectRatio: aspect.replace('/', ' / ') }}
+      >
         <p className="font-heir text-[15px] leading-[2] text-ds-text/50">
           {label} 이미지가 아직 등록되지 않았습니다.
           <br />
@@ -71,10 +83,16 @@ export function LetterCarousel({ letters, label }: { letters: AboutLetter[]; lab
         아래 숫자 표기의 높이까지 포함돼 버튼이 이미지 중앙보다 19px 내려간다.
       */}
       <div className="relative">
+        {/*
+          object-contain 이다. cover 로 두면 틀과 비율이 다른 그림이 잘린다 —
+          운영진이 관리자 페이지에서 아무 그림이나 올릴 수 있으므로, 잘라내는 대신
+          남는 자리를 패널색으로 두는 편이 안전하다. 비율이 맞으면 여백은 생기지 않는다.
+        */}
         <img
           src={current.imageUrl ?? ''}
           alt={current.caption || `${label} ${index + 1}번째 장`}
-          className="aspect-[634/846] w-full rounded-lg object-cover"
+          className="w-full rounded-lg bg-ds-panel object-contain"
+          style={{ aspectRatio: aspect.replace('/', ' / ') }}
         />
         {total > 1 && (
           <>

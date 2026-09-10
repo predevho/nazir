@@ -31,6 +31,27 @@ export function hasLetterCarousel(slug: AboutSlug): boolean {
   return LETTER_SECTIONS.includes(slug);
 }
 
+/**
+ * 두 화면에 들어가는 그림의 성격이 다르다.
+ *
+ * - `greeting` — 손편지 사진. 시안이 정한 634×846 이다.
+ * - `praysound` — 인스타그램에 올린 카드 뉴스 7장. 4:5(1440×1800)로 만들어졌고,
+ *   사방 가장자리까지 사진이 꽉 차 있어 잘라내면 글자와 인물이 잘린다.
+ *   틀을 그림에 맞추는 편이 그림을 틀에 맞추는 것보다 낫다.
+ *
+ * 값은 Tailwind 의 `aspect-[...]` 에 그대로 들어간다.
+ */
+const LETTER_ASPECT: Record<AboutSlug, string> = {
+  greeting: '634/846',
+  praysound: '4/5',
+  work: '634/846',
+  characters: '634/846',
+};
+
+export function letterAspect(slug: AboutSlug): string {
+  return LETTER_ASPECT[slug];
+}
+
 export function findAboutSection(slug: string): AboutSection | undefined {
   return ABOUT_SECTIONS.find((s) => s.slug === slug);
 }

@@ -7,7 +7,13 @@ import { SwipeNavigator } from '@/components/section/SwipeNavigator';
 import { SectionEdgeNav } from '@/components/section/SectionEdgeNav';
 import { getNeighbors } from '@/lib/sectionNav';
 import { LetterCarousel } from '@/components/about/LetterCarousel';
-import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
+import {
+  ABOUT_SECTIONS,
+  findAboutSection,
+  hasLetterCarousel,
+  letterAspect,
+  type AboutSection,
+} from '@/content/about';
 import type { AllContent } from '@/content/types';
 import { pageMeta } from '@/lib/pageMeta';
 
@@ -83,6 +89,7 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
                 <LetterCarousel
                   letters={content.letters.filter((l) => l.section === section.slug)}
                   label={section.title}
+                  aspect={letterAspect(section.slug)}
                 />
               </div>
             )}

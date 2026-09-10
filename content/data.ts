@@ -211,6 +211,15 @@ const letters: AboutLetter[] = [
     caption: '리더의 편지 2장 — 사명을 찾는 길에는 많은 수고와 어려움이 따르는 것 같습니다',
     sortOrder: 1,
   },
+  // Praysound 소개 카드 뉴스 7장. 원본이 4:5 라 이 화면만 틀을 4:5 로 둔다
+  // — content/about.ts 의 letterAspect.
+  ...Array.from({ length: 7 }, (_, i) => ({
+    id: `p${i + 1}`,
+    section: 'praysound' as const,
+    imageUrl: `/images/about-praysound-${i + 1}.webp`,
+    caption: `Praysound 이야기 ${i + 1}`,
+    sortOrder: i,
+  })),
 ];
 
 const facts: Fact[] = [
