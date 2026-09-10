@@ -193,17 +193,26 @@
 
 ## 배포 전 점검
 
-- [ ] **마이그레이션 적용** — `0007`(people_groups 라벨 팀원→스탭진) · ~~`0008`(about_letters)~~ 적용 완료 ·
-      `0009`(guestbook). Supabase 대시보드 SQL Editor에서 직접 실행해야 합니다
+- [x] **폰트 woff2 변환** — Heir of Light Regular/Bold를 OTF에서 woff2로 만들었습니다.
+      `795KB → 451KB`, `809KB → 457KB`. globals.css가 woff2를 먼저 찾으므로
+      **매 방문 나던 404 2건이 사라졌고** OTF는 폴백으로만 남습니다.
+      (변환은 `wawoff2`를 임시 설치해 1회 수행 후 제거했습니다. package.json 변화 없음)
+- [x] **캐시 헤더 확인** — `/fonts/*` 에 `public, max-age=31536000, immutable` 적용 확인
+- [x] **프로덕션 빌드 확인** — `next build` 통과. 정적/동적 분리도 의도대로입니다
+      (콘텐츠 페이지 SSG + 1분 revalidate, `/guestbook`·`/admin/*`·API는 동적)
+- [ ] Vercel 배포 후 `/fonts/HeirOfLight-Regular.woff2` 200 확인
+- [ ] **마이그레이션 적용** — `0007`(people_groups 라벨 팀원→스탭진) · ~~`0008`~~ · ~~`0009`~~ 적용 완료.
+      Supabase 대시보드 SQL Editor에서 직접 실행해야 합니다
 - [ ] **관리자에서 고칠 값** — 은행명 `KAKAOBANK` → `카카오뱅크`,
       예산 총액 `₩ 9,000,000` → 시안 표기 `9,000,000원`
-- [ ] Vercel 배포 후 `/fonts/HeirOfLight-Regular.otf` 200 확인
-- [ ] 응답 헤더 `Cache-Control: public, max-age=31536000, immutable` 확인
 - [ ] Vercel Hobby는 약관상 **개인·비상업 프로젝트 전용**.
       후원 계좌를 안내하는 사이트라 완전히 무관하다고 보기는 어려움 — 인지 필요
-- [ ] 폰트 전송량: 신규 방문 1명당 최대 3.81MB
-      (woff2 2.68MB + OTF gzip 573KB·586KB). Hobby 100GB/월 기준 약 27,000 신규 방문분
-- [ ] `public/fonts/`에 woff2가 없어 매 방문 OTF를 받습니다. woff2를 넣으면 전송량이 크게 줍니다
+- [ ] **GriunGossi 2.7MB** — 응원 게시판에서만 쓰지만 그 페이지 첫 방문에 2.7MB를 받습니다.
+      쪽지 내용이 방문자가 쓰는 한글이라 서브셋이 위험해 손대지 않았습니다.
+      부담되면 ① 쪽지 폰트를 시스템 폰트로 바꾸거나 ② 자주 쓰는 음절만 서브셋 + 나머지는
+      폴백으로 두는 방법이 있습니다 — 결정 필요
+- [ ] 폰트 전송량(현재): 첫 방문 **약 0.9MB**(Heir 2종), 응원 게시판 진입 시 **+2.7MB**(Griun).
+      재방문은 캐시로 0. Hobby 100GB/월 기준 단순 계산 약 110,000 신규 방문분
 
 ---
 
