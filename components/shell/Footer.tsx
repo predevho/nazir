@@ -82,7 +82,13 @@ export function Footer({ site }: { site?: SiteContent }) {
               후원 구글폼 바로가기
             </a>
             <p>
-              계좌 정보 | 카카오뱅크 {site?.accountNumber ?? ''} ({site?.contactName ?? '정은수'})
+              {/*
+                은행명은 관리자에서 고치는 값이다. 여기에 글자로 박아 두면 은행을 바꿔도
+                후원 페이지만 바뀌고 푸터는 옛 은행을 계속 알린다 — 돈이 오가는 안내라
+                두 곳이 어긋나면 안 된다.
+              */}
+              계좌 | {site?.accountBank ?? '카카오뱅크'} {site?.accountNumber ?? ''} (
+              {site?.contactName ?? '정은수'})
             </p>
           </Column>
         </div>
