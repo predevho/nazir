@@ -4,7 +4,7 @@ import { getContent } from '@/lib/content';
 import { MarkdownText } from '@/components/MarkdownText';
 import { AboutDots } from '@/components/AboutDots';
 import { LetterCarousel } from '@/components/LetterCarousel';
-import { ABOUT_SECTIONS, findAboutSection, type AboutSection } from '@/content/about';
+import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
 import type { AllContent } from '@/content/types';
 
 export const revalidate = 60;
@@ -67,9 +67,12 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
         </header>
 
         <div className="min-w-0">
-          {(section.slug === 'greeting' || section.slug === 'praysound') && (
+          {hasLetterCarousel(section.slug) && (
             <div className="mx-auto max-w-[634px]">
-              <LetterCarousel images={section.letterImages} label={section.title} />
+              <LetterCarousel
+                letters={content.letters.filter((l) => l.section === section.slug)}
+                label={section.title}
+              />
             </div>
           )}
 

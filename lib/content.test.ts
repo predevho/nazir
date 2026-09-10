@@ -49,4 +49,33 @@ describe('assembleContent', () => {
     });
     expect(result.site.heroSubtitle).toBe('구별된 사람들');
   });
+
+  const empty = {
+    blocks: [], facts: [], characters: [], timeline: [], budget: [], prayers: [], groups: [], members: [],
+  };
+
+  it('편지 이미지를 sort_order대로 조립한다', () => {
+    const result = assembleContent({
+      ...empty,
+      letters: [
+        { id: 'l1', section: 'praysound', image_url: '/b.webp', caption: '나중', sort_order: 1 },
+        { id: 'l0', section: 'greeting', image_url: '/a.webp', caption: '먼저', sort_order: 0 },
+      ],
+    });
+    expect(result.letters.map((l) => l.id)).toEqual(['l0', 'l1']);
+    expect(result.letters[0]).toEqual({
+      id: 'l0', section: 'greeting', imageUrl: '/a.webp', caption: '먼저', sortOrder: 0,
+    });
+  });
+
+  it('about_letters 테이블이 없는 배포(0008 이전)에서는 로컬 시드로 떨어진다', () => {
+    const result = assembleContent(empty);
+    expect(result.letters.map((l) => l.section)).toEqual(['greeting']);
+    expect(result.site.heroSubtitle).toBe('구별된 사람들');
+  });
+
+  it('테이블이 있는데 비어 있으면 시드를 되살리지 않는다 (운영진이 지운 상태)', () => {
+    const result = assembleContent({ ...empty, letters: [] });
+    expect(result.letters).toEqual([]);
+  });
 });

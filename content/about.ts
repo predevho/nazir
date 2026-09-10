@@ -11,20 +11,25 @@ export interface AboutSection {
   /** 시안 좌측 상단의 `01` ~ `04` */
   no: string;
   title: string;
-  /**
-   * 01·02는 편지 이미지를 좌우로 넘겨 보는 구조다(요구사항 명세서 14~16행, 18~19행).
-   * 시안의 `Feed_8-1.png` 같은 인스타 피드 이미지가 5장 들어가며, 아직 전달받지 못했다.
-   * 파일이 오면 public/images/ 에 넣고 여기에 경로를 채운다.
-   */
-  letterImages: string[];
 }
 
 export const ABOUT_SECTIONS: AboutSection[] = [
-  { slug: 'greeting', no: '01', title: '연출의 인사말', letterImages: [] },
-  { slug: 'praysound', no: '02', title: 'Praysound에 대하여', letterImages: [] },
-  { slug: 'work', no: '03', title: '작품 소개', letterImages: [] },
-  { slug: 'characters', no: '04', title: '작품 속 인물', letterImages: [] },
+  { slug: 'greeting', no: '01', title: '연출의 인사말' },
+  { slug: 'praysound', no: '02', title: 'Praysound에 대하여' },
+  { slug: 'work', no: '03', title: '작품 소개' },
+  { slug: 'characters', no: '04', title: '작품 속 인물' },
 ];
+
+/**
+ * 01·02는 편지 이미지를 좌우로 넘겨 보는 구조다(요구사항 명세서 14~16행, 18~19행).
+ * 이미지는 코드가 아니라 `about_letters` 테이블에 있고 운영진이 관리자 페이지에서 넣고 뺀다.
+ * 장수는 고정이 아니라 등록한 개수만큼 `1 / N`으로 표시된다.
+ */
+export const LETTER_SECTIONS: AboutSlug[] = ['greeting', 'praysound'];
+
+export function hasLetterCarousel(slug: AboutSlug): boolean {
+  return LETTER_SECTIONS.includes(slug);
+}
 
 export function findAboutSection(slug: string): AboutSection | undefined {
   return ABOUT_SECTIONS.find((s) => s.slug === slug);

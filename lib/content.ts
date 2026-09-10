@@ -1,5 +1,5 @@
 import { content as localContent } from '../content/data';
-import type { AllContent, SiteContent, TimelineStatus } from '../content/types';
+import type { AboutLetterSection, AllContent, SiteContent, TimelineStatus } from '../content/types';
 import { createServerClient } from './supabase';
 
 type Rows = {
@@ -11,6 +11,8 @@ type Rows = {
   prayers: { id: string; text: string; sort_order: number }[];
   groups: { id: string; label: string; sort_order: number }[];
   members: { id: string; group_id: string; role: string; team: string; name: string; tagline: string; bio: string; photo_url: string | null; sort_order: number }[];
+  /** 0008 마이그레이션 이전 배포에서는 이 테이블이 없어 조회가 실패한다 → 생략 가능하게 둔다. */
+  letters?: { id: string; section: string; image_url: string | null; caption: string; sort_order: number }[];
 };
 
 const byOrder = <T extends { sort_order: number }>(a: T, b: T) => a.sort_order - b.sort_order;
@@ -35,6 +37,18 @@ export function assembleContent(rows: Rows): AllContent {
     })),
     budget: [...rows.budget].sort(byOrder).map((b) => ({ id: b.id, name: b.name, sortOrder: b.sort_order })),
     prayers: [...rows.prayers].sort(byOrder).map((p) => ({ id: p.id, text: p.text, sortOrder: p.sort_order })),
+    // 테이블이 아직 없으면(0008 이전) 로컬 시드로 떨어뜨린다. site 필드와 같은 취급이다.
+    // 테이블이 있는데 비어 있는 것은 "운영진이 다 지웠다"는 뜻이라 그대로 빈 배열로 둔다.
+    letters:
+      rows.letters === undefined
+        ? localContent.letters
+        : [...rows.letters].sort(byOrder).map((l) => ({
+            id: l.id,
+            section: l.section as AboutLetterSection,
+            imageUrl: l.image_url,
+            caption: l.caption,
+            sortOrder: l.sort_order,
+          })),
     people: [...rows.groups].sort(byOrder).map((g) => ({
       id: g.id, label: g.label, sortOrder: g.sort_order,
       members: rows.members.filter((m) => m.group_id === g.id).sort(byOrder).map((m) => ({
@@ -49,7 +63,7 @@ export async function getContent(): Promise<AllContent> {
   const client = createServerClient();
   if (!client) return localContent;
   try {
-    const [blocks, facts, characters, timeline, budget, prayers, groups, members] = await Promise.all([
+    const [blocks, facts, characters, timeline, budget, prayers, groups, members, letters] = await Promise.all([
       client.from('content_blocks').select('key,value'),
       client.from('facts').select('id,key,value,sort_order'),
       client.from('characters').select('id,name,description,photo_url,sort_order'),
@@ -58,6 +72,7 @@ export async function getContent(): Promise<AllContent> {
       client.from('prayers').select('id,text,sort_order'),
       client.from('people_groups').select('id,label,sort_order'),
       client.from('people_members').select('id,group_id,role,team,name,tagline,bio,photo_url,sort_order'),
+      client.from('about_letters').select('id,section,image_url,caption,sort_order'),
     ]);
     const err = blocks.error || facts.error || characters.error || timeline.error || budget.error || prayers.error || groups.error || members.error;
     if (err) throw err;
@@ -65,6 +80,9 @@ export async function getContent(): Promise<AllContent> {
       blocks: blocks.data ?? [], facts: facts.data ?? [], characters: characters.data ?? [],
       timeline: timeline.data ?? [], budget: budget.data ?? [], prayers: prayers.data ?? [],
       groups: groups.data ?? [], members: members.data ?? [],
+      // 0008 마이그레이션 전이면 이 조회만 실패한다. 나머지를 살리려고 에러를 위 err에 넣지 않고
+      // 로컬 시드로 떨어뜨린다.
+      letters: letters.error ? undefined : (letters.data ?? []),
     });
   } catch {
     return localContent;

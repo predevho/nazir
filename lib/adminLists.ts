@@ -64,4 +64,22 @@ export const ADMIN_LISTS: Record<string, ListConfig> = {
     title: '기도제목',
     columns: [{ key: 'text', label: '내용', type: 'textarea' }],
   },
+  letters: {
+    key: 'letters',
+    table: 'about_letters',
+    title: '편지 이미지 (〈나지르〉에 대하여 01·02)',
+    columns: [
+      {
+        key: 'section',
+        label: '들어갈 페이지',
+        type: 'select',
+        options: [
+          { value: 'greeting', label: '01 연출의 인사말' },
+          { value: 'praysound', label: '02 Praysound에 대하여' },
+        ],
+      },
+      { key: 'image_url', label: '이미지', type: 'image' },
+      { key: 'caption', label: '설명 (화면에는 안 보이고, 이미지가 안 뜰 때·낭독기에서 읽힘)', type: 'text' },
+    ],
+  },
 };

@@ -46,6 +46,20 @@ export interface PeopleGroup {
   members: PeopleMember[];
 }
 
+export type AboutLetterSection = 'greeting' | 'praysound';
+
+/**
+ * 〈나지르〉에 대하여 01·02의 편지 이미지. 장수는 고정이 아니라 등록한 개수만큼이다.
+ * 본문을 이미지가 대신하는 구조라 `caption`(대체 텍스트)이 접근성상 필수다.
+ */
+export interface AboutLetter {
+  id: string;
+  section: AboutLetterSection;
+  imageUrl: string | null;
+  caption: string;
+  sortOrder: number;
+}
+
 export interface Fact {
   key: string;
   value: string;
@@ -91,4 +105,5 @@ export interface AllContent {
   budget: BudgetItem[];
   prayers: Prayer[];
   people: PeopleGroup[];
+  letters: AboutLetter[];
 }

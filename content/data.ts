@@ -1,4 +1,5 @@
 import type {
+  AboutLetter,
   AllContent,
   BudgetItem,
   Character,
@@ -187,6 +188,21 @@ const people: PeopleGroup[] = peopleSeeds.map((g, gi) => ({
   }),
 }));
 
+/**
+ * 편지 이미지 시드. 인스타그램 `The Leader's Letter` 게시물의 1장째다.
+ * 나머지는 운영진이 관리자 페이지(`/admin/lists/letters`)에서 추가한다 —
+ * 장수는 고정이 아니라 등록한 만큼 `1 / N`으로 표시된다.
+ */
+const letters: AboutLetter[] = [
+  {
+    id: 'l0',
+    section: 'greeting',
+    imageUrl: '/images/about-letter-1.webp',
+    caption: '리더의 편지 1장 — 사명을 지닌 모든 분들께',
+    sortOrder: 0,
+  },
+];
+
 const facts: Fact[] = [
   { key: 'FORM', value: '창작 뮤지컬' },
   { key: 'GENRE', value: '드라마' },
@@ -236,4 +252,5 @@ export const content: AllContent = {
   budget,
   prayers,
   people,
+  letters,
 };
