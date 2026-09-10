@@ -37,6 +37,18 @@ describe('Header', () => {
       ),
     ).toBe(true);
   });
+  it('로고 자리에 심볼 이미지가 들어가고, 이름은 aria-label 이 맡는다', () => {
+    // 예전에는 글자 'N' 이었다. 이미지에는 alt 를 비워 두고 링크의 aria-label 로
+    // "나지르 홈"을 전한다 — 둘 다 읽으면 스크린리더가 같은 말을 두 번 한다.
+    render(<Header />);
+    const home = screen.getByRole('link', { name: '나지르 홈' });
+    const img = home.querySelector('img')!;
+    expect(img).toBeInTheDocument();
+    expect(img.getAttribute('src')).toBe('/images/logo-symbol.webp');
+    expect(img.getAttribute('alt')).toBe('');
+    // 폭을 auto 로 두어야 원본 비율(980×1016)이 찌그러지지 않는다
+    expect(img.className).toContain('w-auto');
+  });
 });
 
 describe('Header — 모바일 햄버거', () => {

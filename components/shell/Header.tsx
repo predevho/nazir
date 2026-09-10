@@ -35,14 +35,24 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
         aria-label="주 메뉴"
         className="relative mx-auto flex h-14 max-w-[1920px] items-center gap-6 px-4 xl:h-20 xl:px-8"
       >
-        {/* TODO: 최종 로고 심볼 이미지로 교체 (Figma 코멘트 #24). 시안은 90×94 심볼. */}
+        {/*
+          시안 90×94 심볼(Figma 코멘트 #24). 원본은 벡터가 아니라 980×1016 PNG 라
+          비율 그대로 줄여 쓴다. 높이만 지정하고 폭은 auto 로 두어 원본 비율을 지킨다.
+          GNB 높이가 56(모바일)·80(데스크톱)이므로 그 안에 드는 34·44 로 맞췄다.
+        */}
         <Link
           href="/"
           aria-label="나지르 홈"
           onClick={close}
-          className="tap-target shrink-0 font-heir text-[34px] leading-none text-ds-key2 xl:text-[44px]"
+          className="tap-target flex shrink-0 items-center"
         >
-          N
+          <img
+            src="/images/logo-symbol.webp"
+            alt=""
+            width={308}
+            height={320}
+            className="h-[34px] w-auto xl:h-[44px]"
+          />
         </Link>
 
         <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-12 xl:flex">
