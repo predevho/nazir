@@ -2,6 +2,8 @@
 import { useActionState, useState } from 'react';
 import { savePeople, type SaveState } from './actions';
 import { PhotoField } from '../PhotoField';
+import { ListToolbar } from '../ListToolbar';
+import { applyView, moveWithinVisible, EMPTY_VIEW, type ViewState } from '@/lib/adminView';
 
 type BioLine = { _key: string; text: string };
 type Member = { _key: string; id: string; role: string; team: string; name: string; tagline: string; bio: BioLine[]; photoUrl: string };
@@ -45,6 +47,17 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
   );
   const [state, formAction, pending] = useActionState(savePeople, initial);
 
+  /*
+    43명이 한 화면에 쏟아지던 것을 끊는다. 그룹마다 따로 센다 —
+    헤더진 8 / 스탭진 18 / 배우 17 이라 한 덩어리로 묶으면 그룹 경계가 흐려진다.
+    찾기는 그룹을 가로질러 걸린다(이름·역할·세부팀).
+    저장은 화면과 무관하게 groups 전체를 보낸다 — 아래 payload 참고.
+  */
+  const [views, setViews] = useState<Record<string, ViewState>>({});
+  const viewOf = (key: string) => views[key] ?? EMPTY_VIEW;
+  const setView = (key: string, next: Partial<ViewState>) =>
+    setViews((vs) => ({ ...vs, [key]: { ...(vs[key] ?? EMPTY_VIEW), ...next } }));
+
   const setG = (fn: (gs: Group[]) => Group[]) => setGroups(fn);
   function updateMember(gk: string, mk: string, fn: (m: Member) => Member) {
     setG((gs) => gs.map((g) => (g._key === gk ? { ...g, members: g.members.map((m) => (m._key === mk ? fn(m) : m)) } : g)));
@@ -76,17 +89,13 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
   function removeMember(gk: string, mk: string) {
     setG((gs) => gs.map((g) => (g._key === gk ? { ...g, members: g.members.filter((m) => m._key !== mk) } : g)));
   }
-  function moveMember(gk: string, mk: string, dir: -1 | 1) {
+  function moveMember(gk: string, mk: string, dir: -1 | 1, visible: Member[]) {
+    // 보이는 목록의 이웃과 바꾼다. 전체에서 앞뒤를 바꾸면 찾기가 걸렸을 때
+    // 안 보이는 멤버와 자리를 바꾸게 되고, 누른 사람 눈에는 아무 일도 안 일어난다.
     setG((gs) =>
-      gs.map((g) => {
-        if (g._key !== gk) return g;
-        const i = g.members.findIndex((m) => m._key === mk);
-        const j = i + dir;
-        if (i < 0 || j < 0 || j >= g.members.length) return g;
-        const c = [...g.members];
-        [c[i], c[j]] = [c[j], c[i]];
-        return { ...g, members: c };
-      })
+      gs.map((g) =>
+        g._key === gk ? { ...g, members: moveWithinVisible(g.members, visible, mk, dir, (x) => x._key) } : g,
+      ),
     );
   }
   function setField(gk: string, mk: string, field: 'role' | 'name', value: string) {
@@ -142,13 +151,33 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
             <button type="button" onClick={() => removeGroup(g._key)} aria-label="그룹 삭제" className="px-2 py-1 text-[13px] text-red-400/80 hover:text-red-400">그룹 삭제</button>
           </div>
           <div className="flex flex-col gap-3 pl-3 border-l border-ds-key2/15">
-            {g.members.map((m, mi) => (
+            {(() => {
+              const res = applyView(g.members, viewOf(g._key), {
+                text: (m) => `${m.name} ${m.role} ${m.team} ${m.tagline}`,
+              });
+              return (
+                <>
+                  <ListToolbar
+                    view={{ ...viewOf(g._key), page: res.page }}
+                    onChange={(next) => setView(g._key, next)}
+                    total={res.total}
+                    matched={res.matched.length}
+                    pages={res.pages}
+                  />
+                  {res.matched.length === 0 && g.members.length > 0 && (
+                    <p className="px-3 py-4 text-center text-[13px] text-ds-text/50">
+                      찾는 사람이 없습니다.
+                    </p>
+                  )}
+                  {res.visible.map((m) => {
+                    const mi = res.visible.indexOf(m);
+                    return (
               <div key={m._key} className="flex flex-col gap-2 bg-ds-bg/40 rounded-sm p-2.5">
                 <div className="flex gap-2 items-center">
                   <input value={m.role} onChange={(e) => setField(g._key, m._key, 'role', e.target.value)} placeholder="역할(선택)" aria-label="역할" className={`w-[34%] ${inputCls}`} />
                   <input value={m.name} onChange={(e) => setField(g._key, m._key, 'name', e.target.value)} placeholder="이름" aria-label="이름" className={`flex-1 ${inputCls}`} />
-                  <button type="button" onClick={() => moveMember(g._key, m._key, -1)} disabled={mi === 0} aria-label="멤버 위로" className={iconBtn}>↑</button>
-                  <button type="button" onClick={() => moveMember(g._key, m._key, 1)} disabled={mi === g.members.length - 1} aria-label="멤버 아래로" className={iconBtn}>↓</button>
+                  <button type="button" onClick={() => moveMember(g._key, m._key, -1, res.visible)} disabled={mi === 0} aria-label="멤버 위로" className={iconBtn}>↑</button>
+                  <button type="button" onClick={() => moveMember(g._key, m._key, 1, res.visible)} disabled={mi === res.visible.length - 1} aria-label="멤버 아래로" className={iconBtn}>↓</button>
                   <button type="button" onClick={() => removeMember(g._key, m._key)} aria-label="멤버 삭제" className="px-1.5 text-[12px] text-red-400/80 hover:text-red-400">삭제</button>
                 </div>
                 <div className="flex gap-2 items-center">
@@ -170,7 +199,11 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
                   <button type="button" onClick={() => addBio(g._key, m._key)} className="self-start min-h-[32px] px-3 border border-dashed border-ds-key2/30 text-ds-key2 text-[12px] rounded-sm hover:bg-ds-key2/[0.08]">+ 약력 항목</button>
                 </div>
               </div>
-            ))}
+                    );
+                  })}
+                </>
+              );
+            })()}
             <button type="button" onClick={() => addMember(g._key)} className="min-h-[36px] border border-dashed border-ds-key2/30 text-ds-key2 text-[13px] rounded-sm hover:bg-ds-key2/[0.08]">+ 멤버 추가</button>
           </div>
         </div>
