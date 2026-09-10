@@ -1,5 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { GuestbookForm } from './GuestbookForm';
 
 vi.mock('next/navigation', () => ({
@@ -30,5 +31,20 @@ describe('GuestbookForm', () => {
     const row = container.querySelector('form > div');
     expect(row?.className).toContain('flex-col');
     expect(row?.className).toContain('sm:flex-row');
+  });
+
+  it('보류됐을 때 무엇에 걸렸는지는 알려주지 않는다', async () => {
+    // 사유를 알려주면 우회를 도와주는 셈이다. 예전 문구("링크가 포함된 글은")는
+    // 이제 사실과도 다르다 — 욕설·광고·연락처·도배로도 걸린다.
+    vi.stubGlobal('fetch', vi.fn(async () => ({ json: async () => ({ ok: true, held: true }) })));
+    const user = userEvent.setup();
+    render(<GuestbookForm />);
+    await user.type(screen.getByLabelText('이름'), '임현호');
+    await user.type(screen.getByLabelText('메시지'), '응원합니다');
+    await user.click(screen.getByRole('button', { name: '응원 남기기' }));
+
+    const notice = await screen.findByRole('status');
+    expect(notice).toHaveTextContent('등록되었습니다');
+    expect(notice.textContent).not.toMatch(/링크|욕설|광고|연락처/);
   });
 });

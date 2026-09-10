@@ -16,10 +16,33 @@ export default async function AdminPage() {
   const stats = await getVisitStats();
   const heights = stats ? barHeights(stats.last7, 44) : [];
 
+  /*
+    검토 대기 건수. 보류된 글이 생겨도 알림 경로가 없어서, 운영진이 응원 게시판에
+    직접 들어가 보기 전까지는 아무도 모른다. 로그인하면 제일 먼저 보이는 자리에 둔다.
+    조회가 실패해도(마이그레이션 전 등) 화면은 그대로 뜨고 배지만 빠진다.
+  */
+  const { count: heldCount } = await supabase
+    .from('guestbook_entries')
+    .select('id', { count: 'exact', head: true })
+    .eq('is_held', true);
+
   return (
     <section className="max-w-[760px] mx-auto px-5 py-[clamp(32px,6vw,56px)]">
       <h1 className="font-heir font-bold text-[clamp(24px,5vw,32px)] text-ds-text mb-2">관리자</h1>
       <p className="text-sm text-ds-text/60 mb-8">로그인됨: {username}</p>
+
+      {heldCount ? (
+        <Link
+          href="/admin/guestbook"
+          className="mb-8 flex items-center justify-between gap-4 border border-ds-key2 bg-ds-key2/[0.1] px-5 py-4 transition-colors hover:bg-ds-key2/[0.16]"
+        >
+          <span className="text-sm text-ds-text">
+            <strong className="font-heir text-[20px] text-ds-key2">{heldCount}건</strong>
+            <span className="ml-2">의 응원글이 검토를 기다리고 있습니다.</span>
+          </span>
+          <span className="shrink-0 font-mono text-[11px] text-ds-key2">검토하기 →</span>
+        </Link>
+      ) : null}
       {stats ? (
         <div className="mb-8">
           <div className="grid gap-3 sm:grid-cols-2">
@@ -80,6 +103,7 @@ export default async function AdminPage() {
           className="mt-2 block border border-ds-key2/25 bg-ds-panel rounded-sm px-4 py-3 text-sm text-ds-text hover:border-ds-key2/55 transition-colors"
         >
           응원 게시판 (검토 · 삭제)
+          {heldCount ? <span className="ml-2 text-ds-key2">· 대기 {heldCount}건</span> : null}
         </Link>
       </div>
       <form action={logout}>
