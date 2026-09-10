@@ -48,7 +48,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
                 <Link
                   href={it.to}
                   aria-current={active ? "page" : undefined}
-                  className={`whitespace-nowrap border-b pb-1 font-heir text-[16px] leading-none transition-colors lg:text-[20px] ${
+                  className={`whitespace-nowrap border-b pb-1 font-heir text-[16px] font-bold leading-none tracking-[-0.025em] transition-colors lg:text-[20px] ${
                     active
                       ? "border-ds-key2 text-ds-key2"
                       : "border-transparent text-ds-text hover:text-ds-key2"
