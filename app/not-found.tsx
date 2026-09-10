@@ -9,6 +9,9 @@ import { NAV_ITEMS } from '@/content/nav';
  * 유입이라 주소가 잘려 들어오는 사람이 실제로 생긴다 — 그 사람이 처음 보는 화면이 여기다.
  * 그래서 "잘못 왔다"보다 **나갈 길**을 크게 둔다.
  *
+ * 큰 `404` 숫자는 두지 않는다. 개발자에게는 익숙한 번호지만 보는 사람 대부분에게는
+ * 뜻 없는 세 자리다. 그 자리를 심볼에 준다 — 적어도 "여기가 나지르구나"는 읽힌다.
+ *
  * 공통 헤더·푸터는 쓰지 않는다. 둘 다 관리자가 고친 값을 읽으려고 DB 를 부르는데,
  * 404 는 존재하지 않는 주소를 훑는 봇이 대량으로 만들어 내는 응답이다. 대신 로고와
  * 메뉴를 여기에 직접 둬서 돌아갈 길은 그대로 남긴다.
@@ -22,19 +25,11 @@ export default function NotFound() {
           alt=""
           width={308}
           height={320}
-          className="h-[clamp(44px,8vw,56px)] w-auto"
+          className="h-[clamp(104px,26vw,148px)] w-auto"
         />
       </Link>
 
-      {/*
-        큰 숫자는 장식이다. 낭독기가 "사백사"를 읽어 봐야 도움이 되지 않고, 바로 아래
-        문장이 같은 내용을 사람 말로 다시 한다. 그래서 화면에만 남긴다.
-      */}
-      <p aria-hidden className="mt-[clamp(28px,6vw,44px)] font-heir text-[clamp(64px,16vw,104px)] leading-none text-ds-key2/20">
-        404
-      </p>
-
-      <h1 className="mt-[clamp(12px,3vw,20px)] font-heir text-[clamp(24px,5vw,36px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
+      <h1 className="mt-[clamp(28px,6vw,44px)] font-heir text-[clamp(24px,5vw,36px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
         이 장면은 무대에 없습니다
       </h1>
       <p className="mt-4 font-heir text-[15px] leading-[2] text-ds-text/60">

@@ -23,8 +23,12 @@ describe('404 화면', () => {
     }
   });
 
-  it('큰 숫자는 낭독기에서 읽히지 않는다 — 바로 아래 문장이 같은 말을 한다', () => {
-    render(<NotFound />);
-    expect(screen.queryByText('404')).toHaveAttribute('aria-hidden', 'true');
+  /*
+    `404` 는 개발자에게만 익숙한 번호다. 보는 사람 대부분에게는 뜻 없는 세 자리라
+    화면에 두지 않기로 했다. 꾸미다가 슬그머니 되돌아오는 일이 없게 못 박아 둔다.
+  */
+  it('화면에 404 라는 숫자를 쓰지 않는다', () => {
+    const { container } = render(<NotFound />);
+    expect(container.textContent).not.toContain('404');
   });
 });
