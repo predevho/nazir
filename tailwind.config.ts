@@ -33,12 +33,18 @@ export default {
         },
         riseIn: { from: { opacity: '0', transform: 'translateY(14px)' }, to: { opacity: '1', transform: 'translateY(0)' } },
         glow: { '0%,100%': { opacity: '.55' }, '50%': { opacity: '.9' } },
+        // 스와이프 코치마크의 화살표. 미는 방향을 손짓처럼 되풀이해 보여준다.
+        swipeNudge: {
+          '0%,100%': { transform: 'translateX(0)', opacity: '.55' },
+          '50%': { transform: 'translateX(-4px)', opacity: '1' },
+        },
       },
       animation: {
         curtainL: 'curtainL 1.3s cubic-bezier(.7,0,.2,1) .95s forwards',
         curtainR: 'curtainR 1.3s cubic-bezier(.7,0,.2,1) .95s forwards',
         curtainSway: 'curtainSway 2.4s ease-in-out infinite',
         glow: 'glow 6s ease-in-out infinite',
+        'swipe-nudge': 'swipeNudge 1.4s ease-in-out infinite',
       },
     },
   },
