@@ -56,7 +56,7 @@ export function PhotoField({ kind, id, value, onChange }: Props) {
         {value ? (
           <img src={value} alt="미리보기" className="w-full h-full object-cover" />
         ) : (
-          <span className="font-mono text-[10px] text-ds-text/40">사진 없음</span>
+          <span className="text-[11px] text-ds-text/40">사진 없음</span>
         )}
       </div>
       <div className="flex flex-col gap-1.5">

@@ -157,7 +157,7 @@ export function PeopleEditor({ initialGroups }: { initialGroups: InitialGroup[] 
                 </div>
                 <PhotoField kind="people" id={m.id} value={m.photoUrl} onChange={(url) => setPhoto(g._key, m._key, url)} />
                 <div className="flex flex-col gap-1.5 pl-1">
-                  <span className="font-mono text-[10px] text-ds-text/40">약력 (항목별 · 불릿으로 표시됨)</span>
+                  <span className="text-[11px] text-ds-text/40">약력 (항목별 · 불릿으로 표시됨)</span>
                   {m.bio.map((b, bi) => (
                     <div key={b._key} className="flex gap-1.5 items-center">
                       <span className="text-ds-key2/50 text-xs select-none">•</span>

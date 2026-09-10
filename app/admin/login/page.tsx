@@ -31,11 +31,11 @@ export default function LoginPage() {
 
   return (
     <section className="max-w-[400px] mx-auto px-5 py-[clamp(48px,9vw,88px)]">
-      <p className="font-mono text-[11px] tracking-[0.2em] text-ds-key2 mb-3">ADMIN</p>
+      <p className="text-[11px] tracking-[0.2em] text-ds-key2 mb-3">ADMIN</p>
       <h1 className="font-heir font-bold text-[clamp(26px,6vw,34px)] text-ds-text mb-8">관리자 로그인</h1>
       <form onSubmit={onSubmit} className="flex flex-col gap-4">
         <label className="flex flex-col gap-1.5">
-          <span className="font-mono text-[11px] tracking-[0.14em] text-ds-text/60">아이디</span>
+          <span className="text-[11px] tracking-[0.14em] text-ds-text/60">아이디</span>
           <input
             type="text"
             required
@@ -47,7 +47,7 @@ export default function LoginPage() {
           />
         </label>
         <label className="flex flex-col gap-1.5">
-          <span className="font-mono text-[11px] tracking-[0.14em] text-ds-text/60">비밀번호</span>
+          <span className="text-[11px] tracking-[0.14em] text-ds-text/60">비밀번호</span>
           <input
             type="password"
             required

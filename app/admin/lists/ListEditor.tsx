@@ -58,7 +58,7 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
       {rows.map((row, idx) => (
         <div key={row._key} className="border border-ds-key2/20 bg-ds-panel rounded-sm p-4 flex flex-col gap-3">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[11px] text-ds-text/40">#{idx + 1}</span>
+            <span className="text-[11px] text-ds-text/40">#{idx + 1}</span>
             <div className="flex gap-1">
               <button type="button" onClick={() => move(row._key, -1)} disabled={idx === 0} aria-label="위로 이동" className="px-2 py-1 text-ds-text/70 disabled:opacity-30 hover:opacity-80">↑</button>
               <button type="button" onClick={() => move(row._key, 1)} disabled={idx === rows.length - 1} aria-label="아래로 이동" className="px-2 py-1 text-ds-text/70 disabled:opacity-30 hover:opacity-80">↓</button>
@@ -67,7 +67,7 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
           </div>
           {config.columns.map((c) => (
             <label key={c.key} className="flex flex-col gap-1">
-              <span className="font-mono text-[10px] tracking-[0.1em] text-ds-text/50">{c.label}</span>
+              <span className="text-[11px] tracking-[0.1em] text-ds-text/50">{c.label}</span>
               {c.type === 'image' ? (
                 <PhotoField kind="characters" id={row.id} value={row[c.key] ?? ''} onChange={(url) => setVal(row._key, c.key, url)} />
               ) : c.type === 'textarea' ? (
@@ -77,9 +77,9 @@ export function ListEditor({ config, initialRows }: { config: ListConfig; initia
                     onChange={(e) => setVal(row._key, c.key, e.target.value)}
                     rows={c.markdown ? 6 : 2}
                     placeholder={c.markdown ? '마크다운 지원 (예: - 항목)' : undefined}
-                    className={`px-3 py-2 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60 resize-y ${c.markdown ? 'font-mono' : ''}`}
+                    className={`px-3 py-2 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60 resize-y`}
                   />
-                  {c.markdown && <span className="font-mono text-[10px] text-ds-text/35">마크다운 지원 · 불릿(- ), 굵게(**텍스트**)</span>}
+                  {c.markdown && <span className="text-[11px] text-ds-text/35">마크다운 지원 · 불릿(- ), 굵게(**텍스트**)</span>}
                 </>
               ) : c.type === 'select' ? (
                 <select value={row[c.key] ?? ''} onChange={(e) => setVal(row._key, c.key, e.target.value)} className="min-h-[40px] px-3 bg-ds-bg border border-ds-key2/25 rounded-sm text-ds-text text-sm outline-none focus:border-ds-key2/60">

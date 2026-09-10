@@ -40,23 +40,23 @@ export default async function AdminPage() {
             <strong className="font-heir text-[20px] text-ds-key2">{heldCount}건</strong>
             <span className="ml-2">의 응원글이 검토를 기다리고 있습니다.</span>
           </span>
-          <span className="shrink-0 font-mono text-[11px] text-ds-key2">검토하기 →</span>
+          <span className="shrink-0 text-[11px] text-ds-key2">검토하기 →</span>
         </Link>
       ) : null}
       {stats ? (
         <div className="mb-8">
           <div className="grid gap-3 sm:grid-cols-2">
             <div className="border border-ds-key2/25 bg-ds-panel rounded-sm p-5">
-              <span className="font-mono text-[10px] tracking-[0.18em] text-ds-text/45">오늘 방문자</span>
+              <span className="text-[11px] tracking-[0.18em] text-ds-text/45">오늘 방문자</span>
               <p className="font-heir text-[clamp(28px,6vw,40px)] text-ds-key2 mt-1">{stats.today.toLocaleString()}</p>
             </div>
             <div className="border border-ds-key2/25 bg-ds-panel rounded-sm p-5">
-              <span className="font-mono text-[10px] tracking-[0.18em] text-ds-text/45">총 방문자</span>
+              <span className="text-[11px] tracking-[0.18em] text-ds-text/45">총 방문자</span>
               <p className="font-heir text-[clamp(28px,6vw,40px)] text-ds-key2 mt-1">{stats.total.toLocaleString()}</p>
             </div>
           </div>
           <div className="mt-3 border border-ds-key2/15 bg-ds-panel/60 rounded-sm p-4">
-            <span className="font-mono text-[10px] tracking-[0.18em] text-ds-text/45">최근 7일</span>
+            <span className="text-[11px] tracking-[0.18em] text-ds-text/45">최근 7일</span>
             <div className="flex items-end gap-2 h-[52px] mt-2">
               {stats.last7.map((d, i) => (
                 <div key={d.day} className="flex-1 flex flex-col items-center gap-1">
@@ -80,7 +80,7 @@ export default async function AdminPage() {
         </Link>
       </div>
       <div className="border-t border-ds-key2/15 pt-6 mb-10">
-        <p className="font-mono text-[11px] tracking-[0.2em] text-ds-key2 mb-3">목록 편집</p>
+        <p className="text-[11px] tracking-[0.2em] text-ds-key2 mb-3">목록 편집</p>
         <div className="grid gap-2 sm:grid-cols-2">
           {Object.values(ADMIN_LISTS).map((l) => (
             <Link

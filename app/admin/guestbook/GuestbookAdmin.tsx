@@ -60,11 +60,11 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
           >
             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
               <span className="font-heir text-[15px] text-ds-text">{e.name}</span>
-              <span className="font-mono text-[11px] text-ds-text/45">
+              <span className="text-[11px] text-ds-text/45">
                 {formatNoteDate(e.createdAt)}
               </span>
               {e.isHeld && (
-                <span className="font-mono text-[10px] tracking-[0.14em] text-ds-key2">숨김</span>
+                <span className="text-[11px] tracking-[0.14em] text-ds-key2">숨김</span>
               )}
               {/* 무엇에 걸렸는지 밝힌다. 사유 없이 숨김만 보이면 판단할 근거가 없다. */}
               {e.holdReasons.length > 0 && (
@@ -89,7 +89,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                 <button
                   type="submit"
                   disabled={pending}
-                  className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 font-mono text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
+                  className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
                 >
                   {e.isHeld ? '공개하기' : '숨기기'}
                 </button>
@@ -103,7 +103,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                     <button
                       type="submit"
                       disabled={pending}
-                      className="cursor-pointer border border-red-400/60 px-3 py-1.5 font-mono text-[11px] text-red-300 transition-colors hover:bg-red-400/10 disabled:opacity-40"
+                      className="cursor-pointer border border-red-400/60 px-3 py-1.5 text-[11px] text-red-300 transition-colors hover:bg-red-400/10 disabled:opacity-40"
                     >
                       정말 삭제 (되돌릴 수 없음)
                     </button>
@@ -111,7 +111,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                   <button
                     type="button"
                     onClick={() => setConfirming(null)}
-                    className="cursor-pointer px-3 py-1.5 font-mono text-[11px] text-ds-text/50 hover:text-ds-text"
+                    className="cursor-pointer px-3 py-1.5 text-[11px] text-ds-text/50 hover:text-ds-text"
                   >
                     취소
                   </button>
@@ -120,7 +120,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                 <button
                   type="button"
                   onClick={() => setConfirming(e.id)}
-                  className="cursor-pointer border border-ds-text/25 px-3 py-1.5 font-mono text-[11px] text-ds-text/60 transition-colors hover:border-ds-text/50 hover:text-ds-text"
+                  className="cursor-pointer border border-ds-text/25 px-3 py-1.5 text-[11px] text-ds-text/60 transition-colors hover:border-ds-text/50 hover:text-ds-text"
                 >
                   삭제
                 </button>
@@ -153,7 +153,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                       type="button"
                       onClick={() => setComposing(composing === r.id ? null : r.id)}
                       aria-label={composing === r.id ? '답글 수정 접기' : '답글 수정'}
-                      className="cursor-pointer text-[12px] leading-none text-ds-key2 hover:underline"
+                      className="cursor-pointer text-[11px] leading-none text-ds-key2 hover:underline"
                     >
                       {composing === r.id ? '접기' : '수정'}
                     </button>
@@ -164,7 +164,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                         type="submit"
                         disabled={replyPending}
                         aria-label="답글 삭제"
-                        className="cursor-pointer text-[12px] leading-none text-ds-text/45 hover:text-red-300 disabled:opacity-40"
+                        className="cursor-pointer text-[11px] leading-none text-ds-text/45 hover:text-red-300 disabled:opacity-40"
                       >
                         삭제
                       </button>
@@ -194,7 +194,7 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                 <button
                   type="button"
                   onClick={() => setComposing(e.id)}
-                  className="cursor-pointer font-mono text-[11px] text-ds-key2 hover:underline"
+                  className="cursor-pointer text-[11px] text-ds-key2 hover:underline"
                 >
                   + 답글 달기
                 </button>
@@ -245,14 +245,14 @@ function ReplyForm({
         <button
           type="submit"
           disabled={pending}
-          className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 font-mono text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
+          className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
         >
           {replyId ? '수정' : '답글 남기기'}
         </button>
         <button
           type="button"
           onClick={onClose}
-          className="cursor-pointer px-3 py-1.5 font-mono text-[11px] text-ds-text/50 hover:text-ds-text"
+          className="cursor-pointer px-3 py-1.5 text-[11px] text-ds-text/50 hover:text-ds-text"
         >
           취소
         </button>

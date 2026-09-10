@@ -14,7 +14,7 @@ export function ContentEditForm({ values }: { values: Record<string, string> }) 
           <legend className="font-heir text-xl text-ds-key2 mb-2">{section.title}</legend>
           {section.fields.map((f) => (
             <label key={f.key} className="flex flex-col gap-1.5">
-              <span className="font-mono text-[11px] tracking-[0.12em] text-ds-text/60">{f.label}</span>
+              <span className="text-[11px] tracking-[0.12em] text-ds-text/60">{f.label}</span>
               {f.multiline ? (
                 <textarea
                   name={f.key}
