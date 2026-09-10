@@ -75,6 +75,12 @@ export default async function AdminPage() {
         >
           참여자 명단 (그룹 · 개인)
         </Link>
+        <Link
+          href="/admin/guestbook"
+          className="mt-2 block border border-gold/25 bg-velvet rounded-sm px-4 py-3 text-sm text-paper hover:border-gold/55 transition-colors"
+        >
+          응원 게시판 (검토 · 삭제)
+        </Link>
       </div>
       <form action={logout}>
         <button
