@@ -1,6 +1,7 @@
 'use client';
 import { useRef, useState } from 'react';
 import { compressToWebp } from '@/lib/image/resize';
+import { checkImageFile, MAX_INPUT_BYTES } from '@/lib/image/validate';
 import { uploadEntityPhoto, removeEntityPhoto, type PhotoKind } from '@/lib/image/upload';
 
 type Props = {
@@ -17,8 +18,10 @@ export function PhotoField({ kind, id, value, onChange }: Props) {
 
   async function handleFile(file: File) {
     setError('');
-    if (!file.type.startsWith('image/')) {
-      setError('이미지 파일만 업로드할 수 있습니다.');
+    const check = checkImageFile(file);
+    if (!check.ok) {
+      setError(check.message);
+      if (inputRef.current) inputRef.current.value = '';
       return;
     }
     setBusy(true);
@@ -60,7 +63,7 @@ export function PhotoField({ kind, id, value, onChange }: Props) {
         <input
           ref={inputRef}
           type="file"
-          accept="image/*"
+          accept="image/jpeg,image/png,image/webp,image/gif"
           disabled={busy}
           onChange={(e) => {
             const f = e.target.files?.[0];
@@ -76,6 +79,10 @@ export function PhotoField({ kind, id, value, onChange }: Props) {
             </button>
           )}
         </div>
+        <span className="text-[11px] text-ds-text/40">
+          JPG · PNG · WebP · GIF, {Math.round(MAX_INPUT_BYTES / 1024 / 1024)}MB 이하.
+          올리면 자동으로 가로세로 1200px WebP로 줄여 저장합니다.
+        </span>
         {error && <span className="text-[11px] text-red-400">{error}</span>}
       </div>
     </div>
