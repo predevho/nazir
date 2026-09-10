@@ -26,10 +26,12 @@ export function SectionDots({
   const { prev, next } = getNeighbors(items, activeSlug, basePath);
 
   const arrow =
-    'flex h-[18px] w-[18px] items-center justify-center font-heir text-[22px] leading-none transition-colors';
+    'tap-target flex h-[18px] w-[18px] items-center justify-center font-heir text-[22px] leading-none transition-colors';
 
   return (
-    <nav aria-label={`${label} 세부 페이지`} className="flex items-center gap-6">
+    // gap-7(28px)이면 화살표와 첫 도트의 터치 범위(각 44px)가 겹치지 않는다.
+    // 도트 사이 간격은 시안값 60px 그대로다 — 화살표는 시안에 없는 추가 요소라 여기만 조정한다.
+    <nav aria-label={`${label} 세부 페이지`} className="flex items-center gap-7">
       {prev ? (
         <Link href={prev.href} aria-label={`이전: ${prev.label}`} className={`${arrow} text-ds-text hover:text-ds-key2`}>
           ‹
@@ -40,7 +42,13 @@ export function SectionDots({
         </span>
       )}
 
-      <ul className="flex items-center gap-[60px]">
+      {/*
+        시안 간격은 60px이지만 그건 1920 폭 기준이다. 390에서는 도트 4개(72) +
+        간격 3개(180) + 화살표 2개(36) + 그 여백(56) = 344px 로 콘텐츠 폭 327을 넘는다.
+        body 의 overflow-x-hidden 이 가려줄 뿐 끝 도트가 잘린다.
+        모바일만 32px로 좁힌다 — 중심 간 50px이라 44px 터치 범위도 겹치지 않는다.
+      */}
+      <ul className="flex items-center gap-8 sm:gap-[60px]">
         {items.map((item) => {
           const active = item.slug === activeSlug;
           return (
@@ -49,7 +57,7 @@ export function SectionDots({
                 href={`${basePath}/${item.slug}`}
                 aria-current={active ? 'page' : undefined}
                 aria-label={`${item.no} ${item.title}`}
-                className={`block h-[18px] w-[18px] rounded-full transition-colors ${
+                className={`tap-target block h-[18px] w-[18px] rounded-full transition-colors ${
                   active ? 'bg-ds-key2' : 'bg-ds-text/25 hover:bg-ds-text/50'
                 }`}
               />

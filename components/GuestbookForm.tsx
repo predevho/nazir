@@ -67,8 +67,15 @@ export function GuestbookForm() {
 
   return (
     <form onSubmit={submit} className="mx-auto w-full max-w-[781px]">
-      <div className="flex items-end gap-4">
-        <label className="flex-none">
+      {/*
+        시안은 781 폭 한 줄이다. 그 비율을 390 화면에 그대로 두면 메시지 칸이 167px 밖에
+        남지 않아 쓴 글이 보이지 않으므로, sm 미만에서는 세로로 쌓는다.
+
+        입력 글자는 모바일에서 16px이다. 15px 이하면 iOS 사파리가 포커스할 때
+        화면을 확대해 버리고, 확대된 상태로 남아 이후 스크롤이 어긋난다.
+      */}
+      <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:gap-4">
+        <label className="sm:flex-none">
           <span className="sr-only">이름</span>
           <input
             value={name}
@@ -77,10 +84,10 @@ export function GuestbookForm() {
             required
             autoComplete="off"
             placeholder="이름"
-            className="w-[110px] border-0 border-b border-ds-text/40 bg-transparent pb-2 text-center font-heir text-[15px] text-ds-text outline-none placeholder:text-ds-text/40 focus:border-ds-key2"
+            className="w-full border-0 border-b border-ds-text/40 bg-transparent pb-2 text-center font-heir text-[16px] text-ds-text outline-none placeholder:text-ds-text/40 focus:border-ds-key2 sm:w-[110px] sm:text-[15px]"
           />
         </label>
-        <label className="min-w-0 flex-1">
+        <label className="min-w-0 sm:flex-1">
           <span className="sr-only">메시지</span>
           <input
             value={message}
@@ -89,16 +96,18 @@ export function GuestbookForm() {
             required
             autoComplete="off"
             placeholder="메시지를 남겨주세요"
-            className="w-full border-0 border-b border-ds-text/40 bg-transparent pb-2 text-center font-heir text-[15px] text-ds-text outline-none placeholder:text-ds-text/40 focus:border-ds-key2"
+            className="w-full border-0 border-b border-ds-text/40 bg-transparent pb-2 text-center font-heir text-[16px] text-ds-text outline-none placeholder:text-ds-text/40 focus:border-ds-key2 sm:text-[15px]"
           />
         </label>
         <button
           type="submit"
           disabled={status.kind === 'sending'}
           aria-label="응원 남기기"
-          className="flex-none cursor-pointer pb-2 font-heir text-[18px] text-ds-text transition-colors hover:text-ds-key2 disabled:opacity-40"
+          className="tap-target flex h-11 w-full flex-none cursor-pointer items-center justify-center gap-2 rounded border border-ds-key2/50 font-heir text-[16px] text-ds-text transition-colors hover:text-ds-key2 disabled:opacity-40 sm:h-auto sm:w-auto sm:rounded-none sm:border-0 sm:pb-2 sm:text-[18px]"
         >
-          ›
+          {/* 한 줄 폼에서는 시안대로 화살표만, 쌓였을 때는 무엇을 누르는지 글자로 밝힌다. */}
+          <span className="sm:hidden">응원 남기기</span>
+          <span aria-hidden>›</span>
         </button>
       </div>
 

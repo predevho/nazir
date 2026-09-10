@@ -64,4 +64,16 @@ describe('SectionDots', () => {
       '/join/prayer',
     );
   });
+
+  it('keeps every dot and arrow inside a finger-sized tap area', () => {
+    // 도트는 시안대로 18px로 그린다. 그 크기 그대로 두면 휴대폰에서 누르기 어려워
+    // .tap-target 이 가상 요소로 눌리는 범위만 44px로 넓힌다(app/globals.css).
+    // 클래스가 빠지면 화면상으로는 아무 차이가 없어 눈으로는 못 잡는다.
+    render(
+      <SectionDots items={ABOUT_SECTIONS} activeSlug="praysound" basePath="/about" label="대하여" />,
+    );
+    for (const link of screen.getAllByRole('link')) {
+      expect(link.className).toContain('tap-target');
+    }
+  });
 });

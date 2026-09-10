@@ -17,7 +17,7 @@ export function GuestbookPager({ page, totalPages }: { page: number; totalPages:
       className="mt-[clamp(32px,5vw,56px)] flex items-center justify-center gap-6 font-heir text-[15px] text-ds-text"
     >
       {page > 1 ? (
-        <Link href={href(page - 1)} aria-label="이전 페이지" className="px-2 hover:text-ds-key2">
+        <Link href={href(page - 1)} aria-label="이전 페이지" className="tap-target px-2 hover:text-ds-key2">
           ‹
         </Link>
       ) : (
@@ -29,7 +29,7 @@ export function GuestbookPager({ page, totalPages }: { page: number; totalPages:
         {page} / {totalPages}
       </span>
       {page < totalPages ? (
-        <Link href={href(page + 1)} aria-label="다음 페이지" className="px-2 hover:text-ds-key2">
+        <Link href={href(page + 1)} aria-label="다음 페이지" className="tap-target px-2 hover:text-ds-key2">
           ›
         </Link>
       ) : (

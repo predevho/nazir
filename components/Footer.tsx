@@ -15,7 +15,14 @@ function Column({ title, children }: { title: string; children: React.ReactNode 
     <div className="flex flex-col">
       <h2 className="font-heir text-[26px] leading-none text-ds-text">{title}</h2>
       <hr className="mt-6 border-0 border-t-[0.5px] border-white" />
-      <div className="mt-6 flex flex-col gap-2 font-heir text-[15px] text-ds-text">{children}</div>
+      {/*
+        모바일에서만 줄 간격을 벌린다. 링크 높이가 23px라 손가락으로 옆줄을 누르기 쉬운데,
+        시안이 이 목록을 24px 간격으로 못 박아 두어 링크 자체를 키울 수는 없다.
+        [&>a]:py-1 로 링크의 눌리는 높이만 39px로 올리고, 데스크톱은 시안 그대로 둔다.
+      */}
+      <div className="mt-6 flex flex-col gap-3 font-heir text-[15px] text-ds-text [&>a]:py-1 md:gap-2 md:[&>a]:py-0">
+        {children}
+      </div>
     </div>
   );
 }

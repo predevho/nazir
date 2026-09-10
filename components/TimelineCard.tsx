@@ -68,7 +68,7 @@ export function TimelineCard({
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className={`mt-4 w-full cursor-pointer font-heir text-[15px] ${muted} transition-opacity hover:opacity-70`}
+            className={`tap-target mt-4 w-full cursor-pointer font-heir text-[15px] ${muted} transition-opacity hover:opacity-70`}
           >
             ⌄ 외 {hidden}개의 기록 더보기
           </button>

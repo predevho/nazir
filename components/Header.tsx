@@ -40,7 +40,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
           href="/"
           aria-label="나지르 홈"
           onClick={close}
-          className="shrink-0 font-heir text-[34px] leading-none text-ds-key2 xl:text-[44px]"
+          className="tap-target shrink-0 font-heir text-[34px] leading-none text-ds-key2 xl:text-[44px]"
         >
           N
         </Link>
@@ -82,7 +82,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
-          className="ml-auto flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-[5px] xl:hidden"
+          className="tap-target ml-auto flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-[5px] xl:hidden"
         >
           <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />
           <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />

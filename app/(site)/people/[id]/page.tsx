@@ -43,7 +43,7 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
     <section className="max-w-[820px] mx-auto px-5 py-[clamp(32px,7vw,64px)]">
       <Link
         href={`/people?tab=${encodeURIComponent(groupLabel)}`}
-        className="font-mono text-[11px] text-ds-key2 hover:opacity-80"
+        className="tap-target inline-block font-heir text-[14px] text-ds-key2 hover:opacity-80"
       >
         ← 함께하는 사람들
       </Link>

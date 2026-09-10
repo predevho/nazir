@@ -44,6 +44,22 @@ a { color: #DAC32D; text-decoration: none; }
 a:hover { opacity: 0.85; }
 :focus-visible { outline: 2px solid #DAC32D; outline-offset: 3px; }
 
+/* 손가락으로 누를 수 있는 크기로 넓힌다.
+   시안의 도트는 18px, 화살표 글리프도 그 정도라 손끝(권장 44px)보다 한참 작다.
+   요소 자체를 키우면 도트 간격 60px 같은 시안 수치가 전부 틀어지므로,
+   레이아웃에 영향이 없는 가상 요소로 눌리는 범위만 넓힌다.
+   실제 크기가 이미 44px를 넘으면 max()가 그대로 두므로 넓은 링크에도 안전하다. */
+.tap-target { position: relative; }
+.tap-target::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: max(100%, 44px);
+  height: max(100%, 44px);
+  transform: translate(-50%, -50%);
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: .001ms !important;
