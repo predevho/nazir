@@ -81,6 +81,10 @@ export interface SiteContent {
   budgetNote: string;
   joinVerse: string;
   joinVerseRef: string;
+  /** `후원과 기도` 01 좌측 본문 */
+  joinIntro: string;
+  /** `기도 제목` 카드 상단 안내 문구 */
+  prayerNote: string;
   supportIntro: string;
   supportFormUrl: string;
   accountBank: string;

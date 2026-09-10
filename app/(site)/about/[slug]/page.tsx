@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
 import { MarkdownText } from '@/components/MarkdownText';
-import { AboutDots } from '@/components/AboutDots';
+import { SectionDots } from '@/components/SectionDots';
 import { LetterCarousel } from '@/components/LetterCarousel';
 import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
 import type { AllContent } from '@/content/types';
@@ -120,7 +120,12 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
       </div>
 
       <div className="mt-[clamp(48px,7vw,88px)]">
-        <AboutDots activeSlug={section.slug} />
+        <SectionDots
+          items={ABOUT_SECTIONS}
+          activeSlug={section.slug}
+          basePath="/about"
+          label="〈나지르〉에 대하여"
+        />
       </div>
     </section>
   );
