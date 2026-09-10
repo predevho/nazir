@@ -5,8 +5,8 @@ import Link from 'next/link';
  *
  * 상단 배너는 **관리자 허브(`/admin`)** 로 간다. 공개 사이트가 아니다 —
  * 관리자 화면에서 로고를 누르면 관리자 홈으로 가는 것이 관례고, 공개 사이트로
- * 튕기면 하던 작업 자리를 잃는다. 공개 사이트로 나가는 길은 `홈 ↗` 처럼
- * "여기를 벗어난다"는 표시가 붙은 별도 링크(AdminNav)로 둔다.
+ * 튕기면 하던 작업 자리를 잃는다. 관리자 화면에서 공개 사이트로 나가는 링크는
+ * 따로 두지 않는다.
  */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
