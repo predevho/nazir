@@ -16,7 +16,7 @@ export function PeopleGrid({ members }: { members: PeopleMember[] }) {
     return <p className="py-16 text-center font-heir text-[16px] text-ds-text/60">등록된 구성원이 없습니다.</p>;
   }
   return (
-    <ul className="grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-3 lg:grid-cols-5">
+    <ul className="grid grid-cols-2 gap-x-3 gap-y-2 sm:grid-cols-3 xl:grid-cols-5">
       {members.map((m) => {
         const role = memberRoleLabel(m);
         return (

@@ -68,7 +68,7 @@ export default async function GuestbookPage({
   }
 
   return (
-    <section className="mx-auto max-w-content px-6 lg:px-8 py-[clamp(48px,7vw,88px)]">
+    <section className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,7vw,88px)]">
       <header className="max-w-[497px]">
         <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
           응원 게시판
@@ -95,7 +95,7 @@ export default async function GuestbookPage({
           </p>
         ) : (
           <>
-            <ul className="grid list-none grid-cols-1 gap-x-6 gap-y-12 p-0 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="grid list-none grid-cols-1 gap-x-6 gap-y-12 p-0 sm:grid-cols-2 xl:grid-cols-4">
               {entries.map((entry, i) => (
                 <GuestbookNote key={entry.id} entry={entry} index={(page - 1) * PAGE_SIZE + i} />
               ))}

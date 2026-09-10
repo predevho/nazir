@@ -33,19 +33,19 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
     <header className="sticky top-0 z-[100] bg-ds-bg/95 backdrop-blur-md">
       <nav
         aria-label="주 메뉴"
-        className="relative mx-auto flex h-14 max-w-[1920px] items-center gap-6 px-4 lg:h-20 lg:px-8"
+        className="relative mx-auto flex h-14 max-w-[1920px] items-center gap-6 px-4 xl:h-20 xl:px-8"
       >
         {/* TODO: 최종 로고 심볼 이미지로 교체 (Figma 코멘트 #24). 시안은 90×94 심볼. */}
         <Link
           href="/"
           aria-label="나지르 홈"
           onClick={close}
-          className="shrink-0 font-heir text-[34px] leading-none text-ds-key2 lg:text-[44px]"
+          className="shrink-0 font-heir text-[34px] leading-none text-ds-key2 xl:text-[44px]"
         >
           N
         </Link>
 
-        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-12 lg:flex">
+        <ul className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-12 xl:flex">
           {items.map((it) => {
             const active = isActive(pathname, it.to);
             return (
@@ -70,7 +70,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
           href={supportFormUrl ?? "#"}
           target="_blank"
           rel="noopener"
-          className="ml-auto hidden h-[37px] w-36 shrink-0 items-center justify-center bg-ds-key2 font-heir text-[16px] leading-none text-ds-key1 transition-opacity hover:opacity-85 lg:flex"
+          className="ml-auto hidden h-[37px] w-36 shrink-0 items-center justify-center bg-ds-key2 font-heir text-[16px] leading-none text-ds-key1 transition-opacity hover:opacity-85 xl:flex"
         >
           후원 바로가기
         </a>
@@ -82,7 +82,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
           aria-expanded={open}
           aria-controls="mobile-menu"
           aria-label={open ? "메뉴 닫기" : "메뉴 열기"}
-          className="ml-auto flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-[5px] lg:hidden"
+          className="ml-auto flex h-10 w-10 shrink-0 flex-col items-center justify-center gap-[5px] xl:hidden"
         >
           <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />
           <span aria-hidden className="block h-[2px] w-6 bg-ds-text" />
@@ -91,7 +91,7 @@ export function Header({ supportFormUrl }: { supportFormUrl?: string }) {
       </nav>
 
       {open && (
-        <div id="mobile-menu" className="border-t border-ds-text/10 bg-ds-bg px-6 pb-6 pt-2 lg:hidden">
+        <div id="mobile-menu" className="border-t border-ds-text/10 bg-ds-bg px-6 pb-6 pt-2 xl:hidden">
           <ul className="flex flex-col">
             {items.map((it) => {
               const active = isActive(pathname, it.to);

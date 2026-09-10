@@ -21,19 +21,30 @@ export default function Home() {
       <h1 className="sr-only">창작뮤지컬 &lt;나지르&gt; 기록 및 후원 안내</h1>
 
       {/*
-        데스크톱 1920×757, 모바일 390×520 (docs/mobile-ui.md). 비율 차이가 커서
-        데스크톱 이미지를 모바일에서 그대로 잘라 쓰면 포스터 가운데만 크게 확대되고
-        `창작뮤지컬 <나지르>` 카피가 잘려 나간다.
+        시안 히어로(1920×757)는 세로 포스터를 얇은 띠로 잘라 쓰는데, 그러면 헤드라인
+        `이 뮤지컬은 무대에 올라갈 수 있을까요?`의 윗줄이 통째로 잘려 나간다.
+        포스터에서 글자가 차지하는 세로 범위가 70%를 넘어서, 2.5:1 띠에는 구조적으로
+        들어가지 않는다.
 
-        원본 포스터가 2904×3871로 정확히 3:4라 모바일 프레임(390×520) 비율과 같다.
-        그래서 모바일에는 잘라낸 데스크톱 판이 아니라 포스터 전체를 쓴다.
-        검정 20%는 데스크톱 내보내기와 맞추려고 이미지에 구워 넣었다.
+        그래서 자르지 않고 포스터를 통째로 얹고, 히어로 배경색을 포스터의 배경 노랑과
+        같은 값으로 깔았다. 포스터 가장자리가 배경과 이어져 레터박스처럼 보이지 않는다.
+        잘라내지 않으니 어떤 비율을 줘도 글자가 상하지 않는다. 화면이 넓어질수록
+        포스터 양옆의 노랑만 넓어진다.
+        - 모바일(~767): 3:4 — 포스터 비율과 같아 화면을 꽉 채운다
+        - 태블릿(768~1279): 3:2 — 3:4로 두면 아이패드 세로에서 히어로가 한 화면을 다 먹는다
+        - 데스크톱(1280~): 16:9
+
+        배경색 `#AE9B22`는 브라우저가 이 webp에서 실제로 디코딩하는 모서리 픽셀 값이다.
+        원본 PNG를 이미지 라이브러리로 재면 다른 값이 나오는데(색 프로파일 처리 차이),
+        화면에서 이음매가 보이는지는 브라우저가 보는 값이 정하므로 그쪽을 따랐다.
+        검정 20% 오버레이는 이미지에 구워져 있어 CSS로 다시 얹지 않는다.
       */}
       <div
-        className="aspect-[39/52] w-full bg-ds-bg bg-[url(/images/landing-hero-mobile.webp)] bg-cover bg-center bg-no-repeat lg:aspect-[1920/757] lg:bg-[url(/images/landing-hero.webp)]"
+        className="aspect-[39/52] w-full bg-[url(/images/landing-poster.webp)] bg-contain bg-center bg-no-repeat md:aspect-[3/2] xl:aspect-[16/9]"
+        style={{ backgroundColor: '#AE9B22' }}
       />
 
-      <div className="mx-auto max-w-content px-6 lg:px-8 py-[clamp(48px,9vw,120px)]">
+      <div className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,9vw,120px)]">
         <LandingCards cards={LANDING_CARDS} />
       </div>
     </section>

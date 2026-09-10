@@ -15,26 +15,26 @@ import type { LandingCard } from '../content/landing';
  */
 export function LandingCards({ cards }: { cards: LandingCard[] }) {
   return (
-    <ul className="grid grid-cols-1 gap-3 lg:grid-cols-5">
+    <ul className="grid grid-cols-1 gap-3 xl:grid-cols-5">
       {cards.map((c) => (
         <li key={c.to}>
           <Link
             href={c.to}
-            className="flex h-full items-center gap-4 rounded-lg border-[0.5px] border-ds-key2 bg-ds-key2-fill px-4 py-6 text-ds-key1 shadow-[10px_10px_30px_rgba(0,0,0,0.06)] transition-opacity hover:opacity-90 lg:aspect-[27/35] lg:flex-col lg:justify-center lg:gap-2 lg:py-0"
+            className="flex h-full items-center gap-4 rounded-lg border-[0.5px] border-ds-key2 bg-ds-key2-fill px-4 py-6 text-ds-key1 shadow-[10px_10px_30px_rgba(0,0,0,0.06)] transition-opacity hover:opacity-90 xl:aspect-[27/35] xl:flex-col xl:justify-center xl:gap-2 xl:py-0"
           >
             <span
               aria-hidden
-              className="h-[88px] w-[88px] shrink-0 bg-contain bg-center bg-no-repeat lg:h-[100px] lg:w-full"
+              className="h-[88px] w-[88px] shrink-0 bg-contain bg-center bg-no-repeat xl:h-[100px] xl:w-full"
               style={{ backgroundImage: `url(${c.icon})` }}
             />
-            <span className="flex min-w-0 flex-1 flex-col items-center gap-1 text-center lg:flex-none lg:gap-2">
-              <span className="font-heir text-[22px] leading-tight lg:text-[25px]">{c.title}</span>
+            <span className="flex min-w-0 flex-1 flex-col items-center gap-1 text-center xl:flex-none xl:gap-2">
+              <span className="font-heir text-[22px] leading-tight xl:text-[25px]">{c.title}</span>
               <span className="font-heir text-[12px] leading-tight">{c.subtitle}</span>
               {/*
                 설명은 데스크톱 시안이 10px / 불투명도 0.5다. 디자이너가 모바일 변환 때
                 이 값이 안 읽혀 0.8로 올렸으므로(docs/mobile-ui.md) 모바일만 올린다.
               */}
-              <span className="whitespace-pre-line font-heir text-[11px] leading-[1.7] opacity-80 lg:text-[10px] lg:opacity-50">
+              <span className="whitespace-pre-line font-heir text-[11px] leading-[1.7] opacity-80 xl:text-[10px] xl:opacity-50">
                 {c.description}
               </span>
             </span>

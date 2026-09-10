@@ -22,7 +22,7 @@ function Column({ title, children }: { title: string; children: React.ReactNode 
 
 export function Footer({ site }: { site?: SiteContent }) {
   return (
-    <footer className="bg-ds-panel px-6 lg:px-8 py-[clamp(40px,6vw,64px)]">
+    <footer className="bg-ds-panel px-6 xl:px-8 py-[clamp(40px,6vw,64px)]">
       <div className="mx-auto max-w-content">
         {/* TODO: 최종 로고 이미지로 교체 (Figma 코멘트 #24). 현재는 시안과 동일한 임시 텍스트. */}
         <p className="font-heir text-[36px] leading-none text-ds-key2">나지르 | NAZIR</p>
