@@ -228,6 +228,8 @@ export const content: AllContent = {
     instagramMusical: 'https://www.instagram.com/musical_naz/',
     youtube: 'https://www.youtube.com/@PRAYSOUND2025',
     contactInstagram: 'https://www.instagram.com/musical_naz/',
+    contactName: '정은수',
+    contactPhone: '010-9545-7091',
   },
   characters,
   timeline,

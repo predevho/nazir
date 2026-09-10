@@ -58,6 +58,8 @@ export const ADMIN_SECTIONS: AdminSection[] = [
       { key: 'instagramMusical', label: '인스타그램 — musical_naz (URL)' },
       { key: 'youtube', label: '유튜브 (URL)' },
       { key: 'contactInstagram', label: '문의 인스타그램 (URL)' },
+      { key: 'contactName', label: '푸터 문의 — 대표 이름' },
+      { key: 'contactPhone', label: '푸터 문의 — 연락처' },
     ],
   },
 ];

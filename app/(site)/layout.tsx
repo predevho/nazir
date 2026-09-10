@@ -10,7 +10,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
     <>
       <VisitBeacon />
       <Curtain />
-      <Header />
+      <Header supportFormUrl={site.supportFormUrl} />
       <main className="min-h-[60vh]">{children}</main>
       <Footer site={site} />
     </>

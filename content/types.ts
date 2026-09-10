@@ -79,6 +79,9 @@ export interface SiteContent {
   instagramMusical: string;
   youtube: string;
   contactInstagram: string;
+  /** 푸터 `문의` 컬럼. 마스킹하지 않고 시안 그대로 노출한다 — Figma 코멘트 #47(대표 확인 완료). */
+  contactName: string;
+  contactPhone: string;
 }
 
 export interface AllContent {
