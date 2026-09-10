@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GuestbookAdmin, type AdminEntry } from './GuestbookAdmin';
 
-vi.mock('./actions', () => ({ moderateEntry: vi.fn() }));
+vi.mock('./actions', () => ({ moderateEntry: vi.fn(), saveReply: vi.fn() }));
 
 const entry = (over: Partial<AdminEntry> = {}): AdminEntry => ({
   id: 'e1',
@@ -11,6 +11,7 @@ const entry = (over: Partial<AdminEntry> = {}): AdminEntry => ({
   message: '응원합니다',
   isHeld: false,
   createdAt: '2026-08-26T04:00:00.000Z',
+  replies: [],
   ...over,
 });
 
@@ -55,5 +56,49 @@ describe('GuestbookAdmin', () => {
     await user.click(screen.getByRole('button', { name: '삭제' }));
     const del = screen.getByRole('button', { name: /정말 삭제/ }).closest('form')!;
     expect(del.querySelector('input[name="op"]')).toHaveValue('delete');
+  });
+
+  it('keeps the reply box closed until asked — 43개 글마다 펼쳐져 있으면 검토가 안 된다', async () => {
+    const user = userEvent.setup();
+    render(<GuestbookAdmin entries={[entry()]} />);
+    expect(screen.queryByPlaceholderText('응원에 답하는 한 마디')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: '+ 답글 달기' }));
+    expect(screen.getByPlaceholderText('응원에 답하는 한 마디')).toBeInTheDocument();
+  });
+
+  it('shows existing replies with 고치기 · 지우기', () => {
+    render(
+      <GuestbookAdmin
+        entries={[
+          entry({
+            replies: [
+              { id: 'r1', entryId: 'e1', message: '고맙습니다', createdAt: '2026-08-27T04:00:00.000Z' },
+            ],
+          }),
+        ]}
+      />,
+    );
+    expect(screen.getByText('고맙습니다')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '고치기' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '지우기' })).toBeInTheDocument();
+  });
+
+  it('edits in place — 고치기 는 새 답글이 아니라 그 답글을 가리킨다', async () => {
+    const user = userEvent.setup();
+    const { container } = render(
+      <GuestbookAdmin
+        entries={[
+          entry({
+            replies: [
+              { id: 'r1', entryId: 'e1', message: '고맙습니다', createdAt: '2026-08-27T04:00:00.000Z' },
+            ],
+          }),
+        ]}
+      />,
+    );
+    await user.click(screen.getByRole('button', { name: '고치기' }));
+    const box = screen.getByLabelText('답글 내용') as HTMLTextAreaElement;
+    expect(box.value).toBe('고맙습니다');
+    expect(container.querySelector('input[name="replyId"][value="r1"]')).toBeInTheDocument();
   });
 });

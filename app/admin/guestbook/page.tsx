@@ -2,6 +2,7 @@ import { redirect } from 'next/navigation';
 import { AdminNav } from '../AdminNav';
 import { createClient } from '@/lib/supabase/server';
 import { GuestbookAdmin, type AdminEntry } from './GuestbookAdmin';
+import { groupRepliesByEntry, type GuestbookReply } from '@/lib/guestbook';
 
 /** 검토 화면이라 항상 최신 상태를 봐야 한다. */
 export const dynamic = 'force-dynamic';
@@ -17,6 +18,23 @@ export default async function GuestbookAdminPage() {
     .select('id,name,message,is_held,created_at')
     .order('created_at', { ascending: false });
 
+  // 답글까지 한 번에 읽는다. 숨긴 글의 답글도 여기서는 보여야 한다.
+  const { data: replyRows, error: replyError } = await supabase
+    .from('guestbook_replies')
+    .select('id,entry_id,message,created_at')
+    .order('created_at', { ascending: true });
+
+  const byEntry = groupRepliesByEntry(
+    (replyRows ?? []).map(
+      (r): GuestbookReply => ({
+        id: r.id as string,
+        entryId: r.entry_id as string,
+        message: r.message as string,
+        createdAt: r.created_at as string,
+      }),
+    ),
+  );
+
   // 숨긴 글(검토 대기)을 위로 올린다.
   const entries: AdminEntry[] = (data ?? [])
     .map((r) => ({
@@ -25,6 +43,7 @@ export default async function GuestbookAdminPage() {
       message: r.message as string,
       isHeld: r.is_held as boolean,
       createdAt: r.created_at as string,
+      replies: byEntry.get(r.id as string) ?? [],
     }))
     .sort((a, b) => Number(b.isHeld) - Number(a.isHeld));
 
@@ -36,7 +55,15 @@ export default async function GuestbookAdminPage() {
       </h1>
       <p className="mb-8 text-sm text-ds-text/60">
         링크가 포함된 글은 등록 시 자동으로 숨겨집니다. 확인 후 공개하거나 삭제하세요.
+        <br />
+        답글은 운영진만 답니다. 남기면 게시판의 해당 쪽지 아래에 바로 붙습니다.
       </p>
+      {replyError && (
+        <p className="mb-6 border border-ds-key2/40 px-4 py-3 text-sm text-ds-text/70">
+          답글을 불러오지 못했습니다. 마이그레이션 `0011_guestbook_replies.sql` 이 적용됐는지
+          확인해 주세요. 응원글 검토는 그대로 쓸 수 있습니다.
+        </p>
+      )}
       {error ? (
         <p className="text-sm text-ds-text/60">
           목록을 불러오지 못했습니다. 마이그레이션 `0009_guestbook.sql`이 적용됐는지 확인해 주세요.

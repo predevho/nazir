@@ -1,7 +1,7 @@
 'use client';
 import { useActionState, useState } from 'react';
-import { moderateEntry, type ModerateState } from './actions';
-import { formatNoteDate } from '@/lib/guestbook';
+import { moderateEntry, saveReply, type ModerateState } from './actions';
+import { REPLY_MAX, formatNoteDate, type GuestbookReply } from '@/lib/guestbook';
 
 export type AdminEntry = {
   id: string;
@@ -9,6 +9,7 @@ export type AdminEntry = {
   message: string;
   isHeld: boolean;
   createdAt: string;
+  replies: GuestbookReply[];
 };
 
 const initial: ModerateState = { ok: false, message: '' };
@@ -19,7 +20,10 @@ const initial: ModerateState = { ok: false, message: '' };
  */
 export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
   const [state, formAction, pending] = useActionState(moderateEntry, initial);
+  const [replyState, replyAction, replyPending] = useActionState(saveReply, initial);
   const [confirming, setConfirming] = useState<string | null>(null);
+  // 답글 칸은 눌러야 열린다. 43개 글마다 입력칸이 펼쳐져 있으면 검토 화면이 안 읽힌다.
+  const [composing, setComposing] = useState<string | null>(null);
 
   const held = entries.filter((e) => e.isHeld);
 
@@ -34,12 +38,12 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
           검토 대기 {held.length}건 — 링크가 포함되어 자동으로 숨겨진 글입니다.
         </p>
       )}
-      {state.message && (
+      {(state.message || replyState.message) && (
         <p
           role="status"
-          className={`text-sm ${state.ok ? 'text-ds-key2' : 'text-ds-text/70'}`}
+          className={`text-sm ${(state.message ? state.ok : replyState.ok) ? 'text-ds-key2' : 'text-ds-text/70'}`}
         >
-          {state.message}
+          {state.message || replyState.message}
         </p>
       )}
 
@@ -108,9 +112,124 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                 </button>
               )}
             </div>
+
+            {/* 답글 — 명세 44·47행. 운영진만 쓴다(docs/decisions.md C-2). */}
+            <div className="mt-4 border-t border-ds-key2/15 pt-3">
+              {e.replies.map((r) => (
+                <div key={r.id} className="mb-2 border-l-2 border-ds-key2/40 pl-3">
+                  <p className="whitespace-pre-line break-words text-sm leading-[1.9] text-ds-text/80">
+                    {r.message}
+                  </p>
+                  <div className="mt-1 flex flex-wrap items-center gap-2">
+                    <span className="font-mono text-[10px] text-ds-text/40">
+                      {formatNoteDate(r.createdAt)}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setComposing(composing === r.id ? null : r.id)}
+                      className="cursor-pointer font-mono text-[10px] text-ds-key2 hover:underline"
+                    >
+                      {composing === r.id ? '접기' : '고치기'}
+                    </button>
+                    <form action={replyAction}>
+                      <input type="hidden" name="op" value="delete" />
+                      <input type="hidden" name="replyId" value={r.id} />
+                      <button
+                        type="submit"
+                        disabled={replyPending}
+                        className="cursor-pointer font-mono text-[10px] text-ds-text/45 hover:text-red-300 disabled:opacity-40"
+                      >
+                        지우기
+                      </button>
+                    </form>
+                  </div>
+                  {composing === r.id && (
+                    <ReplyForm
+                      action={replyAction}
+                      pending={replyPending}
+                      entryId={e.id}
+                      replyId={r.id}
+                      defaultValue={r.message}
+                      onClose={() => setComposing(null)}
+                    />
+                  )}
+                </div>
+              ))}
+
+              {composing === e.id ? (
+                <ReplyForm
+                  action={replyAction}
+                  pending={replyPending}
+                  entryId={e.id}
+                  onClose={() => setComposing(null)}
+                />
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setComposing(e.id)}
+                  className="cursor-pointer font-mono text-[11px] text-ds-key2 hover:underline"
+                >
+                  + 답글 달기
+                </button>
+              )}
+            </div>
           </li>
         ))}
       </ul>
     </div>
+  );
+}
+
+/** 새 답글과 고치기가 같은 칸을 쓴다. replyId 가 있으면 고치는 중이다. */
+function ReplyForm({
+  action,
+  pending,
+  entryId,
+  replyId,
+  defaultValue = '',
+  onClose,
+}: {
+  action: (formData: FormData) => void;
+  pending: boolean;
+  entryId: string;
+  replyId?: string;
+  defaultValue?: string;
+  onClose: () => void;
+}) {
+  return (
+    <form action={action} className="mt-2 flex flex-col gap-2">
+      <input type="hidden" name="op" value="save" />
+      <input type="hidden" name="entryId" value={entryId} />
+      {replyId && <input type="hidden" name="replyId" value={replyId} />}
+      <label className="sr-only" htmlFor={`reply-${replyId ?? entryId}`}>
+        답글 내용
+      </label>
+      <textarea
+        id={`reply-${replyId ?? entryId}`}
+        name="message"
+        rows={2}
+        maxLength={REPLY_MAX}
+        defaultValue={defaultValue}
+        autoFocus
+        placeholder="응원에 답하는 한 마디"
+        className="w-full resize-y border border-ds-key2/30 bg-ds-bg px-3 py-2 text-sm leading-[1.7] text-ds-text outline-none placeholder:text-ds-text/35 focus:border-ds-key2"
+      />
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={pending}
+          className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 font-mono text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
+        >
+          {replyId ? '고치기' : '답글 남기기'}
+        </button>
+        <button
+          type="button"
+          onClick={onClose}
+          className="cursor-pointer px-3 py-1.5 font-mono text-[11px] text-ds-text/50 hover:text-ds-text"
+        >
+          취소
+        </button>
+      </div>
+    </form>
   );
 }

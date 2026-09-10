@@ -3,7 +3,13 @@ import { createReadClient } from '@/lib/supabase/read';
 import { GuestbookForm } from '@/components/guestbook/GuestbookForm';
 import { GuestbookNote } from '@/components/guestbook/GuestbookNote';
 import { GuestbookPager } from '@/components/guestbook/GuestbookPager';
-import { PAGE_SIZE, resolvePage, type GuestbookEntry } from '@/lib/guestbook';
+import {
+  PAGE_SIZE,
+  groupRepliesByEntry,
+  resolvePage,
+  type GuestbookEntry,
+  type GuestbookReply,
+} from '@/lib/guestbook';
 import { pageMeta } from '@/lib/pageMeta';
 
 /** 응원글은 바로 보여야 하므로 캐시하지 않는다. */
@@ -18,8 +24,8 @@ export const metadata: Metadata = {
 /**
  * 시안 `응원 게시판`. 제목 → 한 줄 입력 폼 → 쪽지 그리드(4열) → 페이지 이동.
  *
- * 1차 범위는 읽기·쓰기까지다. 하트와 대댓글은 확정 대기라 빠져 있다
- * — docs/decisions.md C-2 · C-3.
+ * 답글은 운영진만 달고(명세 44행, docs/decisions.md C-2) 여기서는 읽기만 한다.
+ * 하트는 아직 확정 대기라 빠져 있다 — 같은 문서 C-3.
  *
  * 보류된 글(링크 포함)은 RLS가 걸러 공개 목록에도 총 개수에도 들어가지 않는다.
  */
@@ -32,6 +38,7 @@ export default async function GuestbookPage({
   const supabase = createReadClient();
 
   let entries: GuestbookEntry[] = [];
+  let replies: GuestbookReply[] = [];
   let page = 1;
   let totalPages = 1;
   let unavailable = false;
@@ -65,9 +72,28 @@ export default async function GuestbookPage({
           message: r.message as string,
           createdAt: r.created_at as string,
         }));
+
+        // 이 페이지에 보이는 글의 답글만 가져온다. 답글 조회가 실패해도 응원글은
+        // 그대로 보여준다 — 곁가지 때문에 본문이 사라지면 안 된다.
+        if (entries.length > 0) {
+          const { data: replyRows } = await supabase
+            .from('guestbook_replies')
+            .select('id,entry_id,message,created_at')
+            .in('entry_id', entries.map((e) => e.id))
+            .order('created_at', { ascending: true });
+
+          replies = (replyRows ?? []).map((r) => ({
+            id: r.id as string,
+            entryId: r.entry_id as string,
+            message: r.message as string,
+            createdAt: r.created_at as string,
+          }));
+        }
       }
     }
   }
+
+  const byEntry = groupRepliesByEntry(replies);
 
   return (
     <section className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,7vw,88px)]">
@@ -97,9 +123,14 @@ export default async function GuestbookPage({
           </p>
         ) : (
           <>
-            <ul className="grid list-none grid-cols-1 gap-x-6 gap-y-12 p-0 sm:grid-cols-2 xl:grid-cols-4">
+            <ul className="grid list-none grid-cols-1 items-start gap-x-6 gap-y-12 p-0 sm:grid-cols-2 xl:grid-cols-4">
               {entries.map((entry, i) => (
-                <GuestbookNote key={entry.id} entry={entry} index={(page - 1) * PAGE_SIZE + i} />
+                <GuestbookNote
+                  key={entry.id}
+                  entry={entry}
+                  index={(page - 1) * PAGE_SIZE + i}
+                  replies={byEntry.get(entry.id)}
+                />
               ))}
             </ul>
             <GuestbookPager page={page} totalPages={totalPages} />

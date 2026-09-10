@@ -5,8 +5,41 @@ export interface GuestbookEntry {
   createdAt: string;
 }
 
+/**
+ * 운영진이 응원글에 다는 답글 (명세 44·45행).
+ * 누구나 다는 것이 아니라 운영진만 쓴다 — docs/decisions.md C-2.
+ * 그래서 작성자 이름 칸이 없다. 화면에서는 늘 "제작팀"으로 밝힌다.
+ */
+export interface GuestbookReply {
+  id: string;
+  entryId: string;
+  message: string;
+  createdAt: string;
+}
+
 export const NAME_MAX = 20;
 export const MESSAGE_MAX = 300;
+/** 답글도 본문과 같은 길이로 묶는다. 쪽지 아래 붙는 자리라 더 길면 원글을 덮는다. */
+export const REPLY_MAX = 300;
+
+/** 답글 목록을 원글 id 별로 묶는다. 한 글에 여러 개가 붙을 수 있다(1:N). */
+export function groupRepliesByEntry(replies: GuestbookReply[]): Map<string, GuestbookReply[]> {
+  const byEntry = new Map<string, GuestbookReply[]>();
+  for (const reply of replies) {
+    const list = byEntry.get(reply.entryId);
+    if (list) list.push(reply);
+    else byEntry.set(reply.entryId, [reply]);
+  }
+  return byEntry;
+}
+
+/** 저장 전 마지막 관문. 서버 액션과 테스트가 같은 규칙을 본다. */
+export function checkReply(message: unknown): { ok: true; message: string } | { ok: false; reason: 'empty' | 'long' } {
+  const text = typeof message === 'string' ? message.trim() : '';
+  if (text === '') return { ok: false, reason: 'empty' };
+  if (text.length > REPLY_MAX) return { ok: false, reason: 'long' };
+  return { ok: true, message: text };
+}
 /** 사람이 이름·메시지를 채우는 데 걸리는 최소 시간. 이보다 빠르면 자동 제출로 본다. */
 export const MIN_FILL_MS = 3000;
 

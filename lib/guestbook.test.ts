@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
 import {
+  checkReply,
+  groupRepliesByEntry,
+  REPLY_MAX,
   checkSubmission,
   noteStyle,
   formatNoteDate,
@@ -97,5 +100,43 @@ describe('formatNoteDate', () => {
   });
   it('returns an empty string for junk instead of throwing', () => {
     expect(formatNoteDate('nope')).toBe('');
+  });
+});
+
+describe('groupRepliesByEntry', () => {
+  const reply = (id: string, entryId: string) => ({
+    id, entryId, message: '고맙습니다', createdAt: '2026-08-27T04:00:00.000Z',
+  });
+
+  it('묶어서 원글 id 로 꺼낼 수 있게 한다', () => {
+    const byEntry = groupRepliesByEntry([reply('r1', 'e1'), reply('r2', 'e2'), reply('r3', 'e1')]);
+    expect(byEntry.get('e1')?.map((r) => r.id)).toEqual(['r1', 'r3']);
+    expect(byEntry.get('e2')?.map((r) => r.id)).toEqual(['r2']);
+  });
+
+  it('답글이 없는 글은 아예 없는 키다 — 화면에서 빈 배열로 받는다', () => {
+    expect(groupRepliesByEntry([]).get('e1')).toBeUndefined();
+  });
+
+  it('넘어온 순서를 지킨다. 정렬은 질의가 맡는다', () => {
+    const byEntry = groupRepliesByEntry([reply('b', 'e1'), reply('a', 'e1')]);
+    expect(byEntry.get('e1')?.map((r) => r.id)).toEqual(['b', 'a']);
+  });
+});
+
+describe('checkReply', () => {
+  it('앞뒤 공백을 털고 통과시킨다', () => {
+    expect(checkReply('  고맙습니다  ')).toEqual({ ok: true, message: '고맙습니다' });
+  });
+
+  it('빈 답글은 막는다 — 공백만 있는 경우도', () => {
+    expect(checkReply('')).toEqual({ ok: false, reason: 'empty' });
+    expect(checkReply('   ')).toEqual({ ok: false, reason: 'empty' });
+    expect(checkReply(undefined)).toEqual({ ok: false, reason: 'empty' });
+  });
+
+  it('본문과 같은 길이로 묶는다 — 쪽지 아래 자리라 더 길면 원글을 덮는다', () => {
+    expect(checkReply('가'.repeat(REPLY_MAX)).ok).toBe(true);
+    expect(checkReply('가'.repeat(REPLY_MAX + 1))).toEqual({ ok: false, reason: 'long' });
   });
 });
