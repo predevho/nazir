@@ -54,6 +54,20 @@ export function noteStyle(index: number): { background: string; tapeAngle: numbe
   };
 }
 
+/** 한 페이지에 깔리는 쪽지 수. 시안 그리드가 4열이라 4의 배수로 둔다. */
+export const PAGE_SIZE = 24;
+
+/**
+ * `?page=` 값을 실제로 보여줄 페이지로 정리한다.
+ * 글자·음수·범위 밖 값은 조용히 1페이지로 떨어뜨린다.
+ */
+export function resolvePage(raw: unknown, total: number): { page: number; totalPages: number } {
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const n = Number(Array.isArray(raw) ? raw[0] : raw);
+  if (!Number.isInteger(n) || n < 1 || n > totalPages) return { page: 1, totalPages };
+  return { page: n, totalPages };
+}
+
 /** 쪽지 우하단 날짜. 시안 표기는 `2026.08.26`. */
 export function formatNoteDate(iso: string): string {
   const d = new Date(iso);

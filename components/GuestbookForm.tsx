@@ -56,6 +56,9 @@ export function GuestbookForm() {
           ? '등록되었습니다. 링크가 포함된 글은 확인 후 공개됩니다.'
           : '등록되었습니다. 고맙습니다.',
       });
+      // 새 글은 항상 1페이지 맨 앞에 붙는다. 뒤 페이지에서 남겼다면 그리로 보내야
+      // 방금 쓴 쪽지가 보인다.
+      router.push('/guestbook');
       router.refresh();
     } catch {
       setStatus({ kind: 'error', message: MESSAGES.unavailable });

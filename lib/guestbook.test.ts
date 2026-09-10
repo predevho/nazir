@@ -1,5 +1,13 @@
 import { describe, it, expect } from 'vitest';
-import { checkSubmission, noteStyle, formatNoteDate, MESSAGE_MAX, NAME_MAX } from './guestbook';
+import {
+  checkSubmission,
+  noteStyle,
+  formatNoteDate,
+  resolvePage,
+  MESSAGE_MAX,
+  NAME_MAX,
+  PAGE_SIZE,
+} from './guestbook';
 
 const valid = { name: '정은수', message: '응원합니다', honeypot: '', elapsedMs: 5000 };
 
@@ -52,6 +60,34 @@ describe('noteStyle', () => {
     expect(noteStyle(0)).toEqual({ background: '/images/note-square.webp', tapeAngle: 8 });
     expect(noteStyle(1)).toEqual({ background: '/images/note-wide.webp', tapeAngle: -8 });
     expect(noteStyle(2)).toEqual(noteStyle(0));
+  });
+});
+
+describe('resolvePage', () => {
+  it('reports a single page when everything fits', () => {
+    expect(resolvePage(undefined, PAGE_SIZE)).toEqual({ page: 1, totalPages: 1 });
+  });
+
+  it('reports a single page when the board is empty', () => {
+    expect(resolvePage(undefined, 0)).toEqual({ page: 1, totalPages: 1 });
+  });
+
+  it('splits into pages once it overflows', () => {
+    expect(resolvePage('2', PAGE_SIZE + 1)).toEqual({ page: 2, totalPages: 2 });
+  });
+
+  it('falls back to the first page for junk instead of 404ing', () => {
+    for (const bad of ['abc', '0', '-3', '1.5', '', null]) {
+      expect(resolvePage(bad, PAGE_SIZE * 3).page).toBe(1);
+    }
+  });
+
+  it('falls back when the page is past the end', () => {
+    expect(resolvePage('9', PAGE_SIZE + 1).page).toBe(1);
+  });
+
+  it('takes the first value when the query repeats', () => {
+    expect(resolvePage(['2', '3'], PAGE_SIZE * 3).page).toBe(2);
   });
 });
 
