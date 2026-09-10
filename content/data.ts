@@ -123,7 +123,7 @@ const peopleSeeds: { label: string; members: { role: string; name: string }[] }[
     ],
   },
   {
-    label: '팀원',
+    label: '스탭진',
     members: [
       { role: '기획팀', name: '김은성' },
       { role: '기획팀', name: '장시은' },
@@ -173,7 +173,7 @@ const people: PeopleGroup[] = peopleSeeds.map((g, gi) => ({
   label: g.label,
   sortOrder: gi,
   members: g.members.map((m, i) => {
-    const isTeamGroup = gi === 1; // 팀원
+    const isTeamGroup = gi === 1; // 스탭진
     return {
       id: `g${gi}m${i}`,
       role: isTeamGroup ? '' : m.role,

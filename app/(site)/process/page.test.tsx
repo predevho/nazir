@@ -8,11 +8,13 @@ describe('Process', () => {
     expect(screen.getByText('대본 작업')).toBeInTheDocument();
     expect(screen.getAllByText('완료').length).toBeGreaterThan(0);
   });
-  it('shows people as individuals and budget total', async () => {
+  it('shows the budget total', async () => {
     render(await Process());
     expect(screen.getByText('₩ 9,000,000')).toBeInTheDocument();
-    // 헤더진(기본 펼침)의 개인 이름
-    expect(screen.getByText('정은수')).toBeInTheDocument();
-    expect(screen.getByText('연출')).toBeInTheDocument();
+  });
+  it('sends people to their own route instead of listing them here', async () => {
+    render(await Process());
+    expect(screen.getByRole('link', { name: /함께하는 사람들 보기/ })).toHaveAttribute('href', '/people');
+    expect(screen.queryByText('정은수')).not.toBeInTheDocument();
   });
 });

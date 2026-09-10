@@ -1,14 +1,11 @@
-import { Accordion } from '@/components/Accordion';
 import { StatusChip } from '@/components/StatusChip';
-import { MarkdownText } from '@/components/MarkdownText';
 import Link from 'next/link';
 import { getContent } from '@/lib/content';
-import { groupMembersByTeam } from '@/lib/people';
 
 export const revalidate = 60;
 
 export default async function Process() {
-  const { site, timeline, people, budget } = await getContent();
+  const { site, timeline, budget } = await getContent();
   return (
     <section className="max-w-[900px] mx-auto px-5 py-[clamp(48px,9vw,88px)] pb-[clamp(100px,14vw,140px)]">
       <p className="font-mono text-[11px] tracking-[0.2em] text-gold mb-3">02 / IN THE MAKING</p>
@@ -26,41 +23,13 @@ export default async function Process() {
         ))}
       </ol>
 
-      <h3 className="font-display text-[clamp(20px,4.6vw,26px)] text-paper mb-3">함께 세우는 사람들</h3>
-      <p className="text-sm font-light leading-[2] text-paper/[0.72] mb-5">{site.peopleIntro}</p>
-      <div className="grid gap-px bg-gold/[0.14] border border-gold/[0.14] mb-[clamp(48px,8vw,72px)]">
-        {people.map((g) => (
-          <Accordion key={g.id} label={g.label} defaultOpen={g.label === '헤더진'}>
-            <div className="flex flex-col gap-4">
-              {groupMembersByTeam(g.members).map((bucket) => (
-                <div key={bucket.team || '_'} className="flex flex-col gap-2">
-                  {bucket.team && (
-                    <span className="font-mono text-[11px] tracking-[0.14em] text-gold/80 border-l-2 border-gold/40 pl-2">{bucket.team}</span>
-                  )}
-                  <div className="grid gap-3 grid-cols-2 sm:grid-cols-4">
-                    {bucket.members.map((m) => (
-                      <div key={m.id} className="flex flex-col gap-1.5">
-                        <Link href={`/people/${m.id}`} className="flex flex-col gap-1.5 group">
-                          <div className="aspect-square rounded-sm overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
-                            {m.photoUrl ? (
-                              <img src={m.photoUrl} alt={m.name} loading="lazy" className="w-full h-full object-cover transition-opacity group-hover:opacity-80" />
-                            ) : (
-                              <span className="font-mono text-[10px] text-paper/40">사진</span>
-                            )}
-                          </div>
-                          {m.role && <span className="font-mono text-[10px] tracking-[0.06em] text-gold">{m.role}</span>}
-                          <span className="font-display text-sm text-paper leading-tight group-hover:text-gold transition-colors">{m.name}</span>
-                        </Link>
-                        <MarkdownText className="text-[12px] font-light text-paper/70">{m.bio}</MarkdownText>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Accordion>
-        ))}
-      </div>
+      {/* `함께하는 사람들`은 시안에서 최상위 라우트로 분리됐다 → app/(site)/people/page.tsx */}
+      <p className="mb-[clamp(48px,8vw,72px)] text-sm font-light leading-[2] text-paper/[0.72]">
+        {site.peopleIntro}{' '}
+        <Link href="/people" className="text-gold hover:text-gold-soft">
+          함께하는 사람들 보기 →
+        </Link>
+      </p>
 
       <h3 className="font-display text-[clamp(20px,4.6vw,26px)] text-paper mb-2">제작 예산</h3>
       <p className="font-mono text-[clamp(24px,7vw,38px)] text-gold mb-5">{site.budgetTotal}</p>

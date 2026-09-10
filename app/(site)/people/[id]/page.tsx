@@ -21,7 +21,12 @@ export default async function PersonPage({ params }: { params: Promise<{ id: str
 
   return (
     <section className="max-w-[820px] mx-auto px-5 py-[clamp(32px,7vw,64px)]">
-      <Link href="/process" className="font-mono text-[11px] text-gold hover:text-gold-soft">← 함께 세우는 사람들</Link>
+      <Link
+        href={`/people?tab=${encodeURIComponent(groupLabel)}`}
+        className="font-mono text-[11px] text-gold hover:text-gold-soft"
+      >
+        ← 함께하는 사람들
+      </Link>
       <div className="mt-6 grid gap-6 sm:[grid-template-columns:280px_1fr] items-start">
         <div className="aspect-square rounded-sm overflow-hidden bg-[repeating-linear-gradient(135deg,#0B0A0E,#0B0A0E_8px,#141019_8px,#141019_16px)] flex items-center justify-center">
           {member.photoUrl ? (
