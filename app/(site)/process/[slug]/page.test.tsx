@@ -7,6 +7,8 @@ vi.mock('next/navigation', () => ({
   notFound: () => {
     throw new Error('NEXT_NOT_FOUND');
   },
+  // 스와이프 네비게이터가 쓴다. 이 테스트에서는 실제 이동을 검증하지 않는다.
+  useRouter: () => ({ push: vi.fn() }),
 }));
 
 const show = async (slug: string) =>

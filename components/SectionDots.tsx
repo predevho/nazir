@@ -1,6 +1,5 @@
 import Link from 'next/link';
-
-export type DotItem = { slug: string; no: string; title: string };
+import { getNeighbors, type SectionItem } from '../lib/sectionNav';
 
 /**
  * 시안 하단 페이지네이션 도트. `Frame 36` 기준으로 지름 18px, gap 60px.
@@ -19,14 +18,12 @@ export function SectionDots({
   basePath,
   label,
 }: {
-  items: DotItem[];
+  items: SectionItem[];
   activeSlug: string;
   basePath: string;
   label: string;
 }) {
-  const index = items.findIndex((i) => i.slug === activeSlug);
-  const prev = index > 0 ? items[index - 1] : undefined;
-  const next = index >= 0 && index < items.length - 1 ? items[index + 1] : undefined;
+  const { prev, next } = getNeighbors(items, activeSlug, basePath);
 
   const arrow =
     'flex h-[18px] w-[18px] items-center justify-center font-heir text-[22px] leading-none transition-colors';
@@ -34,11 +31,7 @@ export function SectionDots({
   return (
     <nav aria-label={`${label} 세부 페이지`} className="flex items-center gap-6">
       {prev ? (
-        <Link
-          href={`${basePath}/${prev.slug}`}
-          aria-label={`이전: ${prev.no} ${prev.title}`}
-          className={`${arrow} text-ds-text hover:text-ds-key2`}
-        >
+        <Link href={prev.href} aria-label={`이전: ${prev.label}`} className={`${arrow} text-ds-text hover:text-ds-key2`}>
           ‹
         </Link>
       ) : (
@@ -66,11 +59,7 @@ export function SectionDots({
       </ul>
 
       {next ? (
-        <Link
-          href={`${basePath}/${next.slug}`}
-          aria-label={`다음: ${next.no} ${next.title}`}
-          className={`${arrow} text-ds-text hover:text-ds-key2`}
-        >
+        <Link href={next.href} aria-label={`다음: ${next.label}`} className={`${arrow} text-ds-text hover:text-ds-key2`}>
           ›
         </Link>
       ) : (

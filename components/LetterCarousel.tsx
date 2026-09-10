@@ -1,6 +1,7 @@
 'use client';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { AboutLetter } from '../content/types';
+import { readSwipe } from '../lib/sectionNav';
 
 /**
  * 시안 `Frame 35`: 편지 이미지 634×846, 아래에 `‹ 1 / N ›` 페이저.
@@ -35,8 +36,27 @@ export function LetterCarousel({ letters, label }: { letters: AboutLetter[]; lab
   const current = slides[Math.min(index, total - 1)];
   const go = (delta: number) => setIndex((i) => (i + delta + total) % total);
 
+  /**
+   * 편지 위에서 미는 것은 "다음 장"이지 "다음 페이지"가 아니다.
+   * `data-swipe-ignore` 로 페이지 단위 스와이프(SwipeNavigator)를 막고 여기서 직접 넘긴다.
+   */
+  const start = useRef<{ x: number; y: number } | null>(null);
+  function onTouchStart(e: React.TouchEvent) {
+    const t = e.touches[0];
+    start.current = { x: t.clientX, y: t.clientY };
+  }
+  function onTouchEnd(e: React.TouchEvent) {
+    const from = start.current;
+    start.current = null;
+    if (!from || total <= 1) return;
+    const t = e.changedTouches[0];
+    const dir = readSwipe(t.clientX - from.x, t.clientY - from.y);
+    if (dir === 'next') go(1);
+    if (dir === 'prev') go(-1);
+  }
+
   return (
-    <figure className="m-0">
+    <figure className="m-0" data-swipe-ignore onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
       <img
         src={current.imageUrl ?? ''}
         alt={current.caption || `${label} ${index + 1}번째 장`}

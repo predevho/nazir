@@ -3,6 +3,8 @@ import { notFound } from 'next/navigation';
 import { getContent } from '@/lib/content';
 import { MarkdownText } from '@/components/MarkdownText';
 import { SectionDots } from '@/components/SectionDots';
+import { SwipeNavigator } from '@/components/SwipeNavigator';
+import { getNeighbors } from '@/lib/sectionNav';
 import { LetterCarousel } from '@/components/LetterCarousel';
 import { ABOUT_SECTIONS, findAboutSection, hasLetterCarousel, type AboutSection } from '@/content/about';
 import type { AllContent } from '@/content/types';
@@ -53,95 +55,99 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
   const content = await getContent();
   const { site, characters } = content;
 
+  const neighbors = getNeighbors(ABOUT_SECTIONS, section.slug, '/about');
+
   return (
-    <section className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,7vw,88px)]">
-      <div className="grid gap-x-16 gap-y-12 xl:grid-cols-[497px_1fr]">
-        <header className="flex flex-col gap-3">
-          <p className="font-heir text-[20px] leading-none text-ds-text/70">{section.no}</p>
-          <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
-            {section.title}
-          </h1>
-          <MarkdownText className="mt-4 max-w-[586px] font-heir text-[15px] leading-[2] text-ds-text/70">
-            {intro(section, content)}
-          </MarkdownText>
-        </header>
+    <SwipeNavigator neighbors={neighbors}>
+      <section className="mx-auto max-w-content px-6 xl:px-8 py-[clamp(48px,7vw,88px)]">
+        <div className="grid gap-x-16 gap-y-12 xl:grid-cols-[497px_1fr]">
+          <header className="flex flex-col gap-3">
+            <p className="font-heir text-[20px] leading-none text-ds-text/70">{section.no}</p>
+            <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
+              {section.title}
+            </h1>
+            <MarkdownText className="mt-4 max-w-[586px] font-heir text-[15px] leading-[2] text-ds-text/70">
+              {intro(section, content)}
+            </MarkdownText>
+          </header>
 
-        <div className="min-w-0">
-          {hasLetterCarousel(section.slug) && (
-            <div className="mx-auto max-w-[634px]">
-              <LetterCarousel
-                letters={content.letters.filter((l) => l.section === section.slug)}
-                label={section.title}
-              />
-            </div>
-          )}
+          <div className="min-w-0">
+            {hasLetterCarousel(section.slug) && (
+              <div className="mx-auto max-w-[634px]">
+                <LetterCarousel
+                  letters={content.letters.filter((l) => l.section === section.slug)}
+                  label={section.title}
+                />
+              </div>
+            )}
 
-          {section.slug === 'work' && (
-            <div className="flex flex-col gap-12">
-              <div className="border border-ds-key2/40 p-8">
-                <h2 className="font-heir text-[26px] leading-none text-ds-key2">작품 개요</h2>
-                <dl className="mt-6 m-0 grid gap-3">
-                  {site.facts.map((f) => (
-                    <div key={f.key} className="flex gap-6">
-                      <dt className="min-w-[140px] font-heir text-[15px] text-ds-key2">{f.key}</dt>
-                      <dd className="m-0 font-heir text-[15px] text-ds-text">{f.value}</dd>
+            {section.slug === 'work' && (
+              <div className="flex flex-col gap-12">
+                <div className="border border-ds-key2/40 p-8">
+                  <h2 className="font-heir text-[26px] leading-none text-ds-key2">작품 개요</h2>
+                  <dl className="mt-6 m-0 grid gap-3">
+                    {site.facts.map((f) => (
+                      <div key={f.key} className="flex gap-6">
+                        <dt className="min-w-[140px] font-heir text-[15px] text-ds-key2">{f.key}</dt>
+                        <dd className="m-0 font-heir text-[15px] text-ds-text">{f.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+                <div>
+                  <h2 className="font-heir text-[26px] leading-none text-ds-key2">로그라인</h2>
+                  <p className="mt-4 max-w-[483px] font-heir text-[20px] leading-[1.78] text-white">
+                    {site.logline}
+                  </p>
+                </div>
+                <div>
+                  <h2 className="font-heir text-[26px] leading-none text-ds-key2">시놉시스</h2>
+                  <p className="mt-4 max-w-[483px] font-heir text-[20px] leading-[1.78] text-white">
+                    {site.synopsis}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/*
+              시안 인물 카드는 이름 + 설명만 있고 사진이 없다. 반면 요구사항 명세서 21행은
+              "이미지 카드 형태"를 요구한다. 사진이 등록된 인물만 사진을 얹어 둘 다 만족시킨다
+              — 지금은 전원 미등록이라 화면은 시안과 같고, 관리자가 올리면 카드에 나타난다.
+            */}
+            {section.slug === 'characters' && (
+              <ul className="grid gap-3 sm:grid-cols-2">
+                {characters.map((c) => (
+                  <li key={c.id} className="flex gap-5 border border-ds-key2/40 p-6">
+                    {c.photoUrl && (
+                      <img
+                        src={c.photoUrl}
+                        alt={c.name}
+                        loading="lazy"
+                        className="h-24 w-24 flex-none rounded-sm object-cover"
+                      />
+                    )}
+                    <div className="min-w-0">
+                      <h2 className="font-heir text-[22px] leading-none text-ds-key2">{c.name}</h2>
+                      <MarkdownText className="mt-3 font-heir text-[15px] leading-[1.9] text-ds-text/80">
+                        {c.description}
+                      </MarkdownText>
                     </div>
-                  ))}
-                </dl>
-              </div>
-              <div>
-                <h2 className="font-heir text-[26px] leading-none text-ds-key2">로그라인</h2>
-                <p className="mt-4 max-w-[483px] font-heir text-[20px] leading-[1.78] text-white">
-                  {site.logline}
-                </p>
-              </div>
-              <div>
-                <h2 className="font-heir text-[26px] leading-none text-ds-key2">시놉시스</h2>
-                <p className="mt-4 max-w-[483px] font-heir text-[20px] leading-[1.78] text-white">
-                  {site.synopsis}
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/*
-            시안 인물 카드는 이름 + 설명만 있고 사진이 없다. 반면 요구사항 명세서 21행은
-            "이미지 카드 형태"를 요구한다. 사진이 등록된 인물만 사진을 얹어 둘 다 만족시킨다
-            — 지금은 전원 미등록이라 화면은 시안과 같고, 관리자가 올리면 카드에 나타난다.
-          */}
-          {section.slug === 'characters' && (
-            <ul className="grid gap-3 sm:grid-cols-2">
-              {characters.map((c) => (
-                <li key={c.id} className="flex gap-5 border border-ds-key2/40 p-6">
-                  {c.photoUrl && (
-                    <img
-                      src={c.photoUrl}
-                      alt={c.name}
-                      loading="lazy"
-                      className="h-24 w-24 flex-none rounded-sm object-cover"
-                    />
-                  )}
-                  <div className="min-w-0">
-                    <h2 className="font-heir text-[22px] leading-none text-ds-key2">{c.name}</h2>
-                    <MarkdownText className="mt-3 font-heir text-[15px] leading-[1.9] text-ds-text/80">
-                      {c.description}
-                    </MarkdownText>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className="mt-[clamp(48px,7vw,88px)]">
-        <SectionDots
-          items={ABOUT_SECTIONS}
-          activeSlug={section.slug}
-          basePath="/about"
-          label="〈나지르〉에 대하여"
-        />
-      </div>
-    </section>
+        <div className="mt-[clamp(48px,7vw,88px)]">
+          <SectionDots
+            items={ABOUT_SECTIONS}
+            activeSlug={section.slug}
+            basePath="/about"
+            label="〈나지르〉에 대하여"
+          />
+        </div>
+      </section>
+    </SwipeNavigator>
   );
 }
