@@ -38,6 +38,12 @@ describe('AboutSectionPage', () => {
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(6);
   });
 
+  it('shows a character photo only once one has been uploaded', async () => {
+    await show('characters');
+    // 시드는 전원 photoUrl null 이라 지금은 사진 없이 시안과 같은 모습이어야 한다
+    expect(screen.queryByRole('img')).not.toBeInTheDocument();
+  });
+
   it('marks the current dot on each sub page', async () => {
     await show('praysound');
     expect(screen.getByRole('link', { name: '02 Praysound에 대하여' })).toHaveAttribute(
