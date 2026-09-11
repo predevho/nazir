@@ -85,7 +85,7 @@ export default async function AboutSectionPage({ params }: { params: Promise<{ s
             </h1>
             {/* 비어 있으면 그리지 않는다. 빈 문단이 남으면 제목 아래 여백만 벌어진다. */}
             {intro(section, content).trim() && (
-              <MarkdownText className="mt-4 max-w-[586px] font-heir text-[15px] leading-[2] text-ds-text/70">
+              <MarkdownText className="mt-4 max-w-[586px] font-desc font-extralight text-[15px] leading-[2] text-ds-text/70">
                 {intro(section, content)}
               </MarkdownText>
             )}

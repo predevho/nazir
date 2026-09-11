@@ -31,4 +31,9 @@ describe('PeoplePage', () => {
     await render_('없는탭');
     expect(screen.getByRole('link', { name: '헤더진' })).toHaveAttribute('aria-current', 'page');
   });
+
+  it('제목 아래 소개 문단은 고딕(font-desc)이다', async () => {
+    const { container } = await render_();
+    expect(container.querySelector('.font-desc')).toHaveClass('font-extralight');
+  });
 });

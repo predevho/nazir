@@ -58,4 +58,12 @@ describe('AboutSectionPage', () => {
   it('404s on an unknown slug', async () => {
     await expect(show('nope')).rejects.toThrow('NEXT_NOT_FOUND');
   });
+
+  it('제목 아래 소개 문단만 고딕(font-desc)이고 제목은 빛의계승자다 — 클라이언트 확정', async () => {
+    const { container } = await show('greeting');
+    const intro = container.querySelector('header .font-desc');
+    expect(intro).not.toBeNull();
+    expect(intro).toHaveClass('font-extralight');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveClass('font-heir');
+  });
 });

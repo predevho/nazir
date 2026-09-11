@@ -106,7 +106,7 @@ export default async function GuestbookPage({
         </h1>
         {/* 관리자에서 고치는 문구다. 줄바꿈을 넣은 그대로 나가도록 pre-line 으로 둔다. */}
         {site.guestbookIntro.trim() && (
-          <p className="mt-4 whitespace-pre-line font-heir text-[15px] leading-[2] text-ds-text/70">
+          <p className="mt-4 whitespace-pre-line font-desc font-extralight text-[15px] leading-[2] text-ds-text/70">
             {site.guestbookIntro}
           </p>
         )}

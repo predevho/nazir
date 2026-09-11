@@ -68,4 +68,10 @@ describe('ProcessSectionPage', () => {
   it('404s on an unknown slug', async () => {
     await expect(show('nope')).rejects.toThrow('NEXT_NOT_FOUND');
   });
+
+  it('제목 아래 소개 문단만 고딕(font-desc)이다', async () => {
+    const { container } = await show('schedule');
+    expect(container.querySelector('header .font-desc')).toHaveClass('font-extralight');
+    expect(screen.getByRole('heading', { level: 1 })).toHaveClass('font-heir');
+  });
 });

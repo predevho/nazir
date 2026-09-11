@@ -61,7 +61,7 @@ export default async function ProcessSectionPage({
             <h1 className="font-heir text-[clamp(30px,4vw,45px)] leading-[1.4] tracking-[-0.025em] text-ds-text">
               {section.title}
             </h1>
-            <MarkdownText className="mt-4 max-w-[586px] font-heir text-[15px] leading-[2] text-ds-text/70">
+            <MarkdownText className="mt-4 max-w-[586px] font-desc font-extralight text-[15px] leading-[2] text-ds-text/70">
               {intro}
             </MarkdownText>
           </header>

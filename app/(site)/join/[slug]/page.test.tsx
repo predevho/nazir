@@ -51,4 +51,11 @@ describe('JoinSectionPage', () => {
   it('404s on an unknown slug', async () => {
     await expect(show('nope')).rejects.toThrow('NEXT_NOT_FOUND');
   });
+
+  it('제목 아래 소개 문단만 고딕(font-desc)이고 성구 인용은 빛의계승자다', async () => {
+    const { container } = await show('support');
+    expect(container.querySelector('header .font-desc')).toHaveClass('font-extralight');
+    expect(container.querySelector('blockquote p')).toHaveClass('font-heir');
+    expect(container.querySelector('blockquote .font-desc')).toBeNull();
+  });
 });

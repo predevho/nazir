@@ -38,7 +38,7 @@ export default async function PeoplePage({
         그 칸은 있는데 그리는 곳이 없어서, 운영진이 문구를 고쳐도 아무 데도 안 나왔다.
       */}
       {site.peopleIntro && (
-        <MarkdownText className="mx-auto mt-4 max-w-[720px] text-center font-heir text-[15px] leading-[2] text-ds-text/70">
+        <MarkdownText className="mx-auto mt-4 max-w-[720px] text-center font-desc font-extralight text-[15px] leading-[2] text-ds-text/70">
           {site.peopleIntro}
         </MarkdownText>
       )}
