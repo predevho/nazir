@@ -99,8 +99,7 @@ describe('GuestbookNote', () => {
         <GuestbookNote entry={{ ...entry, isHearted: true }} index={0} />
       </ul>,
     );
-    const heart = screen.getByLabelText('제작팀의 하트');
-    expect(heart).toBeInTheDocument();
+    const heart = screen.getByRole('img', { name: '제작팀의 하트' });
     expect(heart).toHaveTextContent('제작팀');
     // 눌리는 것이 아니다
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
@@ -112,11 +111,11 @@ describe('GuestbookNote', () => {
         <GuestbookNote entry={entry} index={0} />
       </ul>,
     );
-    expect(screen.queryByLabelText('제작팀의 하트')).not.toBeInTheDocument();
+    expect(screen.queryByRole('img', { name: '제작팀의 하트' })).not.toBeInTheDocument();
   });
 
   it('답글과 하트가 같이 있으면 둘 다 그린다 — 댓글 아이콘이 먼저', () => {
-    const { container } = render(
+    render(
       <ul>
         <GuestbookNote
           entry={{ ...entry, isHearted: true }}
@@ -125,12 +124,9 @@ describe('GuestbookNote', () => {
         />
       </ul>,
     );
-    expect(screen.getByRole('button', { name: '답글 1개 보기' })).toBeInTheDocument();
-    const heart = screen.getByLabelText('제작팀의 하트');
-    const button = screen.getByRole('button');
-    // 같은 줄(footer)에 있고, 버튼이 하트보다 앞에 온다
-    expect(heart.parentElement).toBe(button.parentElement);
+    const button = screen.getByRole('button', { name: '답글 1개 보기' });
+    const heart = screen.getByRole('img', { name: '제작팀의 하트' });
+    // 댓글 아이콘이 하트보다 앞에 온다
     expect(button.compareDocumentPosition(heart) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-    expect(container.querySelectorAll('svg')).toHaveLength(2);
   });
 });

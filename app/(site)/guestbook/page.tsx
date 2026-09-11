@@ -60,6 +60,8 @@ export default async function GuestbookPage({
       totalPages = resolved.totalPages;
       const from = (page - 1) * PAGE_SIZE;
 
+      // `is_hearted` 는 0014 가 먼저 적용돼 있어야 한다. 없는 칸을 부르면 조회가 42703 으로 실패해
+      // 게시판 전체가 "불러올 수 없습니다"가 된다 — 배포 전에 마이그레이션부터.
       const { data, error } = await supabase
         .from('guestbook_entries')
         .select('id,name,message,is_hearted,created_at')
@@ -72,7 +74,7 @@ export default async function GuestbookPage({
           id: r.id as string,
           name: r.name as string,
           message: r.message as string,
-          isHearted: (r.is_hearted ?? false) as boolean,
+          isHearted: r.is_hearted as boolean,
           createdAt: r.created_at as string,
         }));
 

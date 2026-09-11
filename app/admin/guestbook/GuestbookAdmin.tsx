@@ -69,7 +69,9 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                 <span className="text-[11px] tracking-[0.14em] text-ds-key2">숨김</span>
               )}
               {e.isHearted && (
-                <span className="text-[11px] tracking-[0.14em] text-ds-key2">♥ 하트</span>
+                <span className="text-[11px] tracking-[0.14em] text-ds-key2">
+                  <span aria-hidden>♥</span> 하트
+                </span>
               )}
               {/* 무엇에 걸렸는지 밝힌다. 사유 없이 숨김만 보이면 판단할 근거가 없다. */}
               {e.holdReasons.length > 0 && (

@@ -166,6 +166,9 @@ describe('GuestbookAdmin', () => {
 
   it('하트가 켜진 글은 이름 옆에 배지가 붙는다', () => {
     render(<GuestbookAdmin entries={[entry({ isHearted: true })]} />);
-    expect(screen.getByText('♥ 하트')).toBeInTheDocument();
+    // 버튼 라벨(하트 보내기/거두기)과 헷갈리지 않게 버튼이 아닌 배지만 본다
+    const badge = [...document.querySelectorAll('span')].find((s) => s.textContent === '♥ 하트');
+    expect(badge).toBeDefined();
+    expect(badge!.querySelector('[aria-hidden]')).toHaveTextContent('♥');
   });
 });

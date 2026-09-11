@@ -87,6 +87,15 @@ describe('moderateEntry', () => {
     expect(del).not.toHaveBeenCalled();
   });
 
+  it('DB 가 거절하면 실패로 알리고 화면을 다시 그리지 않는다 — 0014 미적용 때 하트 버튼이 타는 길', async () => {
+    revalidatePath.mockClear();
+    updateEq.mockResolvedValueOnce({ error: { message: 'column "is_hearted" does not exist' } });
+    const r = await moderateEntry(initial, fd('e1', 'heart'));
+    expect(r.ok).toBe(false);
+    expect(r.message).toMatch(/처리 실패/);
+    expect(revalidatePath).not.toHaveBeenCalled();
+  });
+
   it('rejects a missing id', async () => {
     const r = await moderateEntry(initial, fd('', 'delete'));
     expect(r.ok).toBe(false);

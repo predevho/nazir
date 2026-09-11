@@ -13,6 +13,8 @@ import { formatNoteDate, noteStyle, type GuestbookEntry, type GuestbookReply } f
  * 좌하단 아이콘을 누르면 **같은 종이가 늘어나면서** 답글이 드러난다.
  * 시안이 정한 동작 그대로다 — docs/decisions.md C-2.
  *
+ * 하트는 제작팀이 응원에 감사를 표시하려고 켜는 것이다. 방문자 좋아요가 아니고 눌리지도 않는다(C-3).
+ *
  * 종이는 배경 이미지가 아니라 `border-image` 로 그린다. 배경으로 늘리면 악보 오선
  * 간격이 벌어지고 찢어진 가장자리가 같이 늘어난다. 9칸으로 잘라 가운데만 반복시키면
  * 높이가 변해도 질감이 그대로다 — 자르는 값은 lib/guestbook.ts 의 noteStyle 에 있다.

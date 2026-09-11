@@ -16,7 +16,27 @@ const DONE: Record<ModerateOp, string> = {
   unheart: '하트를 거뒀습니다.',
 };
 
-const OPS: readonly ModerateOp[] = ['hold', 'release', 'delete', 'heart', 'unheart'];
+const OPS = Object.keys(DONE) as ModerateOp[];
+const isModerateOp = (v: string): v is ModerateOp => (OPS as string[]).includes(v);
+
+/**
+ * 삭제를 뺀 나머지 동작이 바꿀 칸. 삭제는 되돌릴 수 없으므로 "그 밖의 경우"로 두지 않는다 —
+ * 나중에 동작을 더하고 여기를 잊으면 `never` 에서 타입 오류가 난다.
+ */
+function patchFor(op: Exclude<ModerateOp, 'delete'>) {
+  switch (op) {
+    case 'hold':
+    case 'release':
+      return { is_held: op === 'hold' };
+    case 'heart':
+    case 'unheart':
+      return { is_hearted: op === 'heart' };
+    default: {
+      const unreachable: never = op;
+      throw new Error(`처리하지 않은 동작: ${String(unreachable)}`);
+    }
+  }
+}
 
 /**
  * 응원글 한 건을 숨김 / 공개 / 삭제하거나 제작팀 하트를 켜고 끈다.
@@ -34,9 +54,9 @@ export async function moderateEntry(
   formData: FormData,
 ): Promise<ModerateState> {
   const id = String(formData.get('id') ?? '').trim();
-  const op = String(formData.get('op') ?? '') as ModerateOp;
+  const op = String(formData.get('op') ?? '');
   if (!id) return { ok: false, message: '대상을 찾지 못했습니다.' };
-  if (!OPS.includes(op)) {
+  if (!isModerateOp(op)) {
     return { ok: false, message: '알 수 없는 동작입니다.' };
   }
 
@@ -46,16 +66,10 @@ export async function moderateEntry(
   } = await supabase.auth.getUser();
   if (!user) redirect('/admin/login');
 
-  const patch =
-    op === 'hold' || op === 'release'
-      ? { is_held: op === 'hold' }
-      : op === 'heart' || op === 'unheart'
-        ? { is_hearted: op === 'heart' }
-        : null;
-
-  const { error } = patch
-    ? await supabase.from('guestbook_entries').update(patch).eq('id', id)
-    : await supabase.from('guestbook_entries').delete().eq('id', id);
+  const { error } =
+    op === 'delete'
+      ? await supabase.from('guestbook_entries').delete().eq('id', id)
+      : await supabase.from('guestbook_entries').update(patchFor(op)).eq('id', id);
 
   if (error) return { ok: false, message: `처리 실패: ${error.message}` };
 

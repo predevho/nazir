@@ -14,6 +14,7 @@ export default async function GuestbookAdminPage() {
   if (!claimsData?.claims) redirect('/admin/login');
 
   // 로그인 상태라 RLS의 `auth all` 정책이 걸려 숨긴 글까지 보인다.
+  // `is_hearted` 는 0014 가 먼저 적용돼 있어야 한다. 없는 칸을 부르면 조회 자체가 42703 으로 실패한다.
   const { data, error } = await supabase
     .from('guestbook_entries')
     .select('id,name,message,is_held,is_hearted,hold_reasons,created_at')
@@ -43,8 +44,7 @@ export default async function GuestbookAdminPage() {
       name: r.name as string,
       message: r.message as string,
       isHeld: r.is_held as boolean,
-      // `?? false` 는 마이그레이션 0014 적용 전 배포가 잠깐 겹쳐도 화면이 깨지지 않게 하기 위함.
-      isHearted: (r.is_hearted ?? false) as boolean,
+      isHearted: r.is_hearted as boolean,
       holdReasons: (r.hold_reasons ?? []) as HoldReason[],
       createdAt: r.created_at as string,
       replies: byEntry.get(r.id as string) ?? [],
@@ -72,7 +72,7 @@ export default async function GuestbookAdminPage() {
       )}
       {error ? (
         <p className="text-sm text-ds-text/60">
-          목록을 불러오지 못했습니다. 마이그레이션 `0009_guestbook.sql`이 적용됐는지 확인해 주세요.
+          목록을 불러오지 못했습니다. 마이그레이션 `0009_guestbook.sql`·`0014_guestbook_heart.sql`이 적용됐는지 확인해 주세요.
         </p>
       ) : (
         <GuestbookAdmin entries={entries} />
