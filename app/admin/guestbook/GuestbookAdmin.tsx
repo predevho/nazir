@@ -9,6 +9,8 @@ export type AdminEntry = {
   name: string;
   message: string;
   isHeld: boolean;
+  /** 제작팀 하트 — docs/decisions.md C-3. */
+  isHearted: boolean;
   /** 왜 숨겨졌는지. 비어 있으면 운영진이 손으로 숨긴 글이다. */
   holdReasons: HoldReason[];
   createdAt: string;
@@ -66,6 +68,9 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
               {e.isHeld && (
                 <span className="text-[11px] tracking-[0.14em] text-ds-key2">숨김</span>
               )}
+              {e.isHearted && (
+                <span className="text-[11px] tracking-[0.14em] text-ds-key2">♥ 하트</span>
+              )}
               {/* 무엇에 걸렸는지 밝힌다. 사유 없이 숨김만 보이면 판단할 근거가 없다. */}
               {e.holdReasons.length > 0 && (
                 <span className="border border-ds-key2/40 px-2 py-0.5 text-[11px] text-ds-key2/90">
@@ -92,6 +97,19 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                   className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
                 >
                   {e.isHeld ? '공개하기' : '숨기기'}
+                </button>
+              </form>
+
+              {/* 제작팀 하트. 숨긴 글에도 켤 수 있다 — 숨김을 풀면 바로 보인다. */}
+              <form action={formAction} className="contents">
+                <input type="hidden" name="id" value={e.id} />
+                <input type="hidden" name="op" value={e.isHearted ? 'unheart' : 'heart'} />
+                <button
+                  type="submit"
+                  disabled={pending}
+                  className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
+                >
+                  {e.isHearted ? '하트 거두기' : '하트 보내기'}
                 </button>
               </form>
 

@@ -16,7 +16,7 @@ export default async function GuestbookAdminPage() {
   // 로그인 상태라 RLS의 `auth all` 정책이 걸려 숨긴 글까지 보인다.
   const { data, error } = await supabase
     .from('guestbook_entries')
-    .select('id,name,message,is_held,hold_reasons,created_at')
+    .select('id,name,message,is_held,is_hearted,hold_reasons,created_at')
     .order('created_at', { ascending: false });
 
   // 답글까지 한 번에 읽는다. 숨긴 글의 답글도 여기서는 보여야 한다.
@@ -43,6 +43,8 @@ export default async function GuestbookAdminPage() {
       name: r.name as string,
       message: r.message as string,
       isHeld: r.is_held as boolean,
+      // `?? false` 는 마이그레이션 0014 적용 전 배포가 잠깐 겹쳐도 화면이 깨지지 않게 하기 위함.
+      isHearted: (r.is_hearted ?? false) as boolean,
       holdReasons: (r.hold_reasons ?? []) as HoldReason[],
       createdAt: r.created_at as string,
       replies: byEntry.get(r.id as string) ?? [],

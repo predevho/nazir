@@ -10,6 +10,7 @@ const entry = (over: Partial<AdminEntry> = {}): AdminEntry => ({
   name: '정은수',
   message: '응원합니다',
   isHeld: false,
+  isHearted: false,
   holdReasons: [],
   createdAt: '2026-08-26T04:00:00.000Z',
   replies: [],
@@ -148,5 +149,23 @@ describe('GuestbookAdmin', () => {
     render(<GuestbookAdmin entries={[entry({ isHeld: true, holdReasons: [] })]} />);
     expect(screen.getByText('숨김')).toBeInTheDocument();
     expect(screen.queryByText(/광고성 문구|욕설/)).not.toBeInTheDocument();
+  });
+
+  it('하트가 없는 글에는 하트 보내기, 있는 글에는 하트 거두기를 준다', () => {
+    render(<GuestbookAdmin entries={[entry({ id: 'a' }), entry({ id: 'b', isHearted: true })]} />);
+    expect(screen.getByRole('button', { name: '하트 보내기' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '하트 거두기' })).toBeInTheDocument();
+  });
+
+  it('하트 버튼은 heart / unheart 동작을 보낸다', () => {
+    render(<GuestbookAdmin entries={[entry({ id: 'x', isHearted: true })]} />);
+    const form = screen.getByRole('button', { name: '하트 거두기' }).closest('form')!;
+    expect(form.querySelector('input[name="op"]')).toHaveValue('unheart');
+    expect(form.querySelector('input[name="id"]')).toHaveValue('x');
+  });
+
+  it('하트가 켜진 글은 이름 옆에 배지가 붙는다', () => {
+    render(<GuestbookAdmin entries={[entry({ isHearted: true })]} />);
+    expect(screen.getByText('♥ 하트')).toBeInTheDocument();
   });
 });
