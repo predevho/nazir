@@ -26,7 +26,7 @@ export const metadata: Metadata = {
  * 시안 `응원 게시판`. 제목 → 한 줄 입력 폼 → 쪽지 그리드(4열) → 페이지 이동.
  *
  * 답글은 운영진만 달고(명세 44행, docs/decisions.md C-2) 여기서는 읽기만 한다.
- * 하트는 아직 확정 대기라 빠져 있다 — 같은 문서 C-3.
+ * 하트는 제작팀이 켜는 표시다(C-3). 방문자 좋아요는 없다.
  *
  * 보류된 글(링크 포함)은 RLS가 걸러 공개 목록에도 총 개수에도 들어가지 않는다.
  */
@@ -62,7 +62,7 @@ export default async function GuestbookPage({
 
       const { data, error } = await supabase
         .from('guestbook_entries')
-        .select('id,name,message,created_at')
+        .select('id,name,message,is_hearted,created_at')
         .order('created_at', { ascending: false })
         .range(from, from + PAGE_SIZE - 1);
 
@@ -72,6 +72,7 @@ export default async function GuestbookPage({
           id: r.id as string,
           name: r.name as string,
           message: r.message as string,
+          isHearted: (r.is_hearted ?? false) as boolean,
           createdAt: r.created_at as string,
         }));
 

@@ -1,13 +1,14 @@
 'use client';
 import { useState } from 'react';
 import { CommentIcon } from './CommentIcon';
+import { HeartIcon } from './HeartIcon';
 import { formatNoteDate, noteStyle, type GuestbookEntry, type GuestbookReply } from '@/lib/guestbook';
 
 /**
  * 시안 쪽지 카드 (코멘트 #43).
  * - 배경은 찢어진 악보. 정사각형·직사각형을 번갈아 쓴다.
  * - 노란 테이프 `77×36`을 상단에 8° / −8°로 교대해 붙인다.
- * - 좌상단 이름 / 가운데 내용 / 우하단 날짜 / **좌하단 댓글 아이콘**.
+ * - 좌상단 이름 / 가운데 내용 / 우하단 날짜 / **좌하단 댓글 아이콘·제작팀 하트**.
  *
  * 좌하단 아이콘을 누르면 **같은 종이가 늘어나면서** 답글이 드러난다.
  * 시안이 정한 동작 그대로다 — docs/decisions.md C-2.
@@ -70,28 +71,41 @@ export function GuestbookNote({
 
         <div className="mt-4 flex items-center justify-between gap-3">
           {/*
-            답글이 없으면 아이콘도 두지 않는다. 눌러도 아무 일이 없는 아이콘은 없는 것만 못하다.
-            답글은 운영진만 다므로 대부분의 쪽지에는 붙지 않는다.
+            왼쪽: 댓글 아이콘 → 제작팀 하트 순.
+            댓글 아이콘은 답글이 있는 쪽지에만 붙는다 — 눌러도 아무 일이 없는 아이콘은 없는 것만 못하다.
+            하트는 제작팀이 켠 표시일 뿐 눌리지 않는다(docs/decisions.md C-3). 둘 다 없으면 빈 칸.
           */}
-          {replies.length > 0 ? (
-            <button
-              type="button"
-              onClick={() => setOpen((v) => !v)}
-              aria-expanded={open}
-              aria-controls={panelId}
-              aria-label={open ? '답글 접기' : `답글 ${replies.length}개 보기`}
-              className="tap-target flex items-center gap-1 leading-none transition-opacity hover:opacity-70"
-            >
-              <CommentIcon className="h-[21px] w-[21px]" />
-              {replies.length > 1 && (
+          <div className="flex items-center gap-3">
+            {replies.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setOpen((v) => !v)}
+                aria-expanded={open}
+                aria-controls={panelId}
+                aria-label={open ? '답글 접기' : `답글 ${replies.length}개 보기`}
+                className="tap-target flex items-center gap-1 leading-none transition-opacity hover:opacity-70"
+              >
+                <CommentIcon className="h-[21px] w-[21px]" />
+                {replies.length > 1 && (
+                  <span aria-hidden className="font-griun text-[14px] leading-none">
+                    {replies.length}
+                  </span>
+                )}
+              </button>
+            )}
+            {entry.isHearted && (
+              <span
+                role="img"
+                aria-label="제작팀의 하트"
+                className="flex items-center gap-1 leading-none text-ds-key2"
+              >
+                <HeartIcon className="h-[21px] w-[21px]" />
                 <span aria-hidden className="font-griun text-[14px] leading-none">
-                  {replies.length}
+                  제작팀
                 </span>
-              )}
-            </button>
-          ) : (
-            <span />
-          )}
+              </span>
+            )}
+          </div>
           <p className="font-griun text-[15px] leading-none">{formatNoteDate(entry.createdAt)}</p>
         </div>
       </article>
