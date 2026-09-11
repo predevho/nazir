@@ -323,8 +323,8 @@ export type AdminEntry = {
 `app/admin/guestbook/page.tsx`:
 
 select 문자열을 `'id,name,message,is_held,is_hearted,hold_reasons,created_at'` 로 바꾸고,
-매핑에 `isHeld: r.is_held as boolean,` 다음 줄로 `isHearted: (r.is_hearted ?? false) as boolean,` 을 넣는다.
-(`?? false` 는 마이그레이션 0014 적용 전 배포가 잠깐 겹쳐도 화면이 깨지지 않게 하기 위한 것이다.)
+매핑에 `isHeld: r.is_held as boolean,` 다음 줄로 `isHearted: r.is_hearted as boolean,` 을 넣는다.
+(0014 선적용이 전제다. 처음엔 `?? false` 폴백을 넣었으나, 없는 칸을 select 하면 조회 자체가 42703 으로 실패해 폴백에 닿지 못한다 — 리뷰에서 걷어냄.)
 
 - [ ] **Step 5: 통과 확인**
 
@@ -488,7 +488,7 @@ export function HeartIcon({ className }: { className?: string }) {
 `app/(site)/guestbook/page.tsx`:
 
 select 를 `'id,name,message,is_hearted,created_at'` 로 바꾸고 매핑에
-`isHearted: (r.is_hearted ?? false) as boolean,` 을 추가한다.
+`isHearted: r.is_hearted as boolean,` 을 추가한다(0014 선적용 전제).
 
 파일 상단 주석의 `하트는 아직 확정 대기라 빠져 있다 — 같은 문서 C-3.` 를
 `하트는 제작팀이 켜는 표시다(C-3). 방문자 좋아요는 없다.` 로 바꾼다.
@@ -809,5 +809,7 @@ Co-Authored-By: Claude Fable 5.1 <noreply@anthropic.com>"
 ## 완료 후 사용자 몫
 
 1. Supabase SQL Editor 에서 `supabase/migrations/0014_guestbook_heart.sql` 1회 실행.
-   (미적용 상태로 배포돼도 `?? false` 폴백으로 화면은 깨지지 않지만, 하트 버튼을 누르면 "처리 실패" 가 뜬다.)
+   **push 전에 반드시** 실행한다. 미적용 상태로 배포하면 없는 칸을 조회해 42703 에러가 나고 공개 응원 게시판
+   전체가 "불러올 수 없습니다"가 된다(실제로 확인함). 적용 직후 하트 버튼이 PGRST204 로 실패하면
+   SQL Editor 에서 `notify pgrst, 'reload schema';` 1회.
 2. main 에 ff 병합 후 push → Vercel 배포.
