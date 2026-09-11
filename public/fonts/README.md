@@ -7,8 +7,9 @@
 | `HeirOfLight-Regular.otf` | 814KB | 로드 확인 |
 | `HeirOfLight-Bold.otf` | 828KB | 로드 확인 |
 | `GriunGossi-Regular.woff2` | 2.68MB | 로드 확인 |
+| `Pretendard-ExtraLight.woff2` | 717KB | 소개 문단용 대체 폰트(애플 기기는 내장 Apple SD Gothic Neo 사용) |
 
-합계 4.3MB. 아래는 재설치·교체가 필요할 때의 안내입니다.
+합계 5.0MB. 아래는 재설치·교체가 필요할 때의 안내입니다.
 
 ---
 
@@ -120,3 +121,11 @@ npm run dev
 아무 요청도 없으면 파일명이 위 표와 다른 것이고, 404가 뜨면 확장자가 CSS와 안 맞는 것입니다.
 
 파일을 안 넣어도 빌드와 렌더링은 정상이며, 대체 폰트(`Gowun Batang`)로 표시됩니다.
+
+## 4. Pretendard (소개 문단 대체 폰트)
+
+- 출처: https://github.com/orioncactus/pretendard (v1.3.9), SIL Open Font License 1.1
+- 파일: `packages/pretendard/dist/web/static/woff2/Pretendard-ExtraLight.woff2`
+- 용도: 페이지 제목 아래 소개 문단(`font-desc`). 시안 지정은 Apple SD Gothic Neo UltraLight 이고,
+  애플 기기는 `local()` 로 내장 폰트를 쓴다. 이 파일은 윈도우·안드로이드용이다.
+- OFL 이라 자체 호스팅·서브셋 모두 허용. 지금은 서브셋 없이 정적 파일 하나만 둔다.

@@ -33,6 +33,20 @@
        url('/fonts/GriunGossi-Regular.ttf') format('truetype');
 }
 
+/* 페이지 제목 아래 소개 문단용 고딕 (클라이언트 확정 2026-09-11: "제목 아래 부분은 AppleSDGothicNeo").
+   시안 지정은 Apple SD Gothic Neo UltraLight. 애플 내장 폰트라 웹에 심을 수 없으므로
+   애플 기기는 local() 로 그 폰트를 그대로 쓰고(다운로드 0), 그 외 기기만 거의 같은 모양의
+   Pretendard ExtraLight(SIL OFL)를 받는다. 이 패밀리는 소개 문단(font-desc)에만 쓴다. */
+@font-face {
+  font-family: 'Nazir Sans';
+  font-style: normal;
+  font-weight: 200;
+  font-display: swap;
+  src: local('AppleSDGothicNeo-UltraLight'),
+       local('Apple SD Gothic Neo UltraLight'),
+       url('/fonts/Pretendard-ExtraLight.woff2') format('woff2');
+}
+
 html, body { margin: 0; padding: 0; background: #0B0A0E; }
 * { box-sizing: border-box; }
 body {

@@ -21,6 +21,9 @@ export default {
         // 시안 폰트. 파일은 public/fonts/ (README.md 참고), 없으면 아래 대체 폰트로 렌더링된다.
         heir: ["'Heir of Light'", 'serif'],
         griun: ["'Griun Gossi'", 'serif'],
+        // 페이지 제목 아래 소개 문단 전용 고딕. 'Nazir Sans' 는 globals.css 의 @font-face
+        // (애플은 내장 Apple SD Gothic Neo, 그 외는 Pretendard). 나머지 본문은 font-heir.
+        desc: ["'Nazir Sans'", "'Apple SD Gothic Neo'", 'Pretendard', "'Noto Sans KR'", 'sans-serif'],
         // 관리자 화면의 수치·레이블용. 시안에는 없는 영역이라 시스템 폰트로 충분하다.
         mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
