@@ -56,6 +56,25 @@ describe('moderateEntry', () => {
     expect(r.ok).toBe(true);
   });
 
+  it('하트를 켠다 — 제작팀이 응원에 답하는 표시', async () => {
+    const r = await moderateEntry(initial, fd('e1', 'heart'));
+    expect(update).toHaveBeenCalledWith({ is_hearted: true });
+    expect(updateEq).toHaveBeenCalledWith('id', 'e1');
+    expect(r.ok).toBe(true);
+    expect(r.message).toMatch(/하트/);
+  });
+
+  it('하트를 거둔다', async () => {
+    await moderateEntry(initial, fd('e1', 'unheart'));
+    expect(update).toHaveBeenCalledWith({ is_hearted: false });
+  });
+
+  it('하트도 공개 게시판을 다시 그린다', async () => {
+    revalidatePath.mockClear();
+    await moderateEntry(initial, fd('e1', 'heart'));
+    expect(revalidatePath).toHaveBeenCalledWith('/guestbook');
+  });
+
   it('refreshes the public board as well as the admin list', async () => {
     await moderateEntry(initial, fd('e1', 'release'));
     expect(revalidatePath).toHaveBeenCalledWith('/guestbook');

@@ -6,19 +6,26 @@ import { checkReply } from '@/lib/guestbook';
 
 export type ModerateState = { ok: boolean; message: string };
 
-export type ModerateOp = 'hold' | 'release' | 'delete';
+export type ModerateOp = 'hold' | 'release' | 'delete' | 'heart' | 'unheart';
 
 const DONE: Record<ModerateOp, string> = {
   hold: '숨김 처리했습니다. 공개 목록에서 사라집니다.',
   release: '공개했습니다. 게시판에 바로 보입니다.',
   delete: '삭제했습니다.',
+  heart: '하트를 보냈습니다. 쪽지에 제작팀 하트가 붙습니다.',
+  unheart: '하트를 거뒀습니다.',
 };
 
+const OPS: readonly ModerateOp[] = ['hold', 'release', 'delete', 'heart', 'unheart'];
+
 /**
- * 응원글 한 건을 숨김 / 공개 / 삭제한다.
+ * 응원글 한 건을 숨김 / 공개 / 삭제하거나 제작팀 하트를 켜고 끈다.
  *
  * 링크가 섞인 글은 등록 시 자동으로 보류(`is_held`)되므로, 운영진이 여기서 보고
  * 풀어주거나 지운다 — docs/decisions.md C-4.
+ *
+ * 하트는 제작팀이 응원에 감사를 표시하는 boolean 하나다(C-3). 숨긴 글에도 켤 수 있다 —
+ * 숨김을 풀면 바로 보이면 되고, 막을 이유가 없다.
  *
  * 작성자 본인이 지우는 경로는 두지 않기로 했다(C-1). 삭제 권한은 여기뿐이다.
  */
@@ -29,7 +36,7 @@ export async function moderateEntry(
   const id = String(formData.get('id') ?? '').trim();
   const op = String(formData.get('op') ?? '') as ModerateOp;
   if (!id) return { ok: false, message: '대상을 찾지 못했습니다.' };
-  if (op !== 'hold' && op !== 'release' && op !== 'delete') {
+  if (!OPS.includes(op)) {
     return { ok: false, message: '알 수 없는 동작입니다.' };
   }
 
@@ -39,13 +46,16 @@ export async function moderateEntry(
   } = await supabase.auth.getUser();
   if (!user) redirect('/admin/login');
 
-  const { error } =
-    op === 'delete'
-      ? await supabase.from('guestbook_entries').delete().eq('id', id)
-      : await supabase
-          .from('guestbook_entries')
-          .update({ is_held: op === 'hold' })
-          .eq('id', id);
+  const patch =
+    op === 'hold' || op === 'release'
+      ? { is_held: op === 'hold' }
+      : op === 'heart' || op === 'unheart'
+        ? { is_hearted: op === 'heart' }
+        : null;
+
+  const { error } = patch
+    ? await supabase.from('guestbook_entries').update(patch).eq('id', id)
+    : await supabase.from('guestbook_entries').delete().eq('id', id);
 
   if (error) return { ok: false, message: `처리 실패: ${error.message}` };
 
