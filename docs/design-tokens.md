@@ -87,10 +87,12 @@ weight 400 단독. 쓰이는 곳이 명확합니다.
 | 20px | `(완료된 여정)`, `(진행 중인 여정)` |
 | 15px | 응원 게시판 쪽지의 작성자명·날짜 |
 
-### 무시해도 되는 것
+### Apple SD Gothic Neo UltraLight — 페이지 제목 아래 소개 문단 (9회)
 
-`AppleSDGothicNeoUL00`(8), `Apple SD Gothic Neo`(1)는 전부 `간단한 설명 간단한 설명…`
-플레이스홀더 텍스트에만 붙어 있습니다. 폰트 지정을 안 한 더미라 구현 대상이 아닙니다.
+`AppleSDGothicNeoUL00`(8), `Apple SD Gothic Neo`(1)는 `간단한 설명…` 플레이스홀더에 붙어 있어
+처음엔 더미로 봤으나, **클라이언트 확정(2026-09-11)으로 실제 지정이었습니다.** 제목 바로 아래 소개
+문단만 이 폰트이고 나머지 본문은 빛의계승자입니다. 구현은 `'Nazir Sans'`
+(`local()` Apple SD Gothic Neo UltraLight → Pretendard ExtraLight) + Tailwind `font-desc`.
 
 ### 공통 값
 
