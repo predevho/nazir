@@ -8,6 +8,7 @@ const entry = {
   name: '정은수',
   message: '함께 기도하겠습니다!',
   createdAt: '2026-08-26T04:00:00.000Z',
+  isHearted: false,
 };
 
 describe('GuestbookNote', () => {

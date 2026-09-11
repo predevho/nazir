@@ -3,6 +3,8 @@ export interface GuestbookEntry {
   name: string;
   message: string;
   createdAt: string;
+  /** 제작팀이 켠 하트. 방문자 좋아요가 아니다 — docs/decisions.md C-3. */
+  isHearted: boolean;
 }
 
 /**
