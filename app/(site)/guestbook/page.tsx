@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import { createReadClient } from '@/lib/supabase/read';
+import { createClient } from '@/lib/supabase/server';
+import { toggleGuestbookHeart } from './actions';
 import { GuestbookForm } from '@/components/guestbook/GuestbookForm';
 import { GuestbookNote } from '@/components/guestbook/GuestbookNote';
 import { GuestbookPager } from '@/components/guestbook/GuestbookPager';
@@ -12,6 +14,7 @@ import {
 } from '@/lib/guestbook';
 import { pageMeta } from '@/lib/pageMeta';
 import { getContent } from '@/lib/content';
+import { ADMIN_EMAIL_DOMAIN } from '@/lib/adminUsername';
 
 /** 응원글은 바로 보여야 하므로 캐시하지 않는다. */
 export const dynamic = 'force-dynamic';
@@ -38,6 +41,19 @@ export default async function GuestbookPage({
   const { page: rawPage } = await searchParams;
   const { site } = await getContent();
   const supabase = createReadClient();
+  let heartAction: typeof toggleGuestbookHeart | undefined;
+
+  try {
+    const authSupabase = await createClient();
+    const {
+      data: { user },
+    } = await authSupabase.auth.getUser();
+    if (user?.email?.toLowerCase().endsWith(`@${ADMIN_EMAIL_DOMAIN}`)) {
+      heartAction = toggleGuestbookHeart;
+    }
+  } catch {
+    // Supabase env가 없는 로컬 폴백에서는 로그인용 하트 버튼만 숨긴다.
+  }
 
   let entries: GuestbookEntry[] = [];
   let replies: GuestbookReply[] = [];
@@ -136,6 +152,7 @@ export default async function GuestbookPage({
                   entry={entry}
                   index={(page - 1) * PAGE_SIZE + i}
                   replies={byEntry.get(entry.id)}
+                  heartAction={heartAction}
                 />
               ))}
             </ul>

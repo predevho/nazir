@@ -2,6 +2,7 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { GuestbookNote } from './GuestbookNote';
+import type { HeartToggleState } from '@/app/(site)/guestbook/actions';
 
 const entry = {
   id: 'e1',
@@ -10,6 +11,11 @@ const entry = {
   createdAt: '2026-08-26T04:00:00.000Z',
   isHearted: false,
 };
+
+const heartAction = async (
+  _prev: HeartToggleState,
+  _formData: FormData,
+): Promise<HeartToggleState> => ({ ok: true, message: '' });
 
 describe('GuestbookNote', () => {
   it('shows the name, message and date from the design layout', () => {
@@ -101,6 +107,8 @@ describe('GuestbookNote', () => {
     );
     const heart = screen.getByRole('img', { name: '제작팀의 하트' });
     expect(heart).toHaveTextContent('제작팀');
+    expect(heart).toHaveClass('text-ds-key1');
+    expect(heart).not.toHaveClass('text-ds-key2');
     // 눌리는 것이 아니다
     expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
@@ -128,5 +136,32 @@ describe('GuestbookNote', () => {
     const heart = screen.getByRole('img', { name: '제작팀의 하트' });
     // 댓글 아이콘이 하트보다 앞에 온다
     expect(button.compareDocumentPosition(heart) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  });
+
+  it('로그인 상태면 공개 쪽지에서도 하트를 보낼 수 있다', () => {
+    const { container } = render(
+      <ul>
+        <GuestbookNote entry={entry} index={0} heartAction={heartAction} />
+      </ul>,
+    );
+    const form = screen.getByRole('button', { name: '하트 보내기' }).closest('form')!;
+    expect(form.querySelector('input[name="id"]')).toHaveValue('e1');
+    expect(form.querySelector('input[name="op"]')).toHaveValue('heart');
+    expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"]')).toHaveClass(
+      'text-ds-key1',
+    );
+  });
+
+  it('로그인 상태에서 이미 하트가 켜진 쪽지는 하트를 거둘 수 있다', () => {
+    const { container } = render(
+      <ul>
+        <GuestbookNote entry={{ ...entry, isHearted: true }} index={0} heartAction={heartAction} />
+      </ul>,
+    );
+    const form = screen.getByRole('button', { name: '하트 거두기' }).closest('form')!;
+    expect(form.querySelector('input[name="op"]')).toHaveValue('unheart');
+    expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"]')).toHaveClass(
+      'text-ds-key1',
+    );
   });
 });

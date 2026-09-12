@@ -1,8 +1,17 @@
 'use client';
-import { useState } from 'react';
+import { useActionState, useState } from 'react';
 import { CommentIcon } from './CommentIcon';
 import { HeartIcon } from './HeartIcon';
+import type { HeartToggleState } from '@/app/(site)/guestbook/actions';
 import { formatNoteDate, noteStyle, type GuestbookEntry, type GuestbookReply } from '@/lib/guestbook';
+
+type HeartAction = (
+  prev: HeartToggleState,
+  formData: FormData,
+) => Promise<HeartToggleState>;
+
+const initialHeartState: HeartToggleState = { ok: false, message: '' };
+const noopHeartAction: HeartAction = async () => initialHeartState;
 
 /**
  * 시안 쪽지 카드 (코멘트 #43).
@@ -23,13 +32,19 @@ export function GuestbookNote({
   entry,
   index,
   replies = [],
+  heartAction,
 }: {
   entry: GuestbookEntry;
   index: number;
   replies?: GuestbookReply[];
+  heartAction?: HeartAction;
 }) {
   const { background, slice, border, tapeAngle } = noteStyle(index);
   const [open, setOpen] = useState(false);
+  const [, heartFormAction, heartPending] = useActionState(
+    heartAction ?? noopHeartAction,
+    initialHeartState,
+  );
   const panelId = `replies-${entry.id}`;
 
   return (
@@ -95,11 +110,33 @@ export function GuestbookNote({
                 )}
               </button>
             )}
-            {entry.isHearted && (
+            {heartAction ? (
+              <form action={heartFormAction} className="contents">
+                <input type="hidden" name="id" value={entry.id} />
+                <input type="hidden" name="op" value={entry.isHearted ? 'unheart' : 'heart'} />
+                <button
+                  type="submit"
+                  disabled={heartPending}
+                  aria-label={entry.isHearted ? '하트 거두기' : '하트 보내기'}
+                  className="tap-target flex cursor-pointer items-center gap-1 leading-none text-ds-key1 transition-opacity hover:opacity-70 disabled:opacity-40"
+                >
+                  <span
+                    role="img"
+                    aria-label="제작팀의 하트"
+                    className="flex items-center gap-1 leading-none text-ds-key1"
+                  >
+                    <HeartIcon className="h-[21px] w-[21px]" />
+                    <span aria-hidden className="font-griun text-[14px] leading-none">
+                      제작팀
+                    </span>
+                  </span>
+                </button>
+              </form>
+            ) : entry.isHearted && (
               <span
                 role="img"
                 aria-label="제작팀의 하트"
-                className="flex items-center gap-1 leading-none text-ds-key2"
+                className="flex items-center gap-1 leading-none text-ds-key1"
               >
                 <HeartIcon className="h-[21px] w-[21px]" />
                 <span aria-hidden className="font-griun text-[14px] leading-none">
