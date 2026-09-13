@@ -4,7 +4,7 @@ import { redirect } from 'next/navigation';
 import { ADMIN_EMAIL_DOMAIN } from '@/lib/adminUsername';
 import { createClient } from '@/lib/supabase/server';
 
-export type HeartToggleState = { ok: boolean; message: string };
+export type HeartToggleState = { ok: boolean; message: string; isHearted: boolean };
 export type HeartToggleOp = 'heart' | 'unheart';
 
 const DONE: Record<HeartToggleOp, string> = {
@@ -18,13 +18,15 @@ const isAdminEmail = (email: string | undefined) =>
 
 /** 공개 방명록에서 로그인한 운영진이 제작팀 하트만 켜고 끈다. */
 export async function toggleGuestbookHeart(
-  _prev: HeartToggleState,
+  prev: HeartToggleState,
   formData: FormData,
 ): Promise<HeartToggleState> {
   const id = String(formData.get('id') ?? '').trim();
   const op = String(formData.get('op') ?? '');
-  if (!id) return { ok: false, message: '대상을 찾지 못했습니다.' };
-  if (!isHeartToggleOp(op)) return { ok: false, message: '알 수 없는 동작입니다.' };
+  if (!id) return { ok: false, message: '대상을 찾지 못했습니다.', isHearted: prev.isHearted };
+  if (!isHeartToggleOp(op)) {
+    return { ok: false, message: '알 수 없는 동작입니다.', isHearted: prev.isHearted };
+  }
 
   const supabase = await createClient();
   const {
@@ -37,9 +39,11 @@ export async function toggleGuestbookHeart(
     .update({ is_hearted: op === 'heart' })
     .eq('id', id);
 
-  if (error) return { ok: false, message: `처리 실패: ${error.message}` };
+  if (error) {
+    return { ok: false, message: `처리 실패: ${error.message}`, isHearted: prev.isHearted };
+  }
 
   revalidatePath('/guestbook');
   revalidatePath('/admin/guestbook');
-  return { ok: true, message: DONE[op] };
+  return { ok: true, message: DONE[op], isHearted: op === 'heart' };
 }

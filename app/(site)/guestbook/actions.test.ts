@@ -26,7 +26,7 @@ const fd = (id: string, op: string) => {
   return f;
 };
 
-const initial = { ok: false, message: '' };
+const initial = { ok: false, message: '', isHearted: false };
 
 beforeEach(() => {
   getUser.mockClear();
@@ -45,13 +45,18 @@ describe('toggleGuestbookHeart', () => {
     expect(revalidatePath).toHaveBeenCalledWith('/guestbook');
     expect(revalidatePath).toHaveBeenCalledWith('/admin/guestbook');
     expect(r.ok).toBe(true);
+    expect(r.isHearted).toBe(true);
   });
 
   it('하트를 거둔다', async () => {
-    await toggleGuestbookHeart(initial, fd('e1', 'unheart'));
+    const r = await toggleGuestbookHeart(
+      { ok: false, message: '', isHearted: true },
+      fd('e1', 'unheart'),
+    );
 
     expect(update).toHaveBeenCalledWith({ is_hearted: false });
     expect(updateEq).toHaveBeenCalledWith('id', 'e1');
+    expect(r.isHearted).toBe(false);
   });
 
   it('하트 전용 경로라 다른 관리자 동작은 거절한다', async () => {

@@ -10,8 +10,7 @@ type HeartAction = (
   formData: FormData,
 ) => Promise<HeartToggleState>;
 
-const initialHeartState: HeartToggleState = { ok: false, message: '' };
-const noopHeartAction: HeartAction = async () => initialHeartState;
+const noopHeartAction: HeartAction = async (prev) => prev;
 
 /**
  * 시안 쪽지 카드 (코멘트 #43).
@@ -41,10 +40,11 @@ export function GuestbookNote({
 }) {
   const { background, slice, border, tapeAngle } = noteStyle(index);
   const [open, setOpen] = useState(false);
-  const [, heartFormAction, heartPending] = useActionState(
+  const [heartState, heartFormAction, heartPending] = useActionState(
     heartAction ?? noopHeartAction,
-    initialHeartState,
+    { ok: false, message: '', isHearted: entry.isHearted },
   );
+  const isHearted = heartState.isHearted;
   const panelId = `replies-${entry.id}`;
 
   return (
@@ -113,11 +113,11 @@ export function GuestbookNote({
             {heartAction ? (
               <form action={heartFormAction} className="contents">
                 <input type="hidden" name="id" value={entry.id} />
-                <input type="hidden" name="op" value={entry.isHearted ? 'unheart' : 'heart'} />
+                <input type="hidden" name="op" value={isHearted ? 'unheart' : 'heart'} />
                 <button
                   type="submit"
                   disabled={heartPending}
-                  aria-label={entry.isHearted ? '하트 거두기' : '하트 보내기'}
+                  aria-label={isHearted ? '하트 거두기' : '하트 보내기'}
                   className="tap-target flex cursor-pointer items-center gap-1 leading-none text-ds-key1 transition-opacity hover:opacity-70 disabled:opacity-40"
                 >
                   <span
@@ -147,6 +147,11 @@ export function GuestbookNote({
           </div>
           <p className="font-griun text-[15px] leading-none">{formatNoteDate(entry.createdAt)}</p>
         </div>
+        {heartAction && !heartState.ok && heartState.message && (
+          <p role="alert" className="mt-2 font-griun text-[13px] leading-[1.4] text-ds-text/70">
+            {heartState.message}
+          </p>
+        )}
       </article>
     </li>
   );

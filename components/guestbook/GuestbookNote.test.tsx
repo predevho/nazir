@@ -15,7 +15,7 @@ const entry = {
 const heartAction = async (
   _prev: HeartToggleState,
   _formData: FormData,
-): Promise<HeartToggleState> => ({ ok: true, message: '' });
+): Promise<HeartToggleState> => ({ ok: true, message: '', isHearted: true });
 
 describe('GuestbookNote', () => {
   it('shows the name, message and date from the design layout', () => {
@@ -162,6 +162,44 @@ describe('GuestbookNote', () => {
     expect(form.querySelector('input[name="op"]')).toHaveValue('unheart');
     expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"]')).toHaveClass(
       'text-ds-key1',
+    );
+  });
+
+  it('하트 처리가 성공하면 공개 쪽지의 버튼 상태가 바로 바뀐다', async () => {
+    const user = userEvent.setup();
+    const succeed = async () => ({
+      ok: true,
+      message: '하트를 보냈습니다.',
+      isHearted: true,
+    });
+    render(
+      <ul>
+        <GuestbookNote entry={entry} index={0} heartAction={succeed} />
+      </ul>,
+    );
+
+    await user.click(screen.getByRole('button', { name: '하트 보내기' }));
+
+    expect(await screen.findByRole('button', { name: '하트 거두기' })).toBeInTheDocument();
+  });
+
+  it('하트 처리가 실패하면 공개 쪽지에 오류를 보여 준다', async () => {
+    const user = userEvent.setup();
+    const fail = async () => ({
+      ok: false,
+      message: '처리 실패: 잠시 후 다시 시도해 주세요.',
+      isHearted: false,
+    });
+    render(
+      <ul>
+        <GuestbookNote entry={entry} index={0} heartAction={fail} />
+      </ul>,
+    );
+
+    await user.click(screen.getByRole('button', { name: '하트 보내기' }));
+
+    expect(await screen.findByRole('alert')).toHaveTextContent(
+      '처리 실패: 잠시 후 다시 시도해 주세요.',
     );
   });
 });
