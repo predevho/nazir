@@ -150,6 +150,9 @@ describe('GuestbookNote', () => {
     expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"]')).toHaveClass(
       'text-ds-key1',
     );
+    expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"] svg')).toHaveClass(
+      'fill-none',
+    );
   });
 
   it('로그인 상태에서 이미 하트가 켜진 쪽지는 하트를 거둘 수 있다', () => {
@@ -162,6 +165,9 @@ describe('GuestbookNote', () => {
     expect(form.querySelector('input[name="op"]')).toHaveValue('unheart');
     expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"]')).toHaveClass(
       'text-ds-key1',
+    );
+    expect(container.querySelector('[role="img"][aria-label="제작팀의 하트"] svg')).toHaveClass(
+      'fill-current',
     );
   });
 

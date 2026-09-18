@@ -125,7 +125,10 @@ export function GuestbookNote({
                     aria-label="제작팀의 하트"
                     className="flex items-center gap-1 leading-none text-ds-key1"
                   >
-                    <HeartIcon className="h-[21px] w-[21px]" />
+                    <HeartIcon
+                      className={`h-[21px] w-[21px] ${isHearted ? 'fill-current' : 'fill-none'}`}
+                      filled={isHearted}
+                    />
                     <span aria-hidden className="font-griun text-[14px] leading-none">
                       제작팀
                     </span>
