@@ -109,8 +109,15 @@ export function GuestbookAdmin({ entries }: { entries: AdminEntry[] }) {
                 <button
                   type="submit"
                   disabled={pending}
-                  className="cursor-pointer border border-ds-key2/50 px-3 py-1.5 text-[11px] text-ds-key2 transition-colors hover:bg-ds-key2/10 disabled:opacity-40"
+                  aria-pressed={e.isHearted}
+                  title={e.isHearted ? '이미 하트가 적용된 글입니다' : '아직 하트가 적용되지 않은 글입니다'}
+                  className={`cursor-pointer border px-3 py-1.5 text-[11px] transition-colors disabled:opacity-40 ${
+                    e.isHearted
+                      ? 'border-ds-key2 bg-ds-key2/10 text-ds-key2 hover:bg-ds-key2/20'
+                      : 'border-ds-key2/50 text-ds-key2 hover:bg-ds-key2/10'
+                  }`}
                 >
+                  <span aria-hidden>{e.isHearted ? '♥' : '♡'}</span>{' '}
                   {e.isHearted ? '하트 거두기' : '하트 보내기'}
                 </button>
               </form>

@@ -153,8 +153,8 @@ describe('GuestbookAdmin', () => {
 
   it('하트가 없는 글에는 하트 보내기, 있는 글에는 하트 거두기를 준다', () => {
     render(<GuestbookAdmin entries={[entry({ id: 'a' }), entry({ id: 'b', isHearted: true })]} />);
-    expect(screen.getByRole('button', { name: '하트 보내기' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: '하트 거두기' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: '하트 보내기' })).toHaveAttribute('aria-pressed', 'false');
+    expect(screen.getByRole('button', { name: '하트 거두기' })).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('하트 버튼은 heart / unheart 동작을 보낸다', () => {
